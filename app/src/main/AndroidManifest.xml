@@ -64,7 +64,6 @@
             android:name=".ultis.ControllerMusicReceiver"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".service.PlayMusicService"
             android:exported="false">
