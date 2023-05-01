@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "324171012269",
+    "project_id": "muzix-b3bea",
+    "storage_bucket": "muzix-b3bea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324171012269:android:c0717087e2b141858dce24",
+        "android_client_info": {
+          "package_name": "com.example.muzix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "324171012269-nhngu3ca1i83d9ef7g2vt5qm54pkheg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo_pgspcJ6Gtc75Bq9sIqZJE3Fqjn8UU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "324171012269-nhngu3ca1i83d9ef7g2vt5qm54pkheg4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

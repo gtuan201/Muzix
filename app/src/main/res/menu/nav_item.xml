@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/icon_home"
+        android:icon="@drawable/baseline_home_24"
+        android:title="Trang chủ" />
+    <item android:id="@+id/icon_search"
+        android:icon="@drawable/baseline_saved_search_24"
+        android:title="Tìm kiếm"/>
+    <item android:id="@+id/icon_library"
+        android:icon="@drawable/baseline_library_music_24"
+        android:title="Thư viện"/>
+    <item android:id="@+id/icon_premium"
+        android:icon="@drawable/baseline_music_note_24"
+        android:title="Premium"/>
+</menu>
