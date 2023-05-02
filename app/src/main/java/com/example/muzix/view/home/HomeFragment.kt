@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
             adapter.notifyDataSetChanged()
             updateUI(viewModel)
         }
-        viewModel.getArtist().observe(requireActivity()){
+        viewModel.getTopArtist().observe(requireActivity()){
             artistAdapter = ArtistAdapter(it)
             binding.rcvArtist.adapter = artistAdapter
             artistAdapter.notifyDataSetChanged()

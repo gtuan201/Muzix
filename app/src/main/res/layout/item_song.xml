@@ -9,7 +9,7 @@
     android:background="@color/main_background">
     <TextView
         android:id="@+id/tvNumber"
-        tools:text="1"
+        tools:text="10"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:layout_centerVertical="true"
@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"/>
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imgSong"
-        android:layout_toEndOf="@id/tvNumber"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="28dp"
         android:layout_width="52dp"
         android:src="@drawable/ic_launcher_background"
         app:riv_corner_radius="5dp"
@@ -47,14 +46,15 @@
            <TextView
                android:text="LYRICS"
                android:textColor="@color/black"
-               android:textSize="12sp"
+               android:textSize="10sp"
+               android:textStyle="bold"
                android:paddingHorizontal="4dp"
                android:background="@drawable/lyric"
                android:id="@+id/lyric"
                android:layout_marginStart="10dp"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               tools:ignore="HardcodedText" />
+               tools:ignore="HardcodedText,SmallSp" />
            <TextView
                android:id="@+id/tvSinger"
                tools:text="Ca sĩ"

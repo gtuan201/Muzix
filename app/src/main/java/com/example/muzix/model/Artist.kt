@@ -11,4 +11,8 @@ data class Artist(
     val listSong : List<Song>? = null,
     val description : String? = null,
     val lover : Long? = null
-)
+) : Comparable<Artist> {
+    override fun compareTo(other: Artist): Int {
+        return lover?.compareTo(other.lover!!) ?: 0
+    }
+}

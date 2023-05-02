@@ -88,19 +88,19 @@ class PlayMusicService : Service() {
         if (isPlaying) {
             remoteViews.setOnClickPendingIntent(
                 R.id.notification_play_pause,
-                getPendingIntent(this, ACTION_PAUSE)
+                getPendingIntent(ACTION_PAUSE)
             )
             remoteViews.setImageViewResource(R.id.notification_play_pause, R.drawable.ic_pause)
         } else {
             remoteViews.setOnClickPendingIntent(
                 R.id.notification_play_pause,
-                getPendingIntent(this, ACTION_RESUME)
+                getPendingIntent(ACTION_RESUME)
             )
             remoteViews.setImageViewResource(R.id.notification_play_pause, R.drawable.ic_play)
         }
         remoteViews.setOnClickPendingIntent(
             R.id.notification_cancel,
-            getPendingIntent(this, ACTION_CLEAR)
+            getPendingIntent(ACTION_CLEAR)
         )
 //        val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
 //            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -113,6 +113,9 @@ class PlayMusicService : Service() {
             .setSmallIcon(R.drawable.baseline_music_note_24)
             .setContentTitle(song?.name)
             .setContentText(song?.artist)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.logo))
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
@@ -122,21 +125,21 @@ class PlayMusicService : Service() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
         if (isPlaying) {
             notificationBuilder.addAction(R.drawable.ic_previous, "Previous", null)
-                .addAction(R.drawable.ic_pause, "Pause", getPendingIntent(this, ACTION_PAUSE))
+                .addAction(R.drawable.ic_pause, "Pause", getPendingIntent(ACTION_PAUSE))
                 .addAction(R.drawable.ic_next, "Next", null)
-                .addAction(R.drawable.ic_clear,"Clear",getPendingIntent(this, ACTION_CLEAR))
+                .addAction(R.drawable.ic_clear,"Clear",getPendingIntent(ACTION_CLEAR))
         }
         else {
             notificationBuilder.addAction(R.drawable.ic_previous, "Previous", null)
-                .addAction(R.drawable.ic_play, "Play", getPendingIntent(this, ACTION_RESUME))
+                .addAction(R.drawable.ic_play, "Play", getPendingIntent(ACTION_RESUME))
                 .addAction(R.drawable.ic_next, "Next", null)
-                .addAction(R.drawable.ic_clear,"Clear",getPendingIntent(this, ACTION_CLEAR))
+                .addAction(R.drawable.ic_clear,"Clear",getPendingIntent(ACTION_CLEAR))
         }
         startForeground(1, notificationBuilder.build())
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    private fun getPendingIntent(playMusicService: PlayMusicService, action: Int): PendingIntent? {
+    private fun getPendingIntent(action: Int): PendingIntent? {
         val intent = Intent(this, ControllerMusicReceiver::class.java)
         intent.putExtra("action", action)
         return PendingIntent.getBroadcast(this, action, intent, PendingIntent.FLAG_UPDATE_CURRENT)

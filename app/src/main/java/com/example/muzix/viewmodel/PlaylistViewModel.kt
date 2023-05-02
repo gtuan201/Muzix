@@ -58,13 +58,13 @@ class PlaylistViewModel : ViewModel() {
             })
         return dataCollection
     }
-    fun getArtist(): MutableLiveData<List<Artist>>{
+    fun getTopArtist(): MutableLiveData<List<Artist>>{
         FirebaseService.apiService.getArtist().enqueue(object :Callback<Map<String,Artist>>{
             override fun onResponse(
                 call: Call<Map<String, Artist>>,
                 response: Response<Map<String, Artist>>
             ) {
-                listArtist = response.body()?.values?.toList()!!
+                listArtist = response.body()?.values?.toList()!!.take(9)
                 dataArtist.postValue(listArtist)
             }
 

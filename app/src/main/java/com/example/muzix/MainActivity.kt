@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager: FragmentManager = supportFragmentManager
         fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.apply {
-            add(R.id.fragment_container, homeFragment).
+            add(R.id.fragment_container, homeFragment)
             add(R.id.fragment_container, searchFragment).hide(searchFragment)
             add(R.id.fragment_container, libraryFragment).hide(libraryFragment)
             add(R.id.fragment_container, premiumFragment).hide(premiumFragment)
@@ -104,16 +104,16 @@ class MainActivity : AppCompatActivity() {
         }
         val email = intent.getStringExtra("Email")
 //        Log.e("email", email.toString())
-//        for (i in 1..10) {
+//        for (i in 1..9) {
 //            val timestamp = System.currentTimeMillis().toString()
-//            FirebaseService.apiService.addPlaylist(timestamp,Playlist(timestamp,"name","des","owner","day","thum",
-//            null,"duration",0,"7"))
-//                .enqueue(object : Callback<Playlist>{
-//                    override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
-//                        Log.e("ok","oke")
+//            FirebaseService.apiService.addSong(timestamp,Song(timestamp,"name","duration","des","image",
+//            "artis","mp3","id",0,"Rap"))
+//                .enqueue(object : Callback<Song>{
+//                    override fun onResponse(call: Call<Song>, response: Response<Song>) {
+//                        Log.e("ok","ok")
 //                    }
 //
-//                    override fun onFailure(call: Call<Playlist>, t: Throwable) {
+//                    override fun onFailure(call: Call<Song>, t: Throwable) {
 //                        TODO("Not yet implemented")
 //                    }
 //
@@ -168,7 +168,16 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("action_service",action)
         startService(intent)
     }
-
+    fun switchFragment(fragment: Fragment){
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.fragment_container,fragment).hide(active).addToBackStack(null).show(fragment)
+        active = fragment
+    }
+    fun checkBackStack(){
+        if (supportFragmentManager.backStackEntryCount > 0){
+            supportFragmentManager.popBackStack()
+        }
+    }
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
