@@ -36,48 +36,48 @@ class PlaylistDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlaylistDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
-        playlist = intent.getParcelableExtra("playlist")
-        viewModel.getSong(playlist?.id.toString()).observe(this){
-            adapter = SongAdapter()
-            binding.rcvSong.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-            binding.rcvSong.setHasFixedSize(true)
-            adapter.setData(it)
-            binding.rcvSong.adapter = adapter
-        }
-        binding.collapsingToolbar.title = playlist?.name
-        binding.tvDescriptionPlaylist.text = playlist?.description
-        binding.tvOwner.text = playlist?.owner
-        binding.tvLoverDuration.text = "${playlist?.lover} lượt thích · ${playlist?.duration}"
-        binding.appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
-            val isCollapsed = abs(verticalOffset) == appBarLayout.totalScrollRange
-            binding.imageView.visibility = if (isCollapsed) View.GONE else View.VISIBLE
-        }
-
-        Glide.with(this).load(playlist?.thumbnail).into(binding.imageView)
-        binding.collapsingToolbar.setCollapsedTitleTextColor(resources.getColor(R.color.white))
-        binding.collapsingToolbar.setExpandedTitleColor(resources.getColor(R.color.white))
-        val bitmap = (binding.imageView.drawable as? BitmapDrawable)?.bitmap
-        if (bitmap != null && !bitmap.isRecycled) {
-            Palette.from(bitmap).generate { palette ->
-                val darkMutedColor = palette?.getDarkMutedColor(ContextCompat.getColor(this,R.color.main_background))
-                binding.collapsingToolbar.setContentScrimColor(darkMutedColor!!)
-            }
-        }
-        val multiTransformation = MultiTransformation(
-            BlurTransformation(50),
-            ColorFilterTransformation(Color.argb(80, 0, 0, 0))
-        )
-        Glide.with(this).asBitmap().load(playlist?.thumbnail)
-            .apply(RequestOptions.bitmapTransform(multiTransformation))
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    val drawable = BitmapDrawable(resources, resource)
-                    binding.collapsingToolbar.background = drawable
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    Log.e("onLoadCleared","error")
-                }
-            })
+//        val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
+//        playlist = intent.getParcelableExtra("playlist")
+//        viewModel.getSong(playlist?.id.toString()).observe(this){
+//            adapter = SongAdapter()
+//            binding.rcvSong.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+//            binding.rcvSong.setHasFixedSize(true)
+//            adapter.setData(it)
+//            binding.rcvSong.adapter = adapter
+//        }
+//        binding.collapsingToolbar.title = playlist?.name
+//        binding.tvDescriptionPlaylist.text = playlist?.description
+//        binding.tvOwner.text = playlist?.owner
+//        binding.tvLoverDuration.text = "${playlist?.lover} lượt thích · ${playlist?.duration}"
+//        binding.appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+//            val isCollapsed = abs(verticalOffset) == appBarLayout.totalScrollRange
+//            binding.imageView.visibility = if (isCollapsed) View.GONE else View.VISIBLE
+//        }
+//
+//        Glide.with(this).load(playlist?.thumbnail).into(binding.imageView)
+//        binding.collapsingToolbar.setCollapsedTitleTextColor(resources.getColor(R.color.white))
+//        binding.collapsingToolbar.setExpandedTitleColor(resources.getColor(R.color.white))
+//        val bitmap = (binding.imageView.drawable as? BitmapDrawable)?.bitmap
+//        if (bitmap != null && !bitmap.isRecycled) {
+//            Palette.from(bitmap).generate { palette ->
+//                val darkMutedColor = palette?.getDarkMutedColor(ContextCompat.getColor(this,R.color.main_background))
+//                binding.collapsingToolbar.setContentScrimColor(darkMutedColor!!)
+//            }
+//        }
+//        val multiTransformation = MultiTransformation(
+//            BlurTransformation(50),
+//            ColorFilterTransformation(Color.argb(80, 0, 0, 0))
+//        )
+//        Glide.with(this).asBitmap().load(playlist?.thumbnail)
+//            .apply(RequestOptions.bitmapTransform(multiTransformation))
+//            .into(object : CustomTarget<Bitmap>() {
+//                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                    val drawable = BitmapDrawable(resources, resource)
+//                    binding.collapsingToolbar.background = drawable
+//                }
+//                override fun onLoadCleared(placeholder: Drawable?) {
+//                    Log.e("onLoadCleared","error")
+//                }
+//            })
     }
 }

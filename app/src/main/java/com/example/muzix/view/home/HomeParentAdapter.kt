@@ -1,6 +1,5 @@
 package com.example.muzix.view.home
 
-import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeParentAdapter : RecyclerView.Adapter<HomeParentAdapter.HomeParentViewHolder>() {
+class HomeParentAdapter(private val listener: HomeChildAdapter.OnItemClickListener) : RecyclerView.Adapter<HomeParentAdapter.HomeParentViewHolder>() {
 
     private var list : List<PlaylistCollection> = ArrayList()
 
@@ -30,7 +29,7 @@ class HomeParentAdapter : RecyclerView.Adapter<HomeParentAdapter.HomeParentViewH
         val playlistCollection = list[position]
         holder.binding.tvNameCollection.text = playlistCollection.name
         holder.binding.rcvChild.layoutManager = LinearLayoutManager(holder.itemView.context,LinearLayoutManager.HORIZONTAL,false)
-        val adapter = HomeChildAdapter()
+        val adapter = HomeChildAdapter(listener)
         holder.binding.rcvChild.adapter = adapter
         holder.binding.rcvChild.setHasFixedSize(true)
         setDataPlaylist(adapter, playlistCollection.id.toString())

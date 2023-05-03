@@ -12,7 +12,7 @@ import com.example.muzix.databinding.ItemHomeChildBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.view.playlist_detail.PlaylistDetailActivity
 
-class HomeChildAdapter : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHolder>() {
+class HomeChildAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHolder>() {
 
     private var listPlaylist: List<Playlist> = emptyList()
 
@@ -36,9 +36,7 @@ class HomeChildAdapter : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHold
         holder.binding.tvNamePlaylist.text = playlist.name
         holder.binding.tvOwner.text = playlist.owner
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, PlaylistDetailActivity::class.java)
-            intent.putExtra("playlist",playlist)
-            holder.itemView.context.startActivity(intent)
+            listener.onItemClick(playlist)
         }
     }
 
@@ -48,6 +46,6 @@ class HomeChildAdapter : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHold
         notifyDataSetChanged()
     }
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(playlist: Playlist)
     }
 }

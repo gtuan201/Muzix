@@ -34,4 +34,7 @@ class SongAdapter : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
     fun setData(list : ArrayList<Song>){
         listSong = list
     }
+    fun clearData(){
+        listSong = emptyList()
+    }
 }

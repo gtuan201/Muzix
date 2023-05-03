@@ -12,12 +12,16 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.muzix.MainActivity
+import com.example.muzix.R
 import com.example.muzix.databinding.FragmentHomeBinding
+import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.ultis.PlayReceiver
+import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeParentAdapter
@@ -61,7 +65,7 @@ class HomeFragment : Fragment() {
         binding.rcvHome.setHasFixedSize(true)
         binding.rcvArtist.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         binding.rcvArtist.setHasFixedSize(true)
-        adapter = HomeParentAdapter()
+        adapter = HomeParentAdapter(this@HomeFragment)
     }
 
     private fun updateUI(viewModel: PlaylistViewModel) {
@@ -79,5 +83,13 @@ class HomeFragment : Fragment() {
             binding.imgRandomSong.visibility = View.VISIBLE
             binding.btnPlay.visibility = View.VISIBLE
         },1000)
+    }
+
+    override fun onItemClick(playlist: Playlist) {
+        val playlistDetailFragment = PlaylistDetailFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(playlistDetailFragment,playlist)
+        }
     }
 }

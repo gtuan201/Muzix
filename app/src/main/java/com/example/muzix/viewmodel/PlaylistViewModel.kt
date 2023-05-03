@@ -22,7 +22,7 @@ class PlaylistViewModel : ViewModel() {
     private var listArtist : List<Artist> = ArrayList()
     private var dataRandomSong : MutableLiveData<Song> = MutableLiveData()
 
-    //    fun getPlaylist(idCollection : String) : MutableLiveData<List<Playlist>>{
+//        fun getPlaylist(idCollection : String) : MutableLiveData<List<Playlist>>{
 //        val call = FirebaseService.apiService.getPlaylist("idCollection",idCollection)
 //        call.enqueue(object : Callback<Map<String, Playlist>> {
 //            override fun onResponse(

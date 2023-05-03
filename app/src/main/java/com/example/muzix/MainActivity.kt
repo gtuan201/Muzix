@@ -1,19 +1,9 @@
 package com.example.muzix
 
-import android.Manifest
-import android.app.NotificationManager
 import android.content.*
-import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -26,19 +16,10 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_CLEAR
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_START
-import com.example.muzix.ultis.FirebaseService
-import com.example.muzix.ultis.NotificationApplication
-import com.example.muzix.ultis.NotificationApplication.Companion.NOTIFICATION_CHANNEL
 import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.LibraryFragment
 import com.example.muzix.view.PremiumFragment
 import com.example.muzix.view.SearchFragment
-import com.example.muzix.view.home.HomeChildAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
@@ -83,18 +64,22 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.icon_home -> {
                     changeFragment(homeFragment)
+                    checkBackStack()
                     true
                 }
                 R.id.icon_search -> {
                     changeFragment(searchFragment)
+                    checkBackStack()
                     true
                 }
                 R.id.icon_library -> {
                     changeFragment(libraryFragment)
+                    checkBackStack()
                     true
                 }
                 R.id.icon_premium -> {
                     changeFragment(premiumFragment)
+                    checkBackStack()
                     true
                 }
                 else -> {
@@ -102,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        val email = intent.getStringExtra("Email")
+//        val email = intent.getStringExtra("Email")
 //        Log.e("email", email.toString())
 //        for (i in 1..9) {
 //            val timestamp = System.currentTimeMillis().toString()
@@ -163,23 +148,38 @@ class MainActivity : AppCompatActivity() {
             binding.btnPlayOrPause.setImageResource(R.drawable.ic_pause)
         } else binding.btnPlayOrPause.setImageResource(R.drawable.ic_play)
     }
-    private fun sendActionToService(action: Int){
-        val intent = Intent(this,PlayMusicService::class.java)
-        intent.putExtra("action_service",action)
+
+    private fun sendActionToService(action: Int) {
+        val intent = Intent(this, PlayMusicService::class.java)
+        intent.putExtra("action_service", action)
         startService(intent)
     }
-    fun switchFragment(fragment: Fragment){
+
+    fun switchFragment(fragment: Fragment, playlist: Playlist) {
         fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.fragment_container,fragment).hide(active).addToBackStack(null).show(fragment)
+        val bundle = Bundle()
+        bundle.putParcelable("playlist", playlist)
+        fragment.arguments = bundle
+        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack("playlist_detail")
+            .hide(active).show(fragment).commit()
         active = fragment
     }
-    fun checkBackStack(){
-        if (supportFragmentManager.backStackEntryCount > 0){
+
+    private fun checkBackStack() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else super.onBackPressed()
     }
 }
