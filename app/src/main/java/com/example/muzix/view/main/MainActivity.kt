@@ -1,14 +1,17 @@
-package com.example.muzix
+package com.example.muzix.view.main
 
 import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.bumptech.glide.Glide
+import com.example.muzix.R
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
 import com.example.muzix.service.PlayMusicService
@@ -16,10 +19,17 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_CLEAR
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_START
+import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
+import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
+import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
+import com.example.muzix.ultis.Constants.Companion.UPDATE_STATUS_PLAYING_NOTIFICATION
 import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.LibraryFragment
 import com.example.muzix.view.PremiumFragment
 import com.example.muzix.view.SearchFragment
+import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
+import com.example.muzix.viewmodel.PlaylistViewModel
+import com.example.muzix.viewmodel.SongViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     private var song: Song? = null
     private var isPlaying: Boolean = false
     private var action: Int? = null
+    private var progress: Long = 0
+    private var max: Long = 0
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras
@@ -45,12 +57,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val receiverProgress: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            val bundle = intent.extras
+            if (bundle != null) {
+                progress = bundle.getLong("progress")
+                max = bundle.getLong("max")
+                updateProgress()
+            }
+        }
+    }
+
+    private val currentSongReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val song = intent?.getParcelableExtra<Song>("song")
+            if (song != null) {
+                sendToFragment(song)
+            }
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        LocalBroadcastManager.getInstance(this)
-            .registerReceiver(broadcastReceiver, IntentFilter("send_action"))
+        registerBroadcast()
         val fragmentManager: FragmentManager = supportFragmentManager
         fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.apply {
@@ -89,21 +121,17 @@ class MainActivity : AppCompatActivity() {
         }
 //        val email = intent.getStringExtra("Email")
 //        Log.e("email", email.toString())
-//        for (i in 1..9) {
-//            val timestamp = System.currentTimeMillis().toString()
-//            FirebaseService.apiService.addSong(timestamp,Song(timestamp,"name","duration","des","image",
-//            "artis","mp3","id",0,"Rap"))
-//                .enqueue(object : Callback<Song>{
-//                    override fun onResponse(call: Call<Song>, response: Response<Song>) {
-//                        Log.e("ok","ok")
-//                    }
-//
-//                    override fun onFailure(call: Call<Song>, t: Throwable) {
-//                        TODO("Not yet implemented")
-//                    }
-//
-//                })
-//        }
+    }
+
+    private fun registerBroadcast() {
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter(ACTION_UPDATE_STATUS_PLAYING))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(receiverProgress, IntentFilter(UPDATE_PROGRESS_PLAYING))
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            currentSongReceiver,
+            IntentFilter(SEND_CURRENT_SONG)
+        )
     }
 
     private fun showNowPlaying(action: Int?) {
@@ -151,8 +179,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendActionToService(action: Int) {
         val intent = Intent(this, PlayMusicService::class.java)
-        intent.putExtra("action_service", action)
+        intent.putExtra(UPDATE_STATUS_PLAYING_NOTIFICATION, action)
         startService(intent)
+    }
+
+    private fun updateProgress() {
+        binding.progressBar.max = max.toInt()
+        binding.progressBar.progress = progress.toInt()
     }
 
     fun switchFragment(fragment: Fragment, playlist: Playlist) {
@@ -171,11 +204,20 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun sendToFragment(song: Song) {
+        val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
+        viewModel.setCurrentSong(song)
+    }
     override fun onDestroy() {
         super.onDestroy()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+        unregisterBroadcastReceiver()
     }
 
+    private fun unregisterBroadcastReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverProgress)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(currentSongReceiver)
+    }
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0) {

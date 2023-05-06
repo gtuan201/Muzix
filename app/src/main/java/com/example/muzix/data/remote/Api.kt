@@ -1,4 +1,4 @@
-package com.example.muzix.ultis
+package com.example.muzix.data.remote
 
 import com.example.muzix.model.*
 import com.google.gson.Gson
@@ -19,6 +19,15 @@ interface FirebaseService {
     }
     @PUT("artist/{artistId}.json")
     fun addArtist(@Path("artistId") artistId : String,@Body artist: Artist) : Call<Artist>
+
+    @PUT("history/{historyId}.json")
+    fun addHistory(@Path("historyId") historyId : String,@Body history: History) : Call<History>
+
+    @GET("playlists/{id}.json")
+    fun getPlaylistFromId(@Path("id") id : String) : Call<Playlist>
+
+    @GET("history.json")
+    fun getHistory(): Call<Map<String,History>>
 
     @GET("artist.json")
     fun getArtist(): Call<Map<String, Artist>>

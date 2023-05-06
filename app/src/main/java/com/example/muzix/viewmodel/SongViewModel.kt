@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.FirebaseService
+import com.example.muzix.data.remote.FirebaseService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.muzix.databinding.ItemHomeParentBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.PlaylistCollection
-import com.example.muzix.ultis.FirebaseService
+import com.example.muzix.data.remote.FirebaseService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

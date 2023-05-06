@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".view.main.MainActivity">
 
    <FrameLayout
        android:id="@+id/fragment_container"
@@ -16,7 +16,7 @@
        android:layout_width="match_parent"
        android:layout_height="50dp"
        android:layout_above="@id/nav"
-       android:background="@color/grey">
+       android:background="#F0272323">
       <com.makeramen.roundedimageview.RoundedImageView
           android:id="@+id/imgNowPlaying"
           android:src="@drawable/logo"
@@ -35,7 +35,8 @@
           android:layout_toEndOf="@id/imgNowPlaying"
           android:layout_marginStart="10dp"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          tools:ignore="RelativeOverlap" />
       <TextView
           android:id="@+id/tvArtistNowPlaying"
           tools:text="Jisoo"
@@ -52,7 +53,8 @@
           android:src="@drawable/baseline_favorite_border_24"
           android:background="@color/transparent"
           android:layout_marginEnd="10dp"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          tools:ignore="ContentDescription" />
       <ImageButton
           android:id="@+id/btnPlayOrPause"
           android:src="@drawable/ic_pause"
@@ -61,7 +63,16 @@
           android:layout_alignParentEnd="true"
           android:layout_centerVertical="true"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
+          android:layout_height="wrap_content"
+          tools:ignore="ContentDescription" />
+      <ProgressBar
+          android:id="@+id/progressBar"
+          android:layout_alignParentBottom="true"
+          style="@style/HorizontalProgressBar"
+          android:layout_width="match_parent"
+          android:layout_height="2dp"
+          android:max="100"
+          android:progress="0" />
    </RelativeLayout>
    <com.google.android.material.bottomnavigation.BottomNavigationView
        android:id="@+id/nav"

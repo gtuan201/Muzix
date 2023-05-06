@@ -9,7 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import com.example.muzix.MainActivity
+import com.example.muzix.view.main.MainActivity
 import com.example.muzix.R
 import com.example.muzix.databinding.ActivityOnboardingBinding
 import com.example.muzix.viewmodel.LoginViewModel
@@ -41,7 +41,7 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding.btnLogin.setOnClickListener {
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
         //set up login google
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
