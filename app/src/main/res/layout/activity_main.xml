@@ -22,7 +22,7 @@
           android:src="@drawable/logo"
           android:scaleType="centerCrop"
           android:layout_centerVertical="true"
-          app:riv_corner_radius="10dp"
+          app:riv_corner_radius="5dp"
           android:layout_marginStart="5dp"
           android:layout_width="40dp"
           android:layout_height="40dp"/>

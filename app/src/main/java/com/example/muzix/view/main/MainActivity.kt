@@ -1,6 +1,9 @@
 package com.example.muzix.view.main
 
 import android.content.*
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,7 +13,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.muzix.R
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
@@ -27,9 +33,8 @@ import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.LibraryFragment
 import com.example.muzix.view.PremiumFragment
 import com.example.muzix.view.SearchFragment
-import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
+import com.example.muzix.view.song_playing.SongPlayingActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
-import com.example.muzix.viewmodel.SongViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,9 +58,12 @@ class MainActivity : AppCompatActivity() {
                 isPlaying = bundle.getBoolean("isPlaying")
                 action = bundle.getInt("action")
                 showNowPlaying(action)
+                backgroundLayoutNowPlaying(song)
+                sendIsPlayingToFragment(isPlaying)
             }
         }
     }
+
 
     private val receiverProgress: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent) {
@@ -73,6 +81,9 @@ class MainActivity : AppCompatActivity() {
             val song = intent?.getParcelableExtra<Song>("song")
             if (song != null) {
                 sendToFragment(song)
+            }
+            else {
+                sendToFragment(null)
             }
         }
     }
@@ -119,8 +130,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.layoutNowPlaying.setOnClickListener { openSongPlayingDetail() }
 //        val email = intent.getStringExtra("Email")
 //        Log.e("email", email.toString())
+    }
+
+    private fun openSongPlayingDetail() {
+        val intent = Intent(this, SongPlayingActivity::class.java)
+        intent.putExtra("song",song)
+        intent.putExtra("progress",progress)
+        intent.putExtra("max",max)
+        intent.putExtra("isPlaying",isPlaying)
+        startActivity(intent)
     }
 
     private fun registerBroadcast() {
@@ -204,9 +225,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendToFragment(song: Song) {
+    private fun sendToFragment(song: Song?) {
         val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
         viewModel.setCurrentSong(song)
+    }
+    private fun sendIsPlayingToFragment(playing: Boolean) {
+        val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
+        viewModel.setIsPlaying(playing)
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -223,5 +248,20 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else super.onBackPressed()
+    }
+    private fun backgroundLayoutNowPlaying(song: Song?) {
+        Glide.with(this).asBitmap().load(song?.image).into(object : CustomTarget<Bitmap>(){
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                Palette.from(resource).generate { palette ->
+                    val darkMutedSwatch = palette?.darkMutedSwatch
+                    val darkColor = darkMutedSwatch?.rgb ?: Color.TRANSPARENT
+                    binding.layoutNowPlaying.setBackgroundColor(darkColor)
+                }
+            }
+
+            override fun onLoadCleared(placeholder: Drawable?) {
+                Log.d("onLoadCleared","error")
+            }
+        })
     }
 }

@@ -3,7 +3,6 @@ package com.example.muzix.view.playlist_detail
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +35,6 @@ class SongAdapter(private var context: Context) : RecyclerView.Adapter<SongAdapt
         val song = listSong[position]
         if (song == playingPosition){
             holder.binding.tvNameSong.setTextColor(context.getColor(R.color.main))
-            Log.e("current",song.name.toString())
         }
         else holder.binding.tvNameSong.setTextColor(context.getColor(R.color.white))
         Glide.with(holder.binding.imgSong).load(song.image).into(holder.binding.imgSong)
@@ -47,7 +45,6 @@ class SongAdapter(private var context: Context) : RecyclerView.Adapter<SongAdapt
             val intent = Intent(context,PlayReceiver::class.java)
             intent.action = PLAY
             intent.putParcelableArrayListExtra("playlist",listSong)
-//            intent.putExtra("key",song)
             intent.putExtra("position",position)
             context.sendBroadcast(intent)
         }
@@ -56,7 +53,7 @@ class SongAdapter(private var context: Context) : RecyclerView.Adapter<SongAdapt
         listSong = list
     }
     @SuppressLint("NotifyDataSetChanged")
-    fun setPlayingPosition(song: Song){
+    fun setPlayingPosition(song: Song?){
         playingPosition = song
         notifyDataSetChanged()
     }

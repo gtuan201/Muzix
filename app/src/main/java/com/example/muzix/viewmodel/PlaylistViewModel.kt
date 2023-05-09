@@ -12,9 +12,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class PlaylistViewModel : ViewModel() {
-    private var dataPlaylist: MutableLiveData<List<Playlist>> = MutableLiveData()
+    private var dataPlaylist: MutableLiveData<Playlist> = MutableLiveData()
     private var dataCollection: MutableLiveData<List<PlaylistCollection>> = MutableLiveData()
-    private var listPlaylist: List<Playlist> = ArrayList()
     private var listCol: List<PlaylistCollection> = ArrayList()
     private var dataArtist : MutableLiveData<List<Artist>> = MutableLiveData()
     private var listArtist : List<Artist> = ArrayList()
@@ -24,23 +23,27 @@ class PlaylistViewModel : ViewModel() {
     private var dataCurrentSong : MutableLiveData<Song> = MutableLiveData()
     var currentSong : Song? = null
     private set
+    private var dataIsPlaying : MutableLiveData<Boolean> = MutableLiveData()
+    var isPlaying : Boolean = false
+        private set
 
-//        fun getPlaylist(idCollection : String) : MutableLiveData<List<Playlist>>{
-//        val call = FirebaseService.apiService.getPlaylist("idCollection",idCollection)
-//        call.enqueue(object : Callback<Map<String, Playlist>> {
-//            override fun onResponse(
-//                call: Call<Map<String, Playlist>>,
-//                response: Response<Map<String, Playlist>>
-//            ) {
-//                listPlaylist = response.body()?.values?.toList()!!
-//                dataPlaylist.postValue(listPlaylist)
-//            }
-//            override fun onFailure(call: Call<Map<String, Playlist>>, t: Throwable) {
-//                Log.e("getPlaylist","error")
-//            }
-//        })
-//        return dataPlaylist
-//    }
+        fun getPlaylist(idPlaylist : String) : MutableLiveData<Playlist>{
+        val call = FirebaseService.apiService.getPlaylistFromId(idPlaylist)
+        call.enqueue(object : Callback<Playlist> {
+            override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                if (response.isSuccessful && response.body() != null){
+                    val playlist = response.body()
+                    dataPlaylist.postValue(playlist)
+                }
+            }
+
+            override fun onFailure(call: Call<Playlist>, t: Throwable) {
+                Log.e("getPlaylist","error")
+            }
+
+        })
+        return dataPlaylist
+    }
     fun getCollection(): MutableLiveData<List<PlaylistCollection>> {
         FirebaseService.apiService.getCollection()
             .enqueue(object : Callback<Map<String, PlaylistCollection>> {
@@ -121,11 +124,18 @@ class PlaylistViewModel : ViewModel() {
         })
         return dataHistory
     }
-    fun setCurrentSong(song: Song){
+    fun setCurrentSong(song: Song?){
         currentSong = song
         dataCurrentSong.postValue(song)
     }
     fun getCurrentSong(): MutableLiveData<Song>{
         return dataCurrentSong
+    }
+    fun setIsPlaying(playing : Boolean){
+        isPlaying = playing
+        dataIsPlaying.postValue(isPlaying)
+    }
+    fun getIsPlaying(): MutableLiveData<Boolean>{
+        return dataIsPlaying
     }
 }

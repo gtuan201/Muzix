@@ -1,7 +1,6 @@
 package com.example.muzix.view.home
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemHomeChildBinding
 import com.example.muzix.model.Playlist
-import com.example.muzix.view.playlist_detail.PlaylistDetailActivity
 
 class HomeChildAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHolder>() {
 

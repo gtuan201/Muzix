@@ -70,7 +70,7 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
                     binding.rcvHistory.adapter = historyAdapter
                     historyAdapter.notifyDataSetChanged()
                     if (it.isNotEmpty()){
-                        display()
+                        displayHistory()
                     }
                 }
 
@@ -93,11 +93,11 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
         return binding.root
     }
 
-    private fun display() {
+    private fun displayHistory() {
        Handler().postDelayed({
            binding.titleHistory.visibility = View.VISIBLE
            binding.rcvHistory.visibility = View.VISIBLE
-       },700)
+       },500)
     }
 
     private fun setUpRcv() {
