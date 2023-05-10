@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class LoginRepository() {
+class LoginRepository {
     fun uploadData() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         val db = Firebase.firestore

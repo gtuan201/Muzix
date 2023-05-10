@@ -89,7 +89,6 @@ class PlaylistDetailFragment : Fragment() {
             if (it != null && it.idPlaylist == playlist?.id) {
                 adapter.setPlayingPosition(it)
             } else {
-                isPlaying = false
                 adapter.setPlayingPosition(null)
                 binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
             }
@@ -97,7 +96,7 @@ class PlaylistDetailFragment : Fragment() {
         viewModelGlobal.getIsPlaying().observe(requireActivity()){
             if (currentSong != null){
                 isPlaying = it
-                if (it){
+                if (isPlaying){
                     binding.fap.setImageResource(R.drawable.baseline_pause_24)
                 }
                 else{
@@ -142,6 +141,7 @@ class PlaylistDetailFragment : Fragment() {
             }
             else{
                 binding.fap.setImageResource(R.drawable.baseline_pause_24)
+                isPlaying = true
                 playingPlaylist()
             }
         }
