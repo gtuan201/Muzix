@@ -146,7 +146,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_artist"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="110dp"
                 android:layout_marginTop="12dp"
                 android:visibility="invisible"
                 android:layout_width="match_parent"

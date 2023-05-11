@@ -13,7 +13,7 @@ data class Playlist(
     val tracks : List<Song>? = null,
     val duration : String? = null,
     val lover : Long? = null,
-    val idCollection : String? = null
+    val idCollection : String? = null,
 ):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),

@@ -55,4 +55,12 @@ interface FirebaseService {
 
     @POST("collections.json")
     fun addCollection(@Body collection: PlaylistCollection) : Call<PlaylistCollection>
+    @PUT("category/{id}.json")
+    fun addCategory(@Path("id") id: String,@Body category: Category) : Call<Category>
+
+    @GET("category.json")
+    fun getCategory() : Call<Map<String,Category>>
+
+    @GET("category/{id}.json")
+    fun getCategoryId(@Path("id") id: String) : Call<Category>
 }

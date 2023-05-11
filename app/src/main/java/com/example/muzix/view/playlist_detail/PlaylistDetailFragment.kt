@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -27,17 +28,20 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.PlayReceiver
+import com.example.muzix.view.home.HomeChildAdapter
+import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment() {
+class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null
     private var isPlaying : Boolean = false
     private lateinit var adapter: SongAdapter
+    private lateinit var playlistAdapter: HomeChildAdapter
     private var listSong : ArrayList<Song> = arrayListOf()
     private var mContext: Context? = null
 
@@ -67,11 +71,7 @@ class PlaylistDetailFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =
             FragmentPlaylistDetailBinding.inflate(LayoutInflater.from(mContext), container, false)
-        adapter = SongAdapter(requireContext())
-        binding.rcvSong.layoutManager =
-            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
-        binding.rcvSong.setHasFixedSize(true)
-        binding.rcvSong.adapter = adapter
+        setUpRcv()
         val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
         viewModel.getSong(playlist?.id.toString()).observe(requireActivity()) {
             listSong = it
@@ -103,6 +103,10 @@ class PlaylistDetailFragment : Fragment() {
                     binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
                 }
             }
+        }
+        viewModelGlobal.getRandomPlaylist().observe(requireActivity()){
+            playlistAdapter.setDataPlaylist(it)
+            adapter.notifyDataSetChanged()
         }
         isPlaying = viewModelGlobal.isPlaying
         if (isPlaying){ binding.fap.setImageResource(R.drawable.baseline_pause_24) }
@@ -175,6 +179,18 @@ class PlaylistDetailFragment : Fragment() {
         return binding.root
     }
 
+    private fun setUpRcv() {
+        adapter = SongAdapter(requireContext())
+        playlistAdapter = HomeChildAdapter(this@PlaylistDetailFragment)
+        binding.rcvSong.layoutManager =
+            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        binding.rcvSong.setHasFixedSize(true)
+        binding.rcvSong.adapter = adapter
+        binding.rcvRecommend.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        binding.rcvRecommend.adapter = playlistAdapter
+        binding.rcvRecommend.setHasFixedSize(true)
+    }
+
     private fun playingPlaylist() {
         val intent = Intent(context, PlayReceiver::class.java)
         val position = Random.nextInt(listSong.size - 1)
@@ -195,5 +211,13 @@ class PlaylistDetailFragment : Fragment() {
         val intent = Intent(requireContext(), PlayMusicService::class.java)
         intent.putExtra(Constants.UPDATE_STATUS_PLAYING_NOTIFICATION, action)
         requireActivity().startService(intent)
+    }
+
+    override fun onItemClick(playlist: Playlist) {
+        val playlistDetailFragment = PlaylistDetailFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(playlistDetailFragment,playlist)
+        }
     }
 }

@@ -8,4 +8,7 @@
     <string name="title_activity_song_playing">SongPlayingActivity</string>
     <string name="action_settings">Settings</string>
     <string name="playlist_playing">Đang phát từ danh sách phát</string>
+    <string name="maybe_you_like">Có thể bạn sẽ thích</string>
+    <string name="edt_hint">Bạn muốn nghe gì?</string>
+    <string name="search">Tìm kiếm</string>
 </resources>

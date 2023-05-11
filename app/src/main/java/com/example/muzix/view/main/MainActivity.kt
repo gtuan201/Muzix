@@ -29,10 +29,10 @@ import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.UPDATE_STATUS_PLAYING_NOTIFICATION
-import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.LibraryFragment
 import com.example.muzix.view.PremiumFragment
-import com.example.muzix.view.SearchFragment
+import com.example.muzix.view.home.HomeFragment
+import com.example.muzix.view.search.SearchFragment
 import com.example.muzix.view.song_playing.SongPlayingActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
 
@@ -106,23 +106,23 @@ class MainActivity : AppCompatActivity() {
         binding.nav.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.icon_home -> {
-                    changeFragment(homeFragment)
                     checkBackStack()
+                    changeFragment(homeFragment)
                     true
                 }
                 R.id.icon_search -> {
-                    changeFragment(searchFragment)
                     checkBackStack()
+                    changeFragment(searchFragment)
                     true
                 }
                 R.id.icon_library -> {
-                    changeFragment(libraryFragment)
                     checkBackStack()
+                    changeFragment(libraryFragment)
                     true
                 }
                 R.id.icon_premium -> {
-                    changeFragment(premiumFragment)
                     checkBackStack()
+                    changeFragment(premiumFragment)
                     true
                 }
                 else -> {
@@ -131,8 +131,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.layoutNowPlaying.setOnClickListener { openSongPlayingDetail() }
-//        val email = intent.getStringExtra("Email")
-//        Log.e("email", email.toString())
     }
 
     private fun openSongPlayingDetail() {
@@ -214,14 +212,23 @@ class MainActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putParcelable("playlist", playlist)
         fragment.arguments = bundle
-        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack("playlist_detail")
+        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null)
             .hide(active).show(fragment).commit()
+        active = fragment
+    }
+    fun switchFragment(fragment: Fragment, category: Category) {
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+        val bundle = Bundle()
+        bundle.putParcelable("category", category)
+        fragment.arguments = bundle
+        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null)
+           .commit()
         active = fragment
     }
 
     private fun checkBackStack() {
-        if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
+        while (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStackImmediate()
         }
     }
 
@@ -245,7 +252,7 @@ class MainActivity : AppCompatActivity() {
     }
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 0) {
+        if (supportFragmentManager.backStackEntryCount > 4) {
             supportFragmentManager.popBackStack()
         } else super.onBackPressed()
     }
@@ -263,5 +270,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d("onLoadCleared","error")
             }
         })
+    }
+    private fun clearBackStack() {
+        val fragmentManager = supportFragmentManager
+        for (i in 0 until fragmentManager.backStackEntryCount) {
+            fragmentManager.popBackStack()
+        }
     }
 }

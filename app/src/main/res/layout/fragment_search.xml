@@ -3,7 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.SearchFragment"
+    tools:context=".view.search.SearchFragment"
     android:background="@color/main_background">
 
+    <TextView
+        android:id="@+id/tvSearch"
+        android:textColor="@color/white"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:text="@string/search"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"/>
+    <TextView
+        android:id="@+id/edt_search"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/tvSearch"
+        android:hint="@string/edt_hint"
+        android:layout_marginHorizontal="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:background="@drawable/edt_custom"
+        android:layout_height="wrap_content"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginStart="16dp"
+        android:id="@+id/rcv_category"
+        android:layout_below="@id/edt_search"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
