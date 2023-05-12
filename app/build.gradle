@@ -78,4 +78,6 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
     //ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+    //SwipeLayout
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".view.search.SearchFragment"
     android:background="@color/main_background">
 
@@ -16,8 +17,9 @@
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="60dp"/>
-    <TextView
+    <EditText
         android:id="@+id/edt_search"
+        android:inputType="textCapSentences"
         android:layout_marginTop="16dp"
         android:layout_below="@id/tvSearch"
         android:hint="@string/edt_hint"
@@ -28,11 +30,89 @@
         android:layout_width="match_parent"
         android:background="@drawable/edt_custom"
         android:layout_height="wrap_content"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginStart="16dp"
-        android:id="@+id/rcv_category"
-        android:layout_below="@id/edt_search"
-        android:layout_marginTop="20dp"
+<!--  <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:id="@+id/rcv_category"-->
+<!--        android:layout_below="@id/edt_search"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
+   <RadioGroup
+       android:id="@+id/tab_search"
+       android:orientation="horizontal"
+       android:visibility="invisible"
+       android:layout_below="@id/edt_search"
+       android:layout_marginTop="20dp"
+       android:layout_marginHorizontal="16dp"
+       android:layout_width="match_parent"
+       android:layout_height="34dp">
+       <RadioButton
+           android:id="@+id/tab_playlist"
+           android:background="@drawable/tab_selector"
+           android:paddingHorizontal="8dp"
+           android:button="@null"
+           android:layout_marginEnd="10dp"
+           android:text="@string/playlist"
+           android:gravity="center"
+           android:layout_gravity="center_vertical"
+           android:textColor="@color/white"
+           android:layout_width="0dp"
+           android:layout_weight="2"
+           android:layout_height="match_parent"/>
+       <RadioButton
+           android:id="@+id/tab_song"
+           android:background="@drawable/tab_selector"
+           android:paddingHorizontal="8dp"
+           android:gravity="center"
+           android:layout_marginEnd="10dp"
+           android:button="@null"
+           android:text="@string/song"
+           android:layout_gravity="center_vertical"
+           android:textColor="@color/white"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="match_parent"/>
+       <RadioButton
+           android:id="@+id/tab_artist"
+           android:layout_gravity="center_vertical"
+           android:background="@drawable/tab_selector"
+           android:paddingHorizontal="8dp"
+           android:gravity="center"
+           android:button="@null"
+           android:text="@string/artist"
+           android:textColor="@color/white"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="match_parent"/>
+   </RadioGroup>
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpg"
+        android:visibility="invisible"
+        android:layout_below="@id/tab_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <LinearLayout
+        android:id="@+id/layout_first_search"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Phát nội dung bạn thích"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:textColor="@color/grey"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="Tìm kiếm bài hát, nghệ sĩ và nhiều \nnội dung khác"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
 </RelativeLayout>

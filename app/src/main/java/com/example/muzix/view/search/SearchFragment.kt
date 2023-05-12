@@ -2,28 +2,22 @@ package com.example.muzix.view.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
+import com.example.muzix.R
 import com.example.muzix.databinding.FragmentSearchBinding
-import com.example.muzix.model.Category
-import com.example.muzix.ultis.showSoftKeyboard
-import com.example.muzix.view.detail_category.DetailCategoryFragment
-import com.example.muzix.view.main.MainActivity
-import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
-import com.example.muzix.viewmodel.CategoryViewModel
+import com.example.muzix.viewmodel.SearchViewModel
 
-class SearchFragment : Fragment(),SearchAdapter.OnCategoryClickListener {
+class SearchFragment : Fragment(){
 
 
     private lateinit var binding : FragmentSearchBinding
     private lateinit var adapter: SearchAdapter
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -32,26 +26,66 @@ class SearchFragment : Fragment(),SearchAdapter.OnCategoryClickListener {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(LayoutInflater.from(context),container,false)
-        val viewModel = ViewModelProvider(this)[CategoryViewModel::class.java]
-        adapter = SearchAdapter(this@SearchFragment)
-        binding.rcvCategory.layoutManager = GridLayoutManager(requireContext(),2)
-        binding.rcvCategory.adapter = adapter
-        binding.rcvCategory.setHasFixedSize(true)
-        viewModel.getCategory().observe(viewLifecycleOwner){
-            adapter.setData(it)
-            adapter.notifyDataSetChanged()
-        }
-        binding.edtSearch.setOnClickListener{
+        val viewModel = ViewModelProvider(requireActivity())[SearchViewModel::class.java]
+//        adapter = SearchAdapter(this@SearchFragment)
+//        binding.rcvCategory.layoutManager = GridLayoutManager(requireContext(),2)
+//        binding.rcvCategory.adapter = adapter
+//        binding.rcvCategory.setHasFixedSize(true)
+//        viewModel.getCategory().observe(viewLifecycleOwner){
+//            adapter.setData(it)
+//            adapter.notifyDataSetChanged()
+//        }
+        setUpTablayout()
+        binding.edtSearch.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-        }
-        return binding.root
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateUI(s!!.isNotEmpty())
+                viewModel.setDataSearch(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
+       return binding.root
     }
 
-    override fun onItemClick(category: Category) {
-        val categoryDetailFragment = DetailCategoryFragment()
-        if (activity is MainActivity){
-            val activity = activity as MainActivity
-            activity.switchFragment(categoryDetailFragment,category)
+    private fun updateUI(hasFocus: Boolean) {
+        if (hasFocus) {
+            binding.layoutFirstSearch.visibility = View.GONE
+            binding.tabSearch.visibility = View.VISIBLE
+            binding.vpg.visibility = View.VISIBLE
+        }
+        else {
+            binding.layoutFirstSearch.visibility = View.VISIBLE
+            binding.tabSearch.visibility = View.INVISIBLE
+            binding.vpg.visibility = View.INVISIBLE
         }
     }
+
+    private fun setUpTablayout() {
+        val adapter = ViewPagerAdapter(childFragmentManager,lifecycle)
+        binding.vpg.adapter = adapter
+        binding.vpg.isUserInputEnabled = false
+        binding.tabSearch.check(R.id.tab_playlist)
+        binding.tabSearch.setOnCheckedChangeListener { _, checkedId ->
+            when(checkedId){
+                R.id.tab_playlist -> binding.vpg.currentItem = 0
+                R.id.tab_song -> binding.vpg.currentItem = 1
+                R.id.tab_artist -> binding.vpg.currentItem = 2
+            }
+        }
+    }
+
+//    override fun onItemClick(category: Category) {
+//        val categoryDetailFragment = DetailCategoryFragment()
+//        if (activity is MainActivity){
+//            val activity = activity as MainActivity
+//            activity.switchFragment(categoryDetailFragment,category)
+//        }
+//    }
 }

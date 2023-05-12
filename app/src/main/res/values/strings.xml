@@ -11,4 +11,8 @@
     <string name="maybe_you_like">Có thể bạn sẽ thích</string>
     <string name="edt_hint">Bạn muốn nghe gì?</string>
     <string name="search">Tìm kiếm</string>
+    <string name="next_song">Bài hát tiếp theo</string>
+    <string name="playlist">Danh sách phát</string>
+    <string name="song">Bài hát</string>
+    <string name="artist">Nghệ sĩ</string>
 </resources>

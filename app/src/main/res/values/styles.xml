@@ -11,4 +11,8 @@
         <item name="android:progressTint">@color/white</item>
         <item name="android:progressBackgroundTint">@color/main_background</item>
     </style>
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">12sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>

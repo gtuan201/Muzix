@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -17,11 +18,14 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.daimajia.swipe.SimpleSwipeListener
+import com.daimajia.swipe.SwipeLayout
 import com.example.muzix.R
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
 import com.example.muzix.service.PlayMusicService
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_CLEAR
+import com.example.muzix.service.PlayMusicService.Companion.ACTION_NEXT
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_START
@@ -106,8 +110,12 @@ class MainActivity : AppCompatActivity() {
         binding.nav.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.icon_home -> {
-                    checkBackStack()
-                    changeFragment(homeFragment)
+//                    clearBackStack()
+//                    checkBackStack()
+//                    changeFragment(homeFragment)
+                    fragmentTransaction = supportFragmentManager.beginTransaction()
+                    fragmentTransaction.hide(active).show(homeFragment).hide(searchFragment).commit()
+                    active = homeFragment
                     true
                 }
                 R.id.icon_search -> {
@@ -131,6 +139,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.layoutNowPlaying.setOnClickListener { openSongPlayingDetail() }
+        binding.swipeToNext.addSwipeListener(object : SimpleSwipeListener(){
+            override fun onOpen(layout: SwipeLayout?) {
+                sendActionToService(ACTION_NEXT)
+                layout?.close()
+            }
+        })
     }
 
     private fun openSongPlayingDetail() {
@@ -228,7 +242,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkBackStack() {
         while (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStackImmediate()
+            supportFragmentManager.popBackStackImmediate(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
     }
 
@@ -263,6 +277,7 @@ class MainActivity : AppCompatActivity() {
                     val darkMutedSwatch = palette?.darkMutedSwatch
                     val darkColor = darkMutedSwatch?.rgb ?: Color.TRANSPARENT
                     binding.layoutNowPlaying.setBackgroundColor(darkColor)
+                    binding.layoutSwipe.setBackgroundColor(darkColor)
                 }
             }
 

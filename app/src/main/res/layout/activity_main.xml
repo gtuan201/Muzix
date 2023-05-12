@@ -26,27 +26,51 @@
           android:layout_marginStart="5dp"
           android:layout_width="40dp"
           android:layout_height="40dp"/>
-      <TextView
-          android:id="@+id/tvNameNowPlaying"
-          tools:text="Đang phát"
-          android:layout_marginTop="4dp"
-          android:textColor="@color/white"
-          android:textStyle="bold"
+      <com.daimajia.swipe.SwipeLayout
+          android:id="@+id/swipe_to_next"
+          android:layout_width="match_parent"
           android:layout_toEndOf="@id/imgNowPlaying"
+          android:layout_toStartOf="@id/btnFavorite"
           android:layout_marginStart="10dp"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          tools:ignore="RelativeOverlap" />
-      <TextView
-          android:id="@+id/tvArtistNowPlaying"
-          tools:text="Jisoo"
-          android:layout_below="@id/tvNameNowPlaying"
-          android:textColor="@color/white"
-          android:layout_toEndOf="@id/imgNowPlaying"
-          android:layout_marginStart="10dp"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"/>
+          android:layout_height="match_parent"
+          app:drag_edge="right">
+         <LinearLayout
+             android:id="@+id/layout_swipe"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvNextSong"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_gravity="center_vertical"
+                android:text="@string/next_song"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+         </LinearLayout>
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:orientation="vertical"
+             android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvNameNowPlaying"
+                tools:text="Đang phát"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="RelativeOverlap" />
+            <TextView
+                android:id="@+id/tvArtistNowPlaying"
+                tools:text="Jisoo"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+         </LinearLayout>
+
+      </com.daimajia.swipe.SwipeLayout>
       <ImageButton
+          android:id="@+id/btnFavorite"
           android:layout_width="wrap_content"
           android:layout_toStartOf="@id/btnPlayOrPause"
           android:layout_centerVertical="true"
