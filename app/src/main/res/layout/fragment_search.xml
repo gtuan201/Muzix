@@ -85,8 +85,8 @@
            android:layout_weight="1"
            android:layout_height="match_parent"/>
    </RadioGroup>
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpg"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container_child"
         android:visibility="invisible"
         android:layout_below="@id/tab_search"
         android:layout_width="match_parent"

@@ -33,6 +33,7 @@ import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.UPDATE_STATUS_PLAYING_NOTIFICATION
+import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.view.LibraryFragment
 import com.example.muzix.view.PremiumFragment
 import com.example.muzix.view.home.HomeFragment
@@ -113,6 +114,7 @@ class MainActivity : AppCompatActivity() {
 //                    clearBackStack()
 //                    checkBackStack()
 //                    changeFragment(homeFragment)
+                    hiddenSoftKeyboard(this)
                     fragmentTransaction = supportFragmentManager.beginTransaction()
                     fragmentTransaction.hide(active).show(homeFragment).hide(searchFragment).commit()
                     active = homeFragment
@@ -187,6 +189,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeFragment(fragment: Fragment) {
+        hiddenSoftKeyboard(this)
         fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.hide(active).show(fragment).commit()
         active = fragment

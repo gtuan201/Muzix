@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.example.muzix.R
 import com.example.muzix.databinding.FragmentSearchBinding
+import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment(){
@@ -58,27 +59,35 @@ class SearchFragment : Fragment(){
         if (hasFocus) {
             binding.layoutFirstSearch.visibility = View.GONE
             binding.tabSearch.visibility = View.VISIBLE
-            binding.vpg.visibility = View.VISIBLE
+            binding.containerChild.visibility = View.VISIBLE
         }
         else {
             binding.layoutFirstSearch.visibility = View.VISIBLE
             binding.tabSearch.visibility = View.INVISIBLE
-            binding.vpg.visibility = View.INVISIBLE
+            binding.containerChild.visibility = View.INVISIBLE
         }
     }
 
     private fun setUpTablayout() {
         val adapter = ViewPagerAdapter(childFragmentManager,lifecycle)
-        binding.vpg.adapter = adapter
-        binding.vpg.isUserInputEnabled = false
+        val ft = childFragmentManager.beginTransaction()
+        val playlistSearchFragment = PlaylistSearchFragment()
+        val songSearchFragment = SongSearchFragment()
+        val artistSearchFragment = ArtistSearchFragment()
+        ft.replace(R.id.container_child,PlaylistSearchFragment()).commit()
         binding.tabSearch.check(R.id.tab_playlist)
         binding.tabSearch.setOnCheckedChangeListener { _, checkedId ->
             when(checkedId){
-                R.id.tab_playlist -> binding.vpg.currentItem = 0
-                R.id.tab_song -> binding.vpg.currentItem = 1
-                R.id.tab_artist -> binding.vpg.currentItem = 2
+                R.id.tab_playlist -> switchFragment(playlistSearchFragment)
+                R.id.tab_song -> switchFragment(songSearchFragment)
+                R.id.tab_artist -> switchFragment(artistSearchFragment)
             }
         }
+    }
+    private fun switchFragment(fragment: Fragment){
+        activity?.let { hiddenSoftKeyboard(it) }
+        val ft = childFragmentManager.beginTransaction()
+        ft.replace(R.id.container_child,fragment).commit()
     }
 
 //    override fun onItemClick(category: Category) {
