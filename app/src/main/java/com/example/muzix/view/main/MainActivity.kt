@@ -140,6 +140,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        binding.layoutInfor.setOnClickListener{openSongPlayingDetail()}
         binding.layoutNowPlaying.setOnClickListener { openSongPlayingDetail() }
         binding.swipeToNext.addSwipeListener(object : SimpleSwipeListener(){
             override fun onOpen(layout: SwipeLayout?) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.muzix.data.remote.FirebaseService
+import com.example.muzix.model.Artist
 import com.example.muzix.model.Category
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
@@ -19,6 +20,7 @@ class SearchViewModel : ViewModel() {
     private var dataSearch : MutableLiveData<String> = MutableLiveData()
     private var dataListPlaylist : MutableLiveData<List<Playlist>> = MutableLiveData()
     private var dataListSong : MutableLiveData<List<Song>> = MutableLiveData()
+    private var dataListArtist : MutableLiveData<List<Artist>> = MutableLiveData()
 
 //    fun getCategory(): MutableLiveData<List<Category>>{
 //        viewModelScope.launch {
@@ -100,5 +102,32 @@ class SearchViewModel : ViewModel() {
             })
         }
         return dataListSong
+    }
+    fun getListArtist(key : String): MutableLiveData<List<Artist>>{
+        viewModelScope.launch {
+            val listValue : MutableList<Artist> = mutableListOf()
+            FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String,Artist>>{
+                override fun onResponse(
+                    call: Call<Map<String, Artist>>,
+                    response: Response<Map<String, Artist>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        val list = response.body()!!.values.toList()
+                        for (i in list){
+                            if (i.name?.lowercase()?.contains(key.lowercase()) == true){
+                                listValue.add(i)
+                            }
+                        }
+                        dataListArtist.postValue(listValue)
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Artist>>, t: Throwable) {
+
+                }
+
+            })
+        }
+        return dataListArtist
     }
 }
