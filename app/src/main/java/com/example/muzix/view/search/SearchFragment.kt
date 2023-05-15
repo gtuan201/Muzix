@@ -9,16 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.muzix.R
 import com.example.muzix.databinding.FragmentSearchBinding
 import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.viewmodel.SearchViewModel
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment(){
 
 
     private lateinit var binding : FragmentSearchBinding
-    private lateinit var adapter: SearchAdapter
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -37,25 +38,28 @@ class SearchFragment : Fragment(){
 //            adapter.notifyDataSetChanged()
 //        }
         setUpTablayout()
-        binding.edtSearch.addTextChangedListener(object : TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.edtSearch.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
-            }
+                }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                updateUI(s!!.isNotEmpty())
-                viewModel.setDataSearch(s.toString())
-            }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    updateUI(s!!.isNotEmpty())
+                    viewModel.setDataSearch(s.toString())
+                }
 
-            override fun afterTextChanged(s: Editable?) {
+                override fun afterTextChanged(s: Editable?) {
 
-            }
+                }
 
-        })
+            })
+        }
        return binding.root
     }
 
     private fun updateUI(hasFocus: Boolean) {
+        binding.tabSearch.check(R.id.tab_playlist)
         if (hasFocus) {
             binding.layoutFirstSearch.visibility = View.GONE
             binding.tabSearch.visibility = View.VISIBLE
@@ -69,7 +73,6 @@ class SearchFragment : Fragment(){
     }
 
     private fun setUpTablayout() {
-        val adapter = ViewPagerAdapter(childFragmentManager,lifecycle)
         val ft = childFragmentManager.beginTransaction()
         val playlistSearchFragment = PlaylistSearchFragment()
         val songSearchFragment = SongSearchFragment()

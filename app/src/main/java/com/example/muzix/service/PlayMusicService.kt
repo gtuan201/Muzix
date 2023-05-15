@@ -58,6 +58,7 @@ class PlayMusicService : Service() {
         const val ACTION_CLEAR = 4
         const val ACTION_NEXT = 5
         const val ACTION_PREVIOUS = 6
+        const val ACTION_SEEK_TO = 7
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -175,6 +176,9 @@ class PlayMusicService : Service() {
                 sendNotification(previousSong)
             }
         }
+    }
+    private fun seekTo(){
+
     }
 
     private fun sendNotification(song: Song?){

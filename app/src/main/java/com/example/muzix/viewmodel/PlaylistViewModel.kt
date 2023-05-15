@@ -141,7 +141,7 @@ class PlaylistViewModel : ViewModel() {
         return dataArtist
     }
 
-    fun getRandomSong(): MutableLiveData<Song> {
+    fun getRandomSong(position : Int): MutableLiveData<Song> {
         viewModelScope.launch {
             FirebaseService.apiService.getSong().enqueue(object : Callback<Map<String, Song>> {
                 override fun onResponse(
@@ -151,7 +151,7 @@ class PlaylistViewModel : ViewModel() {
                     if (response.isSuccessful) {
                         val songs = response.body()?.values?.toList()
                         if (songs != null) {
-                            dataRandomSong.postValue(songs[9])
+                            dataRandomSong.postValue(songs[position])
                         }
                     }
                 }

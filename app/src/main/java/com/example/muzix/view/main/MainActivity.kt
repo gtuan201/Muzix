@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -55,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     private var action: Int? = null
     private var progress: Long = 0
     private var max: Long = 0
+//    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras

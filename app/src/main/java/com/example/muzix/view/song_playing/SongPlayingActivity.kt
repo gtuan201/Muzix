@@ -11,6 +11,8 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
+import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +29,7 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_NEXT
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PREVIOUS
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
+import com.example.muzix.service.PlayMusicService.Companion.ACTION_SEEK_TO
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
@@ -90,6 +93,20 @@ class SongPlayingActivity : AppCompatActivity() {
         }
         binding.btnNext.setOnClickListener { sendActionToService(ACTION_NEXT) }
         binding.btnPrevious.setOnClickListener { sendActionToService(ACTION_PREVIOUS) }
+        binding.progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                sendActionToService(ACTION_SEEK_TO)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+
+            }
+
+        })
     }
 
     private fun showInforSong(song: Song?, viewModel: PlaylistViewModel?) {

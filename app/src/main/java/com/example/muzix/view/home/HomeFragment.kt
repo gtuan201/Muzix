@@ -1,9 +1,11 @@
 package com.example.muzix.view.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,9 +35,7 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
     private lateinit var historyAdapter: HistoryAdapter
     private var song : Song? = null
     private var listPlaylistHistory : MutableList<Playlist> = mutableListOf()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var randomPosition : Int = 0
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -46,6 +46,8 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(LayoutInflater.from(requireContext()), container, false)
         setUpRcv()
+        val preferences = context?.getSharedPreferences("MyPreferences",Context.MODE_PRIVATE)
+        randomPosition = preferences?.getInt("id",0) ?: 0
         val viewModel = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
         viewModel.getCollection().observe(requireActivity()) {
             adapter.setDataCollection(it)
@@ -94,10 +96,8 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
     }
 
     private fun displayHistory() {
-       Handler().postDelayed({
-           binding.titleHistory.visibility = View.VISIBLE
-           binding.rcvHistory.visibility = View.VISIBLE
-       },500)
+        binding.titleHistory.visibility = View.VISIBLE
+        binding.rcvHistory.visibility = View.VISIBLE
     }
 
     private fun setUpRcv() {
@@ -113,9 +113,9 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
 
     @SuppressLint("SetTextI18n")
     private fun updateUI(viewModel: PlaylistViewModel) {
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             binding.progressLoading.visibility = View.GONE
-            viewModel.getRandomSong().observe(requireActivity()){
+            viewModel.getRandomSong(randomPosition).observe(requireActivity()){
                 Glide.with(binding.imgRandomSong).load(it.image).into(binding.imgRandomSong)
                 binding.tvNameSong.text = "${it.name} - ${it.artist}"
                 song = it
