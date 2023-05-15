@@ -85,7 +85,8 @@ class PlayMusicService : Service() {
         }
         val actionMusic = intent?.getIntExtra(UPDATE_STATUS_PLAYING_NOTIFICATION, 0)
         if (actionMusic != null) {
-            handleActionMusic(actionMusic)
+            val process = intent.getLongExtra("seekToProgress",0)
+            handleActionMusic(actionMusic,process)
         }
         return START_NOT_STICKY
     }
@@ -177,8 +178,9 @@ class PlayMusicService : Service() {
             }
         }
     }
-    private fun seekTo(){
-
+    private fun seekTo(process: Long) {
+        player.seekTo(process)
+        player.play()
     }
 
     private fun sendNotification(song: Song?){
@@ -193,7 +195,7 @@ class PlayMusicService : Service() {
             .setStyle(
                 androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2)
-                    .setShowCancelButton(true)
+                    .setShowCancelButton(false)
             )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
         if (isPlaying) {
@@ -217,12 +219,13 @@ class PlayMusicService : Service() {
         return PendingIntent.getBroadcast(this, action, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private fun handleActionMusic(action: Int) {
+    private fun handleActionMusic(action: Int, process: Long) {
         when (action) {
             ACTION_PAUSE -> pauseMusic()
             ACTION_RESUME -> resumeMusic()
             ACTION_NEXT -> nextSongRecommend()
             ACTION_PREVIOUS -> previousSong()
+            ACTION_SEEK_TO -> seekTo(process)
             ACTION_CLEAR -> {
                 sendCurrentSongToActivity(null)
                 sendActionToActivity(ACTION_CLEAR,null)

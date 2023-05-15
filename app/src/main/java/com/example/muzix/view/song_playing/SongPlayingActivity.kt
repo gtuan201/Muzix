@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -95,7 +94,7 @@ class SongPlayingActivity : AppCompatActivity() {
         binding.btnPrevious.setOnClickListener { sendActionToService(ACTION_PREVIOUS) }
         binding.progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                sendActionToService(ACTION_SEEK_TO)
+
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -103,7 +102,8 @@ class SongPlayingActivity : AppCompatActivity() {
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
+                val process = seekBar?.progress?.toLong()
+                sendActionToService(ACTION_SEEK_TO, process)
             }
 
         })
@@ -127,6 +127,12 @@ class SongPlayingActivity : AppCompatActivity() {
     }
     private fun sendActionToService(action: Int) {
         val intent = Intent(this, PlayMusicService::class.java)
+        intent.putExtra(Constants.UPDATE_STATUS_PLAYING_NOTIFICATION, action)
+        startService(intent)
+    }
+    private fun sendActionToService(action: Int, process: Long?) {
+        val intent = Intent(this, PlayMusicService::class.java)
+        intent.putExtra("seekToProgress",process)
         intent.putExtra(Constants.UPDATE_STATUS_PLAYING_NOTIFICATION, action)
         startService(intent)
     }
