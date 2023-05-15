@@ -20,14 +20,17 @@ import com.example.muzix.databinding.FragmentHomeBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.data.remote.FirebaseService
+import com.example.muzix.model.Artist
+import com.example.muzix.ultis.OnArtistClick
 import com.example.muzix.ultis.PlayReceiver
+import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
+class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener, OnArtistClick {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeParentAdapter
@@ -83,7 +86,7 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
             })
         }
         viewModel.getTopArtist().observe(requireActivity()){
-            artistAdapter = ArtistAdapter(it)
+            artistAdapter = ArtistAdapter(it,this@HomeFragment)
             binding.rcvArtist.adapter = artistAdapter
             artistAdapter.notifyDataSetChanged()
         }
@@ -134,6 +137,14 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
         if (activity is MainActivity){
             val activity = activity as MainActivity
             activity.switchFragment(playlistDetailFragment,playlist)
+        }
+    }
+
+    override fun onArtistClick(artist: Artist) {
+        val artistDetailFragment = ArtistDetailFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(artistDetailFragment,artist)
         }
     }
 }

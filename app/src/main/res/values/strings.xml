@@ -15,4 +15,8 @@
     <string name="playlist">Danh sách phát</string>
     <string name="song">Bài hát</string>
     <string name="artist">Nghệ sĩ</string>
+    <string name="follow">Theo dõi</string>
+    <string name="show_more">Xem thêm</string>
+    <string name="show_less">Rút gọn</string>
+    <string name="tracks">Danh sách bài hát</string>
 </resources>
