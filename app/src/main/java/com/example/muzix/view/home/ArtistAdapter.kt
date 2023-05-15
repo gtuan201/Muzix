@@ -10,7 +10,7 @@ import com.example.muzix.databinding.ItemArtistBinding
 import com.example.muzix.model.Artist
 import com.example.muzix.ultis.OnArtistClick
 
-class ArtistAdapter(private var list: List<Artist>,val listener : OnArtistClick) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
+class ArtistAdapter(private var list: List<Artist>, private val listener : OnArtistClick) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 
     class ArtistViewHolder(val binding: ItemArtistBinding) : ViewHolder(binding.root)
 

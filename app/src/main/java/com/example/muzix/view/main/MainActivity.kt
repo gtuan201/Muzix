@@ -20,7 +20,6 @@ import com.bumptech.glide.request.transition.Transition
 import com.daimajia.swipe.SimpleSwipeListener
 import com.daimajia.swipe.SwipeLayout
 import com.example.muzix.R
-import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
 import com.example.muzix.service.PlayMusicService
@@ -34,16 +33,12 @@ import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.UPDATE_STATUS_PLAYING_NOTIFICATION
 import com.example.muzix.ultis.hiddenSoftKeyboard
-import com.example.muzix.view.LibraryFragment
+import com.example.muzix.view.library.LibraryFragment
 import com.example.muzix.view.PremiumFragment
-import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.search.SearchFragment
 import com.example.muzix.view.song_playing.SongPlayingActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {

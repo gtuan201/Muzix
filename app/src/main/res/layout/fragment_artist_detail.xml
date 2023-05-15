@@ -148,9 +148,27 @@
                 android:layout_height="wrap_content"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_song"
-                android:visibility="visible"
                 android:layout_marginTop="12dp"
                 android:layout_below="@id/titleSong"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/title_favourite_artist"
+                android:text="@string/random_artist"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/rcv_song"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_favourite_artist"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="110dp"
+                android:layout_below="@id/title_favourite_artist"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </RelativeLayout>

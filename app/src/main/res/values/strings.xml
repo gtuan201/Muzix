@@ -19,4 +19,5 @@
     <string name="show_more">Xem thêm</string>
     <string name="show_less">Rút gọn</string>
     <string name="tracks">Danh sách bài hát</string>
+    <string name="random_artist">Các nghệ sĩ được yêu thích</string>
 </resources>

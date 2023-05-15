@@ -13,14 +13,18 @@ import com.example.muzix.R
 import com.example.muzix.databinding.FragmentArtistDetailBinding
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Song
+import com.example.muzix.ultis.OnArtistClick
+import com.example.muzix.view.home.ArtistAdapter
+import com.example.muzix.view.main.MainActivity
 import com.example.muzix.view.playlist_detail.SongAdapter
 import com.example.muzix.viewmodel.ArtistViewModel
 
 
-class ArtistDetailFragment : Fragment() {
+class ArtistDetailFragment : Fragment(),OnArtistClick {
 
     private lateinit var binding: FragmentArtistDetailBinding
     private lateinit var adapter: SongAdapter
+    private lateinit var artistAdapter: ArtistAdapter
     private var artist : Artist? = null
     private var alpha: Float = 0f
     private var isExpandable : Boolean = false
@@ -44,9 +48,15 @@ class ArtistDetailFragment : Fragment() {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         adapter = SongAdapter(requireContext())
         binding.rcvSong.adapter = adapter
+        binding.rcvFavouriteArtist.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         val viewModel = ViewModelProvider(this)[ArtistViewModel::class.java]
         viewModel.getSongOfArtist(artist?.name!!.lowercase()).observe(viewLifecycleOwner) {
             adapter.setData(it as ArrayList<Song>)
+            adapter.notifyDataSetChanged()
+        }
+        viewModel.getRandomArtist().observe(viewLifecycleOwner){
+            artistAdapter = ArtistAdapter(it,this@ArtistDetailFragment)
+            binding.rcvFavouriteArtist.adapter = artistAdapter
             adapter.notifyDataSetChanged()
         }
         Glide.with(requireActivity()).load(artist?.background).into(binding.imgBackgroud)
@@ -83,6 +93,14 @@ class ArtistDetailFragment : Fragment() {
                 scrollY.toFloat()/140f
             else 1f
             binding.toolbar.alpha = alpha
+        }
+    }
+
+    override fun onArtistClick(artist: Artist) {
+        val artistDetailFragment = ArtistDetailFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(artistDetailFragment,artist)
         }
     }
 }
