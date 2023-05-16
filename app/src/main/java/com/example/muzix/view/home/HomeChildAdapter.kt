@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemHomeChildBinding
 import com.example.muzix.model.Playlist
+import com.example.muzix.ultis.OnItemClickListener
 
 class HomeChildAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHolder>() {
 
@@ -17,7 +18,8 @@ class HomeChildAdapter(private val listener: OnItemClickListener) : RecyclerView
     class HomeChildViewHolder(val binding: ItemHomeChildBinding) : ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeChildViewHolder {
-        val binding = ItemHomeChildBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding =
+            ItemHomeChildBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return HomeChildViewHolder(binding)
     }
 
@@ -42,8 +44,5 @@ class HomeChildAdapter(private val listener: OnItemClickListener) : RecyclerView
     fun setDataPlaylist(list: List<Playlist>) {
         listPlaylist = list
         notifyDataSetChanged()
-    }
-    interface OnItemClickListener {
-        fun onItemClick(playlist: Playlist)
     }
 }

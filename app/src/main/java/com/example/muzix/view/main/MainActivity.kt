@@ -22,7 +22,6 @@ import com.daimajia.swipe.SwipeLayout
 import com.example.muzix.R
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
-import com.example.muzix.service.PlayMusicService
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_CLEAR
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_NEXT
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
@@ -31,8 +30,8 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_START
 import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
-import com.example.muzix.ultis.Constants.Companion.UPDATE_STATUS_PLAYING_NOTIFICATION
 import com.example.muzix.ultis.hiddenSoftKeyboard
+import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.library.LibraryFragment
 import com.example.muzix.view.PremiumFragment
 import com.example.muzix.view.home.HomeFragment
@@ -111,9 +110,6 @@ class MainActivity : AppCompatActivity() {
         binding.nav.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.icon_home -> {
-//                    clearBackStack()
-//                    checkBackStack()
-//                    changeFragment(homeFragment)
                     hiddenSoftKeyboard(this)
                     fragmentTransaction = supportFragmentManager.beginTransaction()
                     fragmentTransaction.hide(active).show(homeFragment).hide(searchFragment).commit()
@@ -144,7 +140,7 @@ class MainActivity : AppCompatActivity() {
         binding.layoutNowPlaying.setOnClickListener { openSongPlayingDetail() }
         binding.swipeToNext.addSwipeListener(object : SimpleSwipeListener(){
             override fun onOpen(layout: SwipeLayout?) {
-                sendActionToService(ACTION_NEXT)
+                sendActionToService(ACTION_NEXT,this@MainActivity,this@MainActivity)
                 layout?.close()
             }
         })
@@ -202,8 +198,8 @@ class MainActivity : AppCompatActivity() {
             binding.tvNameNowPlaying.text = song?.name
             binding.tvArtistNowPlaying.text = song?.artist
             binding.btnPlayOrPause.setOnClickListener {
-                if (isPlaying) sendActionToService(ACTION_PAUSE)
-                else sendActionToService(ACTION_RESUME)
+                if (isPlaying) sendActionToService(ACTION_PAUSE,this@MainActivity,this@MainActivity)
+                else sendActionToService(ACTION_RESUME,this@MainActivity,this@MainActivity)
             }
         }
     }
@@ -212,12 +208,6 @@ class MainActivity : AppCompatActivity() {
         if (isPlaying) {
             binding.btnPlayOrPause.setImageResource(R.drawable.ic_pause)
         } else binding.btnPlayOrPause.setImageResource(R.drawable.ic_play)
-    }
-
-    private fun sendActionToService(action: Int) {
-        val intent = Intent(this, PlayMusicService::class.java)
-        intent.putExtra(UPDATE_STATUS_PLAYING_NOTIFICATION, action)
-        startService(intent)
     }
 
     private fun updateProgress() {
@@ -268,7 +258,6 @@ class MainActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverProgress)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentSongReceiver)
     }
-    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 4) {
             supportFragmentManager.popBackStack()
@@ -290,10 +279,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-    private fun clearBackStack() {
-        val fragmentManager = supportFragmentManager
-        for (i in 0 until fragmentManager.backStackEntryCount) {
-            fragmentManager.popBackStack()
-        }
-    }
+//    private fun clearBackStack() {
+//        val fragmentManager = supportFragmentManager
+//        for (i in 0 until fragmentManager.backStackEntryCount) {
+//            fragmentManager.popBackStack()
+//        }
+//    }
 }

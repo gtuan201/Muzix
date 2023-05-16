@@ -44,7 +44,7 @@ class SplashActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         if (sharedPreferences.contains("lastDate")){
             val lastDate = sharedPreferences.getInt("lastDate",0)
-            if (lastDate < currentDate){
+            if (currentDate > lastDate){
                 putValuePreferences(size,editor,currentDate)
             }
         }

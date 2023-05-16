@@ -22,6 +22,7 @@ import com.example.muzix.model.Song
 import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.model.Artist
 import com.example.muzix.ultis.OnArtistClick
+import com.example.muzix.ultis.OnItemClickListener
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
@@ -30,7 +31,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener, OnArtistClick {
+class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var adapter: HomeParentAdapter
@@ -111,7 +112,7 @@ class HomeFragment : Fragment(),HomeChildAdapter.OnItemClickListener, OnArtistCl
         adapter = HomeParentAdapter(this@HomeFragment)
         binding.rcvHistory.layoutManager = GridLayoutManager(context,2)
         binding.rcvHistory.setHasFixedSize(true)
-        historyAdapter = HistoryAdapter()
+        historyAdapter = HistoryAdapter(this@HomeFragment)
     }
 
     @SuppressLint("SetTextI18n")

@@ -17,13 +17,14 @@ import com.example.muzix.databinding.FragmentDetailCategoryBinding
 import com.example.muzix.databinding.FragmentPlaylistDetailBinding
 import com.example.muzix.model.Category
 import com.example.muzix.model.Playlist
+import com.example.muzix.ultis.OnItemClickListener
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
 
 
-class DetailCategoryFragment : Fragment(),HomeChildAdapter.OnItemClickListener{
+class DetailCategoryFragment : Fragment(), OnItemClickListener {
 
     private lateinit var binding: FragmentDetailCategoryBinding
     private lateinit var adapter: CategoryParentAdapter

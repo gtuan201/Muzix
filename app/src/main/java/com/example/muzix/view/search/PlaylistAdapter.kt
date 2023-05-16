@@ -8,11 +8,12 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemPlaylistSearchBinding
 import com.example.muzix.model.Playlist
+import com.example.muzix.ultis.OnItemClickListener
 import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 
-class PlaylistAdapter(private val listener : HomeChildAdapter.OnItemClickListener) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
+class PlaylistAdapter(private val listener : OnItemClickListener) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
     private var listPlaylist : List<Playlist> = listOf()
     class PlaylistViewHolder(val binding: ItemPlaylistSearchBinding) : ViewHolder(binding.root)

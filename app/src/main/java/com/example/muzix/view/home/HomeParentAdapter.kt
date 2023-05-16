@@ -10,11 +10,12 @@ import com.example.muzix.databinding.ItemHomeParentBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.PlaylistCollection
 import com.example.muzix.data.remote.FirebaseService
+import com.example.muzix.ultis.OnItemClickListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeParentAdapter(private val listener: HomeChildAdapter.OnItemClickListener) : RecyclerView.Adapter<HomeParentAdapter.HomeParentViewHolder>() {
+class HomeParentAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<HomeParentAdapter.HomeParentViewHolder>() {
 
     private var list : List<PlaylistCollection> = ArrayList()
 

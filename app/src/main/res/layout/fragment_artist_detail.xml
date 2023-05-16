@@ -1,196 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.artist_detail.ArtistDetailFragment"
-    android:background="@color/main_background">
+    android:background="@color/main_background"
+    tools:context=".view.artist_detail.ArtistDetailFragment">
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/imgBackgroud"
-                android:src="@drawable/ic_launcher_background"
-                android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
                 tools:ignore="ContentDescription" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgArtist"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="70dp"
                 android:src="@drawable/ic_launcher_background"
-                app:civ_border_width="0.5dp"
                 app:civ_border_color="@color/grey"
-                android:layout_marginStart="16dp"
-                android:layout_width="140dp"
-                android:layout_height="140dp"/>
+                app:civ_border_width="0.5dp" />
+
             <TextView
                 android:id="@+id/tvNameArtist"
-                android:layout_marginTop="20dp"
-                tools:text="Test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/imgArtist"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="22sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold"
+                tools:text="Test" />
+
             <ImageView
-                android:src="@drawable/verified_account"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/imgArtist"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="26dp"
-                android:layout_below="@id/imgArtist"
                 android:layout_toEndOf="@id/tvNameArtist"
-                android:layout_width="20dp"
-                android:layout_height="20dp"/>
+                android:src="@drawable/verified_account" />
+
             <TextView
                 android:id="@+id/tvNation"
-                tools:text="Test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvNameArtist"
                 android:layout_marginStart="16dp"
-                android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold"
+                tools:text="Test" />
+
             <TextView
                 android:id="@+id/tvFollower"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/tvNation"
                 android:layout_marginStart="16dp"
-                android:textColor="@color/grey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-          <RelativeLayout
-              android:id="@+id/layoutButton"
-              android:layout_width="match_parent"
-              android:layout_below="@id/tvFollower"
-              android:layout_marginHorizontal="16dp"
-              android:layout_height="wrap_content">
-              <com.google.android.material.button.MaterialButton
-                  android:id="@+id/btnFollow"
-                  android:layout_centerVertical="true"
-                  android:layout_width="wrap_content"
-                  app:cornerRadius="10dp"
-                  app:strokeColor="@color/grey"
-                  app:strokeWidth="1.5dp"
-                  android:textColor="@color/white"
-                  android:textAllCaps="false"
-                  android:backgroundTint="@color/main_background"
-                  android:text="@string/follow"
-                  android:layout_height="wrap_content"/>
-              <ImageButton
-                  android:id="@+id/btnMore"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:background="@color/transparent"
-                  android:padding="8dp"
-                  android:layout_toEndOf="@id/btnFollow"
-                  android:layout_centerVertical="true"
-                  android:src="@drawable/baseline_more_vert_24"
-                  tools:ignore="ContentDescription" />
-              <ImageButton
-                  android:id="@+id/btnShuffle"
-                  android:padding="16dp"
-                  android:layout_toStartOf="@id/fap"
-                  android:layout_centerVertical="true"
-                  android:src="@drawable/icon_shuffle"
-                  android:background="@color/transparent"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"/>
-              <com.google.android.material.floatingactionbutton.FloatingActionButton
-                  android:id="@+id/fap"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_alignParentEnd="true"
-                  android:backgroundTint="@color/main"
-                  android:src="@drawable/ic_play"
-                  android:visibility="visible"
-                  app:borderWidth="0dp"
-                  tools:ignore="ContentDescription,RelativeOverlap" />
-          </RelativeLayout>
-            <TextView
-                android:id="@+id/tvDescription"
-                android:textColor="@color/white"
-                android:ellipsize="end"
-                android:layout_marginTop="16dp"
-                android:layout_below="@id/layoutButton"
-                android:layout_marginHorizontal="16dp"
+                android:textColor="@color/grey" />
+
+            <RelativeLayout
+                android:id="@+id/layoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="2"/>
+                android:layout_below="@id/tvFollower"
+                android:layout_marginHorizontal="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnFollow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="@color/main_background"
+                    android:text="@string/follow"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    app:cornerRadius="10dp"
+                    app:strokeColor="@color/grey"
+                    app:strokeWidth="1.5dp" />
+
+                <ImageButton
+                    android:id="@+id/btnMore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/btnFollow"
+                    android:background="@color/transparent"
+                    android:padding="8dp"
+                    android:src="@drawable/baseline_more_vert_24"
+                    tools:ignore="ContentDescription" />
+
+                <ImageButton
+                    android:id="@+id/btnShuffle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/fap"
+                    android:background="@color/transparent"
+                    android:padding="16dp"
+                    android:src="@drawable/icon_shuffle" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:backgroundTint="@color/main"
+                    android:src="@drawable/ic_play"
+                    android:visibility="visible"
+                    app:borderWidth="0dp"
+                    tools:ignore="ContentDescription,RelativeOverlap" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layoutButton"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/show_more"
-                android:layout_marginHorizontal="16dp"
-                android:layout_below="@id/tvDescription"
-                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/show_more"
+                android:layout_below="@id/tvDescription"
+                android:layout_marginHorizontal="16dp"
                 android:gravity="start"
-                android:textColor="#247EDD"/>
+                android:text="@string/show_more"
+                android:textColor="#247EDD"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/titleSong"
-                android:text="@string/tracks"
-                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/show_more"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/tracks"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_song"
-                android:layout_marginTop="12dp"
-                android:layout_below="@id/titleSong"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_below="@id/titleSong"
+                android:layout_marginTop="12dp" />
+
             <TextView
-                android:id="@+id/title_favourite_artist"
-                android:text="@string/random_artist"
-                android:layout_marginTop="20dp"
+                android:id="@+id/title_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/rcv_song"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/list_playlist"
                 android:textColor="@color/white"
-                android:textStyle="bold"
                 android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/title_playlist"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/title_favourite_artist"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rcv_playlist"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/random_artist"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_favourite_artist"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="110dp"
-                android:layout_below="@id/title_favourite_artist"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_below="@id/title_favourite_artist"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="110dp" />
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
     <TextView
         android:id="@+id/toolbar"
-        android:textColor="@color/white"
-        tools:text="Test"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:gravity="center_vertical"
-        android:paddingStart="54dp"
-        android:background="@color/main_background"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        tools:ignore="RtlSymmetry" />
+        android:background="@color/main_background"
+        android:gravity="center_vertical"
+        android:paddingStart="54dp"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:ignore="RtlSymmetry"
+        tools:text="Test" />
+
     <ImageButton
         android:id="@+id/btnBack"
-        android:src="@drawable/baseline_arrow_back_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:background="@drawable/btn_play_background"
         android:padding="4dp"
-        android:layout_margin="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/baseline_arrow_back_24" />
 </RelativeLayout>

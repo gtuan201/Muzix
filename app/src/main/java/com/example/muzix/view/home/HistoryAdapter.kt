@@ -8,8 +8,9 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemHistoryBinding
 import com.example.muzix.model.Playlist
+import com.example.muzix.ultis.OnItemClickListener
 
-class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter(private val listener : OnItemClickListener) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
     private var listHistory : List<Playlist> = ArrayList()
     class HistoryViewHolder(val binding: ItemHistoryBinding) : ViewHolder(binding.root)
@@ -27,6 +28,9 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() 
         val playlist = listHistory[position]
         Glide.with(holder.binding.imgHistory).load(playlist.thumbnail).placeholder(R.drawable.thumbnail).into(holder.binding.imgHistory)
         holder.binding.tvNameHistory.text = playlist.name
+        holder.itemView.setOnClickListener{
+            listener.onItemClick(playlist)
+        }
     }
     fun setData(list : List<Playlist>){
         listHistory = list

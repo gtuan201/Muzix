@@ -26,7 +26,9 @@ import com.example.muzix.service.PlayMusicService
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.ultis.Constants
+import com.example.muzix.ultis.OnItemClickListener
 import com.example.muzix.ultis.PlayReceiver
+import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
@@ -34,7 +36,7 @@ import com.example.muzix.viewmodel.SongViewModel
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
+class PlaylistDetailFragment : Fragment(), OnItemClickListener {
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null
@@ -68,17 +70,22 @@ class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding =
-            FragmentPlaylistDetailBinding.inflate(LayoutInflater.from(mContext), container, false)
+        binding = FragmentPlaylistDetailBinding.inflate(LayoutInflater.from(mContext), container, false)
         setUpRcv()
+        // ViewModel getData
         val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
+        val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
         viewModel.getSong(playlist?.id.toString()).observe(requireActivity()) {
             listSong = it
             adapter.setData(it)
             adapter.notifyDataSetChanged()
             updateUI()
         }
-        val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
+        viewModelGlobal.getRandomPlaylist().observe(requireActivity()){
+            playlistAdapter.setDataPlaylist(it)
+            adapter.notifyDataSetChanged()
+        }
+        // update UI when playing song
         var currentSong = viewModelGlobal.currentSong
         if (currentSong != null && currentSong.idPlaylist == playlist?.id) {
             adapter.setPlayingPosition(currentSong)
@@ -103,13 +110,10 @@ class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
                 }
             }
         }
-        viewModelGlobal.getRandomPlaylist().observe(requireActivity()){
-            playlistAdapter.setDataPlaylist(it)
-            adapter.notifyDataSetChanged()
-        }
         isPlaying = viewModelGlobal.isPlaying
         if (isPlaying){ binding.fap.setImageResource(R.drawable.baseline_pause_24) }
         else binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
+        // Information Playlist
         binding.collapsingToolbar.title = playlist?.name
         binding.tvDescriptionPlaylist.text = playlist?.description
         binding.tvOwner.text = playlist?.owner
@@ -132,14 +136,14 @@ class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
                 R.color.white
             )
         )
-
+        //click fap
         binding.fap.setOnClickListener {
             if (currentSong != null && currentSong?.idPlaylist == playlist?.id){
                 if (isPlaying){
-                    sendActionToService(ACTION_PAUSE)
+                    sendActionToService(ACTION_PAUSE,requireContext(),requireActivity())
                 }
                 else {
-                    sendActionToService(ACTION_RESUME)
+                    sendActionToService(ACTION_RESUME,requireContext(),requireActivity())
                 }
             }
             else{
@@ -181,8 +185,7 @@ class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
     private fun setUpRcv() {
         adapter = SongAdapter(requireContext())
         playlistAdapter = HomeChildAdapter(this@PlaylistDetailFragment)
-        binding.rcvSong.layoutManager =
-            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        binding.rcvSong.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.rcvSong.setHasFixedSize(true)
         binding.rcvSong.adapter = adapter
         binding.rcvRecommend.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
@@ -204,12 +207,6 @@ class PlaylistDetailFragment : Fragment(),HomeChildAdapter.OnItemClickListener {
         binding.scroll.visibility = View.VISIBLE
         binding.fap.visibility = View.VISIBLE
         binding.appBarLayout.visibility = View.VISIBLE
-    }
-
-    private fun sendActionToService(action: Int) {
-        val intent = Intent(requireContext(), PlayMusicService::class.java)
-        intent.putExtra(Constants.UPDATE_STATUS_PLAYING_NOTIFICATION, action)
-        requireActivity().startService(intent)
     }
 
     override fun onItemClick(playlist: Playlist) {

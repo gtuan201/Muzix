@@ -11,12 +11,13 @@ import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.databinding.ItemCategoryParentBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.PlaylistCollection
+import com.example.muzix.ultis.OnItemClickListener
 import com.example.muzix.view.home.HomeChildAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CategoryParentAdapter(private val listener: HomeChildAdapter.OnItemClickListener) : RecyclerView.Adapter<CategoryParentAdapter.CategoryParentVH>() {
+class CategoryParentAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<CategoryParentAdapter.CategoryParentVH>() {
 
     private var listCollectionOfCategory : List<PlaylistCollection> = listOf()
     class CategoryParentVH(val binding : ItemCategoryParentBinding) : ViewHolder(binding.root)

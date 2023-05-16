@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.muzix.R
 import com.example.muzix.databinding.FragmentPlaylistSearchBinding
 import com.example.muzix.model.Playlist
+import com.example.muzix.ultis.OnItemClickListener
 import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
@@ -20,7 +21,7 @@ import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.SearchViewModel
 import com.example.muzix.viewmodel.SongViewModel
 
-class PlaylistSearchFragment() : Fragment(),HomeChildAdapter.OnItemClickListener {
+class PlaylistSearchFragment() : Fragment(), OnItemClickListener {
 
     private lateinit var binding: FragmentPlaylistSearchBinding
     private lateinit var adapter: PlaylistAdapter
