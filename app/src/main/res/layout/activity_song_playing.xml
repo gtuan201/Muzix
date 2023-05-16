@@ -1,176 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layoutSong"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutSong"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_background"
     android:fitsSystemWindows="true"
-    tools:context=".view.song_playing.SongPlayingActivity"
-    android:background="@color/main_background">
+    tools:context=".view.song_playing.SongPlayingActivity">
 
     <ImageButton
         android:id="@+id/btnBack"
-        android:src="@drawable/baseline_keyboard_arrow_down_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:padding="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/baseline_keyboard_arrow_down_24" />
 
     <TextView
         android:id="@+id/tvTitle"
-        android:textColor="@color/grey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_toEndOf="@id/btnBack"
         android:layout_toStartOf="@id/btnMore"
+        android:layout_toEndOf="@id/btnBack"
         android:gravity="center"
         android:text="@string/playlist_playing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:textColor="@color/grey" />
 
     <ImageButton
         android:id="@+id/btnMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/baseline_more_vert_24"
         android:background="@color/transparent"
         android:padding="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/baseline_more_vert_24" />
+
     <TextView
         android:id="@+id/tvNamePlaylist"
-        tools:text="Tuyển tập nhạc của Đen Vâu"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_below="@id/tvTitle"
-        android:layout_toEndOf="@id/btnBack"
-        android:layout_toStartOf="@id/btnMore"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTitle"
+        android:layout_toStartOf="@id/btnMore"
+        android:layout_toEndOf="@id/btnBack"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:text="Tuyển tập nhạc của Đen Vâu" />
+
     <ImageView
         android:id="@+id/imgSong"
-        android:scaleType="centerCrop"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
         android:layout_below="@id/tvNamePlaylist"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="72dp"
-        android:layout_width="280dp"
-        android:layout_height="280dp"/>
+        android:scaleType="centerCrop" />
+
     <TextView
         android:id="@+id/tvNameSong"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="22sp"
-        android:layout_below="@id/imgSong"
-        android:layout_marginTop="72dp"
-        tools:text="Lối Nhỏ"
-        android:layout_marginStart="16dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgSong"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="72dp"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:text="Lối Nhỏ" />
+
     <TextView
         android:id="@+id/tvArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/tvNameSong"
         android:layout_marginStart="16dp"
-        android:textSize="16sp"
-        tools:text="Đen vâu"
         android:textColor="@color/grey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="16sp"
+        tools:text="Đen vâu" />
+
     <ImageButton
         android:id="@+id/btnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/imgSong"
-        android:layout_marginTop="64dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/baseline_favorite_border_24"
+        android:layout_marginTop="64dp"
         android:background="@color/transparent"
         android:padding="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:src="@drawable/baseline_favorite_border_24" />
+
     <SeekBar
         android:id="@+id/progressBar"
-        android:layout_below="@id/tvArtist"
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:thumbTint="@color/main"
+        android:layout_below="@id/tvArtist"
+        android:layout_marginTop="16dp"
+        android:progressBackgroundTint="@color/grey"
         android:progressTint="@color/main"
-        android:progressBackgroundTint="@color/grey" />
+        android:thumbTint="@color/main" />
+
     <TextView
         android:id="@+id/tvCurrentPosotion"
-        tools:text="0:00"
-        android:textColor="@color/grey"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/progressBar"
         android:layout_marginStart="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textColor="@color/grey"
+        tools:text="0:00" />
+
     <TextView
         android:id="@+id/tvDuration"
-        tools:text="3:51"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progressBar"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
         android:textColor="@color/grey"
-        android:layout_below="@id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
- <androidx.constraintlayout.widget.ConstraintLayout
-     android:layout_width="match_parent"
-     android:layout_marginHorizontal="16dp"
-     android:layout_marginTop="40dp"
-     android:layout_below="@id/tvDuration"
-     android:layout_height="wrap_content">
-     <ImageButton
-         android:id="@+id/btnShuffle"
-         app:layout_constraintStart_toStartOf="parent"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintEnd_toStartOf="@id/btnPrevious"
-         android:padding="16dp"
-         app:layout_constraintBottom_toBottomOf="parent"
-         android:src="@drawable/icon_shuffle"
-         android:background="@color/transparent"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"/>
-     <ImageButton
-         android:id="@+id/btnPrevious"
-         android:src="@drawable/ic_previous"
-         android:background="@color/transparent"
-         android:padding="16dp"
-         app:layout_constraintStart_toEndOf="@id/btnShuffle"
-         app:layout_constraintEnd_toStartOf="@id/btnPlay"
-         app:layout_constraintTop_toTopOf="parent"
-         android:scaleX="1.2"
-         android:scaleY="1.2"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"/>
-     <ImageButton
-         android:id="@+id/btnPlay"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintEnd_toStartOf="@id/btnNext"
-         app:layout_constraintStart_toEndOf="@id/btnPrevious"
-         android:src="@drawable/baseline_play_arrow_24"
-         android:padding="16dp"
-         android:background="@drawable/btn_play_background2"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"/>
-     <ImageButton
-         android:id="@+id/btnNext"
-         android:src="@drawable/ic_next"
-         android:background="@color/transparent"
-         android:padding="16dp"
-         app:layout_constraintStart_toEndOf="@id/btnPlay"
-         app:layout_constraintTop_toTopOf="parent"
-         app:layout_constraintEnd_toStartOf="@id/btnCancel"
-         android:scaleX="1.2"
-         android:scaleY="1.2"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"/>
-     <ImageButton
-         android:id="@+id/btnCancel"
-         android:src="@drawable/baseline_remove_circle_outline_24"
-         android:background="@color/transparent"
-         android:padding="16dp"
-         app:layout_constraintEnd_toEndOf="parent"
-         app:layout_constraintStart_toEndOf="@id/btnNext"
-         app:layout_constraintTop_toTopOf="parent"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"/>
- </androidx.constraintlayout.widget.ConstraintLayout>
+        tools:text="3:51" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDuration"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="40dp">
+
+        <ImageButton
+            android:id="@+id/btnShuffle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:padding="16dp"
+            android:src="@drawable/icon_shuffle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnPrevious"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:padding="16dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/ic_previous"
+            app:layout_constraintEnd_toStartOf="@id/btnPlay"
+            app:layout_constraintStart_toEndOf="@id/btnShuffle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_play_background2"
+            android:padding="16dp"
+            android:src="@drawable/baseline_play_arrow_24"
+            app:layout_constraintEnd_toStartOf="@id/btnNext"
+            app:layout_constraintStart_toEndOf="@id/btnPrevious"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:padding="16dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toStartOf="@id/btnCancel"
+            app:layout_constraintStart_toEndOf="@id/btnPlay"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:padding="16dp"
+            android:src="@drawable/baseline_remove_circle_outline_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnNext"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

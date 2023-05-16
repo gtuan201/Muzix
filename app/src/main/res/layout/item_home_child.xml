@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="140dp"
     android:layout_height="190dp"
-    android:orientation="vertical"
     android:layout_marginEnd="16dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/main_background">
+    android:background="@color/main_background"
+    android:orientation="vertical">
+
     <ImageView
         android:id="@+id/imgPlaylist"
-        android:src="@drawable/ic_launcher_background"
-        android:scaleType="centerCrop"
         android:layout_width="140dp"
         android:layout_height="140dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
         tools:ignore="ContentDescription" />
+
     <TextView
         android:id="@+id/tvNamePlaylist"
-        android:layout_marginTop="10dp"
-        tools:text="Tuyển tập những ca sĩ hot hit nhất của năm 2023"
-        android:textColor="@color/white"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textStyle="bold"
-        android:textSize="14sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        tools:text="Tuyển tập những ca sĩ hot hit nhất của năm 2023" />
+
     <TextView
         android:id="@+id/tvOwner"
-        tools:text="Tuấn"
-        android:textColor="@color/grey"
-        android:maxLines="1"
-        android:textSize="14sp"
-        android:ellipsize="end"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        tools:text="Tuấn" />
 </LinearLayout>

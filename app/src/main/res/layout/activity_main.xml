@@ -6,108 +6,120 @@
     android:layout_height="match_parent"
     tools:context=".view.main.MainActivity">
 
-   <FrameLayout
-       android:id="@+id/fragment_container"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
-   <RelativeLayout
-       android:visibility="gone"
-       android:id="@+id/layoutNowPlaying"
-       android:layout_width="match_parent"
-       android:layout_height="50dp"
-       android:layout_above="@id/nav"
-       android:background="#F0272323">
-      <com.makeramen.roundedimageview.RoundedImageView
-          android:id="@+id/imgNowPlaying"
-          android:src="@drawable/logo"
-          android:scaleType="centerCrop"
-          android:layout_centerVertical="true"
-          app:riv_corner_radius="5dp"
-          android:layout_marginStart="5dp"
-          android:layout_width="40dp"
-          android:layout_height="40dp"/>
-      <com.daimajia.swipe.SwipeLayout
-          android:id="@+id/swipe_to_next"
-          android:layout_width="match_parent"
-          android:layout_toEndOf="@id/imgNowPlaying"
-          android:layout_toStartOf="@id/btnFavorite"
-          android:layout_marginStart="10dp"
-          android:layout_height="match_parent"
-          app:drag_edge="right">
-         <LinearLayout
-             android:id="@+id/layout_swipe"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvNextSong"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:layout_gravity="center_vertical"
-                android:text="@string/next_song"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-         </LinearLayout>
-         <LinearLayout
-             android:id="@+id/layout_infor"
-             android:layout_width="wrap_content"
-             android:orientation="vertical"
-             android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/tvNameNowPlaying"
-                tools:text="Đang phát"
-                android:layout_marginTop="4dp"
-                android:textColor="@color/white"
-                android:textStyle="bold"
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/layoutNowPlaying"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@id/nav"
+        android:background="#F0272323"
+        android:visibility="gone">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imgNowPlaying"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo"
+            app:riv_corner_radius="5dp" />
+
+        <com.daimajia.swipe.SwipeLayout
+            android:id="@+id/swipe_to_next"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_toStartOf="@id/btnFavorite"
+            android:layout_toEndOf="@id/imgNowPlaying"
+            app:drag_edge="right">
+
+            <LinearLayout
+                android:id="@+id/layout_swipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvNextSong"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/next_song"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_infor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:ignore="RelativeOverlap" />
-            <TextView
-                android:id="@+id/tvArtistNowPlaying"
-                tools:text="Jisoo"
-                android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-         </LinearLayout>
+                android:orientation="vertical">
 
-      </com.daimajia.swipe.SwipeLayout>
-      <ImageButton
-          android:id="@+id/btnFavorite"
-          android:layout_width="wrap_content"
-          android:layout_toStartOf="@id/btnPlayOrPause"
-          android:layout_centerVertical="true"
-          android:src="@drawable/baseline_favorite_border_24"
-          android:background="@color/transparent"
-          android:layout_marginEnd="10dp"
-          android:layout_height="wrap_content"
-          tools:ignore="ContentDescription" />
-      <ImageButton
-          android:id="@+id/btnPlayOrPause"
-          android:src="@drawable/ic_pause"
-          android:layout_marginEnd="10dp"
-          android:background="@color/transparent"
-          android:layout_alignParentEnd="true"
-          android:layout_centerVertical="true"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          tools:ignore="ContentDescription" />
-      <ProgressBar
-          android:id="@+id/progressBar"
-          android:layout_alignParentBottom="true"
-          style="@style/HorizontalProgressBar"
-          android:layout_width="match_parent"
-          android:layout_height="2dp"
-          android:max="100"
-          android:progress="0" />
-   </RelativeLayout>
-   <com.google.android.material.bottomnavigation.BottomNavigationView
-       android:id="@+id/nav"
-       android:layout_width="match_parent"
-       android:layout_alignParentBottom="true"
-       android:layout_height="wrap_content"
-       app:menu="@menu/nav_item"
-       app:labelVisibilityMode="labeled"
-       app:itemTextColor="@color/nav_selected"
-       app:itemIconTint="@color/nav_selected"
-       android:background="@drawable/nav_background"/>
+                <TextView
+                    android:id="@+id/tvNameNowPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    tools:ignore="RelativeOverlap"
+                    tools:text="Đang phát" />
+
+                <TextView
+                    android:id="@+id/tvArtistNowPlaying"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    tools:text="Jisoo" />
+            </LinearLayout>
+
+        </com.daimajia.swipe.SwipeLayout>
+
+        <ImageButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/btnPlayOrPause"
+            android:background="@color/transparent"
+            android:src="@drawable/baseline_favorite_border_24"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/btnPlayOrPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_pause"
+            tools:ignore="ContentDescription" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/HorizontalProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentBottom="true"
+            android:max="100"
+            android:progress="0" />
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/nav_background"
+        app:itemIconTint="@color/nav_selected"
+        app:itemTextColor="@color/nav_selected"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/nav_item" />
 
 </RelativeLayout>

@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity() {
     private var action: Int? = null
     private var progress: Long = 0
     private var max: Long = 0
-//    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    //    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras
@@ -85,8 +86,7 @@ class MainActivity : AppCompatActivity() {
             val song = intent?.getParcelableExtra<Song>("song")
             if (song != null) {
                 sendToFragment(song)
-            }
-            else {
+            } else {
                 sendToFragment(null)
             }
         }
@@ -112,7 +112,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.icon_home -> {
                     hiddenSoftKeyboard(this)
                     fragmentTransaction = supportFragmentManager.beginTransaction()
-                    fragmentTransaction.hide(active).show(homeFragment).hide(searchFragment).commit()
+                    fragmentTransaction.hide(active).show(homeFragment).hide(searchFragment)
+                        .commit()
                     active = homeFragment
                     true
                 }
@@ -136,11 +137,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.layoutInfor.setOnClickListener{openSongPlayingDetail()}
+        binding.layoutInfor.setOnClickListener { openSongPlayingDetail() }
         binding.layoutNowPlaying.setOnClickListener { openSongPlayingDetail() }
-        binding.swipeToNext.addSwipeListener(object : SimpleSwipeListener(){
+        binding.swipeToNext.addSwipeListener(object : SimpleSwipeListener() {
             override fun onOpen(layout: SwipeLayout?) {
-                sendActionToService(ACTION_NEXT,this@MainActivity,this@MainActivity)
+                sendActionToService(ACTION_NEXT, this@MainActivity, this@MainActivity)
                 layout?.close()
             }
         })
@@ -148,10 +149,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun openSongPlayingDetail() {
         val intent = Intent(this, SongPlayingActivity::class.java)
-        intent.putExtra("song",song)
-        intent.putExtra("progress",progress)
-        intent.putExtra("max",max)
-        intent.putExtra("isPlaying",isPlaying)
+        intent.putExtra("song", song)
+        intent.putExtra("progress", progress)
+        intent.putExtra("max", max)
+        intent.putExtra("isPlaying", isPlaying)
         startActivity(intent)
     }
 
@@ -198,8 +199,12 @@ class MainActivity : AppCompatActivity() {
             binding.tvNameNowPlaying.text = song?.name
             binding.tvArtistNowPlaying.text = song?.artist
             binding.btnPlayOrPause.setOnClickListener {
-                if (isPlaying) sendActionToService(ACTION_PAUSE,this@MainActivity,this@MainActivity)
-                else sendActionToService(ACTION_RESUME,this@MainActivity,this@MainActivity)
+                if (isPlaying) sendActionToService(
+                    ACTION_PAUSE,
+                    this@MainActivity,
+                    this@MainActivity
+                )
+                else sendActionToService(ACTION_RESUME, this@MainActivity, this@MainActivity)
             }
         }
     }
@@ -224,19 +229,24 @@ class MainActivity : AppCompatActivity() {
             .hide(active).show(fragment).commit()
         active = fragment
     }
+
     fun switchFragment(fragment: Fragment, artist: Artist) {
         fragmentTransaction = supportFragmentManager.beginTransaction()
         val bundle = Bundle()
         bundle.putParcelable("artist", artist)
         fragment.arguments = bundle
-        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null).hide(active).show(fragment)
-           .commit()
+        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null).hide(active)
+            .show(fragment)
+            .commit()
         active = fragment
     }
 
     private fun checkBackStack() {
         while (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStackImmediate(null,FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStackImmediate(
+                null,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
         }
     }
 
@@ -244,10 +254,12 @@ class MainActivity : AppCompatActivity() {
         val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
         viewModel.setCurrentSong(song)
     }
+
     private fun sendIsPlayingToFragment(playing: Boolean) {
         val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
         viewModel.setIsPlaying(playing)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         unregisterBroadcastReceiver()
@@ -258,13 +270,15 @@ class MainActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverProgress)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentSongReceiver)
     }
+
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 4) {
             supportFragmentManager.popBackStack()
         } else super.onBackPressed()
     }
+
     private fun backgroundLayoutNowPlaying(song: Song?) {
-        Glide.with(this).asBitmap().load(song?.image).into(object : CustomTarget<Bitmap>(){
+        Glide.with(this).asBitmap().load(song?.image).into(object : CustomTarget<Bitmap>() {
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                 Palette.from(resource).generate { palette ->
                     val darkMutedSwatch = palette?.darkMutedSwatch
@@ -275,7 +289,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onLoadCleared(placeholder: Drawable?) {
-                Log.d("onLoadCleared","error")
+                Log.d("onLoadCleared", "error")
             }
         })
     }
