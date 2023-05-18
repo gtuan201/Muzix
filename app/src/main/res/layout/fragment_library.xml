@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -64,14 +65,43 @@
             android:layout_height="wrap_content"
             tools:ignore="HardcodedText" />
     </LinearLayout>
-    <TextView
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
         android:layout_below="@id/layout_toolbar"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="16sp"
-        android:text="Mới thêm gần đây"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="HardcodedText" />
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvFilter"
+                android:layout_marginTop="22dp"
+                android:layout_marginStart="16sp"
+                android:text="Mới thêm gần đây"
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:drawablePadding="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText"
+                app:drawableStartCompat="@drawable/baseline_filter_list_24" />
+            <ImageButton
+                android:id="@+id/btnChangeLayout"
+                android:layout_width="wrap_content"
+                android:src="@drawable/baseline_grid_view_24"
+                android:background="@color/transparent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="16sp"
+                android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_below="@id/btnChangeLayout"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="110dp"
+                android:id="@+id/rcv_lib"
+                android:layout_marginTop="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
