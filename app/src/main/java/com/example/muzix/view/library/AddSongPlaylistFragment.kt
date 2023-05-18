@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.muzix.R
+import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentAddSongPlaylistBinding
 import com.example.muzix.model.Playlist
@@ -26,6 +28,9 @@ import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
 class AddSongPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
@@ -103,8 +108,41 @@ class AddSongPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
     }
 
     private fun addSongToPlaylist(song: Song) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        FirebaseService.apiService.getPlaylistFromId(playlist?.id.toString()).enqueue(object :Callback<Playlist>{
+            override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                if (response.isSuccessful && response.body() != null){
+                    var listSong : ArrayList<Song> = arrayListOf()
+                    if (response.body()?.tracks != null) {
+                        listSong = response.body()?.tracks!!
+                    }
+                    listSong.add(song)
+                    playlist.apply {
+                        this?.tracks = listSong
+                    }
+                    FirebaseService.apiService.addPlaylist(playlist?.id.toString(), playlist!!)
+                        .enqueue(object : Callback<Playlist>{
+                            override fun onResponse(
+                                call: Call<Playlist>,
+                                response2: Response<Playlist>
+                            ) {
+                               if (response2.isSuccessful){
+                                   Log.e("add_song","success")
+                               }
+                            }
 
+                            override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+                            }
+
+                        })
+                }
+            }
+
+            override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+            }
+
+        })
     }
 
     private fun showSnackBar(song: Song, action : Int) {

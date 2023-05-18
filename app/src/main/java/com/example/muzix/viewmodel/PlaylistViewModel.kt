@@ -189,6 +189,23 @@ class PlaylistViewModel : ViewModel() {
         return dataHistory
     }
 
+    fun addPlaylist(playlist: Playlist){
+        viewModelScope.launch {
+            FirebaseService.apiService.addPlaylist(playlist.id.toString(),playlist)
+                .enqueue(object : Callback<Playlist>{
+                    override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                        if (response.isSuccessful && response.body() != null){
+                            Log.e("ok","ok")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Playlist>, t: Throwable) {
+                        Log.e("addPlaylist", "error")
+                    }
+
+                })
+        }
+    }
     fun setCurrentSong(song: Song?) {
         currentSong = song
         dataCurrentSong.postValue(song)

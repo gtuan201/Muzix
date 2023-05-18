@@ -13,7 +13,7 @@ import com.example.muzix.databinding.BottomSheetAddPlaylistBinding
 import com.example.muzix.databinding.FragmentLibraryBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.view.main.MainActivity
-import com.example.muzix.viewmodel.SongViewModel
+import com.example.muzix.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
@@ -22,7 +22,6 @@ import java.util.Calendar
 class LibraryFragment : Fragment() {
 
     private lateinit var binding : FragmentLibraryBinding
-    private var listPlaylist : MutableList<Playlist> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -33,15 +32,16 @@ class LibraryFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentLibraryBinding.inflate(LayoutInflater.from(context),container,false)
+        val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
         val imgProfile = FirebaseAuth.getInstance().currentUser?.photoUrl
         Glide.with(binding.imgProfile).load(imgProfile).placeholder(R.drawable.thumbnail).into(binding.imgProfile)
         binding.btnAdd.setOnClickListener {
-            openDialogAdd()
+            openDialogAdd(viewModel)
         }
         return binding.root
     }
 
-    private fun openDialogAdd() {
+    private fun openDialogAdd(viewModel: PlaylistViewModel) {
         val dialog = BottomSheetDialog(requireContext())
         val bindingBottom :BottomSheetAddPlaylistBinding = BottomSheetAddPlaylistBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(bindingBottom.root)
@@ -49,20 +49,20 @@ class LibraryFragment : Fragment() {
         bindingBottom.btnAddPlaylist.setOnClickListener {
             val namePlaylist = bindingBottom.edtName.text.toString().trim()
             dialog.dismiss()
-            addPlaylistToLib(namePlaylist)
+            addPlaylistToLib(namePlaylist,viewModel)
         }
         dialog.show()
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun addPlaylistToLib(namePlaylist: String) {
+    private fun addPlaylistToLib(namePlaylist: String, viewModel: PlaylistViewModel) {
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user?.uid.toString()
         val timeStamp = System.currentTimeMillis().toString()
         val calendar = Calendar.getInstance().time
         val dateCreate = SimpleDateFormat("dd-MM-yyyy").format(calendar)
-        val playlist = Playlist(timeStamp,namePlaylist,"",user?.displayName,dateCreate,user?.photoUrl.toString(),
-            null,"0",0,uid)
+        val playlist = Playlist(timeStamp,namePlaylist,"",user?.displayName,dateCreate,user?.photoUrl.toString(), null,"0",0,uid)
+        viewModel.addPlaylist(playlist)
         switchFragment(playlist)
     }
 
