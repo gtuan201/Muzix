@@ -20,6 +20,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.daimajia.swipe.SimpleSwipeListener
 import com.daimajia.swipe.SwipeLayout
 import com.example.muzix.R
+import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_CLEAR
@@ -38,6 +39,10 @@ import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.search.SearchFragment
 import com.example.muzix.view.song_playing.SongPlayingActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
+import com.google.firebase.auth.FirebaseAuth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
@@ -110,26 +115,19 @@ class MainActivity : AppCompatActivity() {
         binding.nav.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.icon_home -> {
-                    hiddenSoftKeyboard(this)
-                    fragmentTransaction = supportFragmentManager.beginTransaction()
-                    fragmentTransaction.hide(active).show(homeFragment).hide(searchFragment)
-                        .commit()
-                    active = homeFragment
+                    showFragment(homeFragment)
                     true
                 }
                 R.id.icon_search -> {
-                    checkBackStack()
-                    changeFragment(searchFragment)
+                    showFragment(searchFragment)
                     true
                 }
                 R.id.icon_library -> {
-                    checkBackStack()
-                    changeFragment(libraryFragment)
+                    showFragment(libraryFragment)
                     true
                 }
                 R.id.icon_premium -> {
-                    checkBackStack()
-                    changeFragment(premiumFragment)
+                    showFragment(premiumFragment)
                     true
                 }
                 else -> {
@@ -186,11 +184,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeFragment(fragment: Fragment) {
+//    private fun changeFragment(fragment: Fragment) {
+//        hiddenSoftKeyboard(this)
+//        fragmentTransaction = supportFragmentManager.beginTransaction()
+//        fragmentTransaction.hide(active).show(fragment).commitNow()
+//        active = fragment
+//    }
+    private fun showFragment(fragment: Fragment) {
+        checkBackStack()
         hiddenSoftKeyboard(this)
-        fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.hide(active).show(fragment).commit()
+        supportFragmentManager.beginTransaction()
+            .apply {
+                show(fragment)
+                hideFragments(this)
+            }
+            .commit()
         active = fragment
+    }
+
+    private fun hideFragments(fragmentTransaction: FragmentTransaction) {
+        for (fragment in listOf(homeFragment, searchFragment, libraryFragment, premiumFragment)) {
+            if (fragment.isVisible) {
+                fragmentTransaction.hide(fragment)
+            }
+        }
     }
 
     private fun showInforSong() {
@@ -240,6 +257,16 @@ class MainActivity : AppCompatActivity() {
             .commit()
         active = fragment
     }
+//    fun switchFragment(fragment: Fragment, playlist: String) {
+//        fragmentTransaction = supportFragmentManager.beginTransaction()
+//        val bundle = Bundle()
+//        bundle.putString("name", playlist)
+//        fragment.arguments = bundle
+//        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null).hide(active)
+//            .show(fragment)
+//            .commit()
+//        active = fragment
+//    }
 
     private fun checkBackStack() {
         while (supportFragmentManager.backStackEntryCount > 0) {

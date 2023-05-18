@@ -21,4 +21,11 @@
     <string name="tracks">Danh sách bài hát</string>
     <string name="random_artist">Các nghệ sĩ được yêu thích</string>
     <string name="list_playlist">Danh sách playlist</string>
+    <string name="morning">Chào buổi sáng</string>
+    <string name="noon">Chào buổi trưa</string>
+    <string name="afternoon">Chào buổi chiều</string>
+    <string name="evening">Chào buổi tối</string>
+    <string name="library">Thư viện</string>
+    <string name="create_playlist">Tạo playlist mới</string>
+    <string name="suggest_song">Gợi ý bài hát cho bạn</string>
 </resources>

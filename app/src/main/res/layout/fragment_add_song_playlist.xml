@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.library.AddSongPlaylistFragment"
+    android:background="@color/main_background">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_play_background"
+        android:padding="4dp"
+        android:src="@drawable/baseline_arrow_back_24" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@id/btnBack"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/imgPlaylist"
+                android:layout_width="100dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_launcher_background"
+                android:scaleType="centerCrop"
+                android:layout_height="100dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tvNamePlaylist"
+                tools:text="Playlist"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/imgPlaylist"
+                app:layout_constraintTop_toTopOf="@id/imgPlaylist"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvType"
+                android:text="playlist • just now"
+                android:textColor="@color/grey"
+                app:layout_constraintTop_toBottomOf="@id/tvNamePlaylist"
+                app:layout_constraintStart_toStartOf="@id/tvNamePlaylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgOwner"
+                app:layout_constraintTop_toBottomOf="@id/tvType"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@id/tvNamePlaylist"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+
+            <TextView
+                android:id="@+id/tvNameOwner"
+                app:layout_constraintTop_toTopOf="@id/imgOwner"
+                app:layout_constraintStart_toEndOf="@id/imgOwner"
+                app:layout_constraintBottom_toBottomOf="@id/imgOwner"
+                tools:text="By Fox"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/grey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <ImageButton
+                android:id="@+id/btnMore"
+                android:src="@drawable/baseline_more_vert_24"
+                android:background="@color/transparent"
+                app:layout_constraintTop_toTopOf="@id/fap"
+                app:layout_constraintBottom_toBottomOf="@id/fap"
+                app:layout_constraintStart_toStartOf="@id/imgPlaylist"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="ContentDescription" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fap"
+                app:layout_constraintTop_toBottomOf="@id/imgPlaylist"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/grey"
+                android:src="@drawable/ic_play"
+                android:visibility="visible"
+                app:borderWidth="0dp"
+                tools:ignore="ContentDescription" />
+            <ImageButton
+                android:id="@+id/btnShuffle"
+                android:src="@drawable/icon_shuffle"
+                android:background="@color/transparent"
+                app:layout_constraintTop_toTopOf="@id/fap"
+                app:layout_constraintBottom_toBottomOf="@id/fap"
+                app:layout_constraintEnd_toStartOf="@id/fap"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tint="@color/grey"
+                tools:ignore="ContentDescription" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_song_added"
+                app:layout_constraintTop_toBottomOf="@id/fap"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/tvSuggest"
+                android:text="@string/suggest_song"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/rcv_song_added"
+                app:layout_constraintStart_toStartOf="@id/imgPlaylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_song_suggest"
+                app:layout_constraintTop_toBottomOf="@id/tvSuggest"
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRefresh"
+                app:layout_constraintTop_toBottomOf="@id/rcv_song_suggest"
+                android:layout_marginHorizontal="16dp"
+                android:text="Làm mới"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="110dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/main_background"
+                android:textAllCaps="false"
+                android:backgroundTint="@color/grey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:ignore="HardcodedText" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

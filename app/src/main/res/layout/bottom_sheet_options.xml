@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/main_background"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
+
+    <View
+        android:layout_width="30dp"
+        android:layout_height="4dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey" />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/imgSong"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        app:riv_corner_radius="4dp" />
+
+    <TextView
+        android:id="@+id/tvNameSong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@id/imgSong"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:text="Tên bài hát" />
+
+    <TextView
+        android:id="@+id/tvArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvNameSong"
+        android:layout_toEndOf="@id/imgSong"
+        android:textColor="@color/grey"
+        tools:text="Ca sĩ" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgSong">
+
+        <ImageButton
+            android:id="@+id/btnQR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_play_background"
+            android:padding="12dp"
+            android:src="@drawable/baseline_qr_code_24"
+            app:layout_constraintEnd_toStartOf="@id/btnCopy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnCopy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_play_background"
+            android:padding="12dp"
+            android:src="@drawable/baseline_content_copy_24"
+            app:layout_constraintEnd_toStartOf="@id/btnMessenger"
+            app:layout_constraintStart_toEndOf="@id/btnQR"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnMessenger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_play_background"
+            android:padding="12dp"
+            android:src="@drawable/messenger"
+            app:layout_constraintEnd_toStartOf="@id/btnSms"
+            app:layout_constraintStart_toEndOf="@id/btnCopy"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnSms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_play_background"
+            android:padding="12dp"
+            android:src="@drawable/baseline_sms_32"
+            app:layout_constraintEnd_toStartOf="@id/btnMore"
+            app:layout_constraintStart_toEndOf="@id/btnMessenger"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btnMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_play_background"
+            android:padding="12dp"
+            android:src="@drawable/baseline_more_horiz"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnSms"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QR code"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/btnQR"
+            app:layout_constraintStart_toStartOf="@id/btnQR"
+            app:layout_constraintTop_toBottomOf="@id/btnQR"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Copy"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/btnCopy"
+            app:layout_constraintStart_toStartOf="@id/btnCopy"
+            app:layout_constraintTop_toBottomOf="@id/btnCopy"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Messenger"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/btnMessenger"
+            app:layout_constraintStart_toStartOf="@id/btnMessenger"
+            app:layout_constraintTop_toBottomOf="@id/btnMessenger"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SMS"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/btnSms"
+            app:layout_constraintStart_toStartOf="@id/btnSms"
+            app:layout_constraintTop_toBottomOf="@id/btnSms"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Khác"
+            android:textColor="@color/grey"
+            app:layout_constraintEnd_toEndOf="@id/btnMore"
+            app:layout_constraintStart_toStartOf="@id/btnMore"
+            app:layout_constraintTop_toBottomOf="@id/btnMore"
+            tools:ignore="HardcodedText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutShare"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvFavourite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp"
+            android:text="Thích"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/baseline_favorite_border_24"
+            app:drawableTint="@color/grey"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvRemoveSong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp"
+            android:text="Xóa khỏi danh sách phát"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/baseline_remove_circle_outline_24"
+            app:drawableTint="@color/grey"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/tvInforArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp"
+            android:text="Xem nghệ sĩ"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/music_artist"
+            app:drawableTint="@color/grey"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp"
+            android:text="Báo cáo"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/baseline_flag_24"
+            app:drawableTint="@color/grey"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</RelativeLayout>

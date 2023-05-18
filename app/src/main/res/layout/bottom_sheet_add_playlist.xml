@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="#252525"
+    android:paddingBottom="20dp">
+    <View
+        android:background="@color/grey"
+        android:layout_width="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_height="4dp"/>
+    <TextView
+        android:text="@string/create_playlist"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:hint="Tên của playlist"
+        android:textColorHint="@color/grey"
+        app:hintTextColor="@color/grey"
+        app:boxStrokeColor="@color/grey"
+        app:boxStrokeWidth="2dp"
+        app:boxBackgroundColor="@color/white"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"        tools:ignore="HardcodedText">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtName"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:text="Hủy"
+            android:backgroundTint="@color/grey"
+            android:textColor="#2E2E2E"
+            android:textAllCaps="false"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddPlaylist"
+            android:layout_width="0dp"
+            android:text="Thêm"
+            android:textColor="@color/white"
+            android:backgroundTint="#59D63D"
+            android:textAllCaps="false"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+</LinearLayout>

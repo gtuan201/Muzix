@@ -3,6 +3,7 @@ package com.example.muzix.view.artist_detail
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -99,10 +100,6 @@ class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener {
                 }
             }
         }
-        viewModelGlobal.getRandomPlaylist().observe(requireActivity()){
-            playlistAdapter.setDataPlaylist(it)
-            adapter.notifyDataSetChanged()
-        }
         isPlaying = viewModelGlobal.isPlaying
         if (isPlaying){ binding.fap.setImageResource(R.drawable.baseline_pause_24) }
         else binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
@@ -134,6 +131,7 @@ class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener {
                 playingPlaylist()
             }
         }
+        binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }
 

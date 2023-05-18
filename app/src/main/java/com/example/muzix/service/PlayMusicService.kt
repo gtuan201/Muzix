@@ -188,7 +188,7 @@ class PlayMusicService : Service() {
             .setSmallIcon(R.drawable.baseline_music_note_24)
             .setContentTitle(song?.name)
             .setContentText(song?.artist)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.logo))

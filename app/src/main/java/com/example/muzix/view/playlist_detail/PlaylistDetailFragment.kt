@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.muzix.R
 import com.example.muzix.databinding.FragmentPlaylistDetailBinding
 import com.example.muzix.model.Playlist
@@ -179,6 +181,13 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener {
 
                 }
             })
+        binding.btnFavorite.setOnClickListener {
+            YoYo.with(Techniques.Wobble)
+                .duration(500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .playOn(binding.btnFavorite)
+        }
+        binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }
 

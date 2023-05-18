@@ -90,6 +90,7 @@ class SongPlayingActivity : AppCompatActivity() {
         binding.btnPlay.setOnClickListener {
             playOrPause(isPlaying)
         }
+        binding.btnBack.setOnClickListener { onBackPressed() }
         binding.btnNext.setOnClickListener { sendActionToService(ACTION_NEXT) }
         binding.btnPrevious.setOnClickListener { sendActionToService(ACTION_PREVIOUS) }
         binding.progressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{

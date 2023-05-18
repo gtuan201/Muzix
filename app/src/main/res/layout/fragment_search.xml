@@ -31,13 +31,7 @@
         android:padding="12dp"
         android:textSize="16sp"
         android:textStyle="bold" />
-    <!--  <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:layout_marginStart="16dp"-->
-    <!--        android:id="@+id/rcv_category"-->
-    <!--        android:layout_below="@id/edt_search"-->
-    <!--        android:layout_marginTop="20dp"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"/>-->
+
     <RadioGroup
         android:id="@+id/tab_search"
         android:layout_width="match_parent"
@@ -95,6 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/tab_search"
+        android:layout_marginBottom="110dp"
         android:visibility="invisible" />
 
     <LinearLayout

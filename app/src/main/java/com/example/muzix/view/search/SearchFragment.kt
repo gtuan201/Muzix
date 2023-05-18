@@ -59,13 +59,13 @@ class SearchFragment : Fragment(){
     }
 
     private fun updateUI(hasFocus: Boolean) {
-        binding.tabSearch.check(R.id.tab_playlist)
         if (hasFocus) {
             binding.layoutFirstSearch.visibility = View.GONE
             binding.tabSearch.visibility = View.VISIBLE
             binding.containerChild.visibility = View.VISIBLE
         }
         else {
+            binding.tabSearch.check(R.id.tab_playlist)
             binding.layoutFirstSearch.visibility = View.VISIBLE
             binding.tabSearch.visibility = View.INVISIBLE
             binding.containerChild.visibility = View.INVISIBLE

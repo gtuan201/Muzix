@@ -17,7 +17,7 @@ class NotificationApplication : Application() {
     private fun createChanelNotification() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val channel = NotificationChannel(NOTIFICATION_CHANNEL,"MusicNotification",
-                NotificationManager.IMPORTANCE_HIGH)
+                NotificationManager.IMPORTANCE_LOW)
             channel.setSound(null,null)
             val notificationManager : NotificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)

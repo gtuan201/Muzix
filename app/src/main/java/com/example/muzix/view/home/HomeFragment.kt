@@ -12,9 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.muzix.R
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.databinding.FragmentHomeBinding
 import com.example.muzix.model.Playlist
@@ -27,9 +29,11 @@ import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Calendar
 
 class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
 
@@ -50,6 +54,7 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(LayoutInflater.from(requireContext()), container, false)
         setUpRcv()
+        binding.tvWelcome.text = welcomeTitle()
         val preferences = context?.getSharedPreferences("MyPreferences",Context.MODE_PRIVATE)
         randomPosition = preferences?.getInt("id",0) ?: 0
         val viewModel = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
@@ -59,6 +64,7 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             adapter.notifyDataSetChanged()
             updateUI(viewModel)
         }
+        // listened playlists
         viewModel.getHistory().observe(requireActivity()){
             FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
                 override fun onResponse(
@@ -86,6 +92,7 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
 
             })
         }
+        //top artist
         viewModel.getTopArtist().observe(requireActivity()){
             artistAdapter = ArtistAdapter(it,this@HomeFragment)
             binding.rcvArtist.adapter = artistAdapter
@@ -100,8 +107,10 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
     }
 
     private fun displayHistory() {
-        binding.titleHistory.visibility = View.VISIBLE
-        binding.rcvHistory.visibility = View.VISIBLE
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.titleHistory.visibility = View.VISIBLE
+            binding.rcvHistory.visibility = View.VISIBLE
+        },500)
     }
 
     private fun setUpRcv() {
@@ -131,6 +140,21 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             binding.imgRandomSong.visibility = View.VISIBLE
             binding.btnPlay.visibility = View.VISIBLE
         },1000)
+    }
+    private fun welcomeTitle() : String{
+        val title = when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            in 4..10 -> {
+                getString(R.string.morning)
+            }
+            in 11..13 -> {
+                getString(R.string.noon)
+            }
+            in 13..17 -> {
+                getString(R.string.afternoon)
+            }
+            else -> getString(R.string.evening)
+        }
+        return title
     }
 
     override fun onItemClick(playlist: Playlist) {

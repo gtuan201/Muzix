@@ -10,7 +10,7 @@ data class Playlist(
     val owner : String? = null,
     val dayCreate : String? = null,
     val thumbnail : String? = null,
-    val tracks : List<Song>? = null,
+    val tracks : ArrayList<Song>? = null,
     val duration : String? = null,
     val lover : Long? = null,
     val idCollection : String? = null,
