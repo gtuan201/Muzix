@@ -29,14 +29,6 @@ class SearchFragment : Fragment(){
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(LayoutInflater.from(context),container,false)
         val viewModel = ViewModelProvider(requireActivity())[SearchViewModel::class.java]
-//        adapter = SearchAdapter(this@SearchFragment)
-//        binding.rcvCategory.layoutManager = GridLayoutManager(requireContext(),2)
-//        binding.rcvCategory.adapter = adapter
-//        binding.rcvCategory.setHasFixedSize(true)
-//        viewModel.getCategory().observe(viewLifecycleOwner){
-//            adapter.setData(it)
-//            adapter.notifyDataSetChanged()
-//        }
         setUpTablayout()
         viewLifecycleOwner.lifecycleScope.launch {
             binding.edtSearch.addTextChangedListener(object : TextWatcher{
@@ -92,12 +84,4 @@ class SearchFragment : Fragment(){
         val ft = childFragmentManager.beginTransaction()
         ft.replace(R.id.container_child,fragment).commit()
     }
-
-//    override fun onItemClick(category: Category) {
-//        val categoryDetailFragment = DetailCategoryFragment()
-//        if (activity is MainActivity){
-//            val activity = activity as MainActivity
-//            activity.switchFragment(categoryDetailFragment,category)
-//        }
-//    }
 }

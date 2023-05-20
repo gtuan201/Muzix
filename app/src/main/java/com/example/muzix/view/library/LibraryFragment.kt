@@ -12,9 +12,14 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.BottomSheetAddPlaylistBinding
 import com.example.muzix.databinding.FragmentLibraryBinding
+import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
 import com.example.muzix.ultis.CustomComparator
+import com.example.muzix.ultis.OnArtistClick
+import com.example.muzix.ultis.OnItemClickListener
+import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
+import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.LibraryViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -22,7 +27,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
-class LibraryFragment : Fragment() {
+class LibraryFragment : Fragment(),OnItemClickListener,OnArtistClick {
 
     private lateinit var binding : FragmentLibraryBinding
     private lateinit var adapter: LibraryAdapter
@@ -42,7 +47,7 @@ class LibraryFragment : Fragment() {
         val viewModelLib = ViewModelProvider(this)[LibraryViewModel::class.java]
         viewModelLib.getLibrary().observe(viewLifecycleOwner){
             Collections.sort(it,CustomComparator())
-            adapter = LibraryAdapter(it)
+            adapter = LibraryAdapter(it,this,this)
             binding.rcvLib.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -86,6 +91,22 @@ class LibraryFragment : Fragment() {
         if (activity is MainActivity){
             val activity = activity as MainActivity
             activity.switchFragment(addSongPlaylistFragment,playlist)
+        }
+    }
+
+    override fun onArtistClick(artist: Artist) {
+        val artistDetailFragment = ArtistDetailFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(artistDetailFragment,artist)
+        }
+    }
+
+    override fun onItemClick(playlist: Playlist) {
+        val playlistDetailFragment = PlaylistDetailFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(playlistDetailFragment,playlist)
         }
     }
 }

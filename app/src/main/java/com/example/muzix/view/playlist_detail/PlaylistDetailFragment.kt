@@ -79,7 +79,10 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener {
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
         viewModel.getSong(playlist?.id.toString()).observe(requireActivity()) {
             listSong = it
-            adapter.setData(it)
+            if (playlist?.tracks != null && playlist?.tracks!!.isNotEmpty()){
+                listSong.addAll(playlist?.tracks!!)
+            }
+            adapter.setData(listSong)
             adapter.notifyDataSetChanged()
             updateUI()
         }

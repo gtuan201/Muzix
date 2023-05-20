@@ -41,48 +41,52 @@ class LibraryViewModel : ViewModel() {
     }
 
     fun getPlaylist(): MutableLiveData<MutableList<Playlist>>{
-        val list : MutableList<Playlist> = mutableListOf()
-        val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
-        FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
-            override fun onResponse(
-                call: Call<Map<String, Playlist>>,
-                response: Response<Map<String, Playlist>>
-            ) {
-                if (response.isSuccessful && response.body() != null){
-                    val listPlaylist = response.body()!!.values.toList()
-                    for (i in listPlaylist){
-                        if (i.idCollection == uid){
-                            list.add(i)
+        viewModelScope.launch {
+            val list : MutableList<Playlist> = mutableListOf()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
+                override fun onResponse(
+                    call: Call<Map<String, Playlist>>,
+                    response: Response<Map<String, Playlist>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        val listPlaylist = response.body()!!.values.toList()
+                        for (i in listPlaylist){
+                            if (i.idCollection == uid){
+                                list.add(i)
+                            }
                         }
+                        dataPlaylist.postValue(list)
                     }
-                    dataPlaylist.postValue(list)
                 }
-            }
 
-            override fun onFailure(call: Call<Map<String, Playlist>>, t: Throwable) {
+                override fun onFailure(call: Call<Map<String, Playlist>>, t: Throwable) {
 
-            }
+                }
 
-        })
+            })
+        }
         return dataPlaylist
     }
 
     private fun getArtist(): MutableLiveData<MutableList<Artist>>{
-        FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String,Artist>>{
-            override fun onResponse(
-                call: Call<Map<String, Artist>>,
-                response: Response<Map<String, Artist>>
-            ) {
-                if (response.isSuccessful && response.body() != null){
-                    dataArtist.postValue(response.body()!!.values.toMutableList().take(2).toMutableList())
+        viewModelScope.launch {
+            FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String,Artist>>{
+                override fun onResponse(
+                    call: Call<Map<String, Artist>>,
+                    response: Response<Map<String, Artist>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        dataArtist.postValue(response.body()!!.values.toMutableList().take(2).toMutableList())
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<Map<String, Artist>>, t: Throwable) {
+                override fun onFailure(call: Call<Map<String, Artist>>, t: Throwable) {
 
-            }
+                }
 
-        })
+            })
+        }
         return dataArtist
     }
 }

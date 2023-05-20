@@ -42,8 +42,18 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
     private lateinit var artistAdapter: ArtistAdapter
     private lateinit var historyAdapter: HistoryAdapter
     private var song : Song? = null
-    private var listPlaylistHistory : MutableList<Playlist> = mutableListOf()
     private var randomPosition : Int = 0
+    private var mContext: Context? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mContext = null
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
@@ -52,7 +62,7 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentHomeBinding.inflate(LayoutInflater.from(requireContext()), container, false)
+        binding = FragmentHomeBinding.inflate(LayoutInflater.from(mContext), container, false)
         setUpRcv()
         binding.tvWelcome.text = welcomeTitle()
         val preferences = context?.getSharedPreferences("MyPreferences",Context.MODE_PRIVATE)
@@ -65,32 +75,12 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             updateUI(viewModel)
         }
         // listened playlists
-        viewModel.getHistory().observe(requireActivity()){
-            FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
-                override fun onResponse(
-                    call: Call<Map<String, Playlist>>,
-                    response: Response<Map<String, Playlist>>
-                ) {
-                    for (i in it){
-                        for (j in response.body()?.values!!.toList()){
-                            if(i.idPlaylist == j.id){
-                                listPlaylistHistory.add(j)
-                            }
-                        }
-                    }
-                    historyAdapter.setData(listPlaylistHistory)
-                    binding.rcvHistory.adapter = historyAdapter
-                    historyAdapter.notifyDataSetChanged()
-                    if (it.isNotEmpty()){
-                        displayHistory()
-                    }
-                }
-
-                override fun onFailure(call: Call<Map<String, Playlist>>, t: Throwable) {
-                    Log.e("error",t.message.toString())
-                }
-
-            })
+        viewModel.getPlaylistHistory().observe(viewLifecycleOwner){
+            historyAdapter.setData(it)
+            historyAdapter.notifyDataSetChanged()
+            if (it.isNotEmpty()){
+                displayHistory()
+            }
         }
         //top artist
         viewModel.getTopArtist().observe(requireActivity()){
@@ -122,6 +112,7 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         binding.rcvHistory.layoutManager = GridLayoutManager(context,2)
         binding.rcvHistory.setHasFixedSize(true)
         historyAdapter = HistoryAdapter(this@HomeFragment)
+        binding.rcvHistory.adapter = historyAdapter
     }
 
     @SuppressLint("SetTextI18n")

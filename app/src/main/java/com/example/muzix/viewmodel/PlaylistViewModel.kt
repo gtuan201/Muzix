@@ -20,10 +20,9 @@ class PlaylistViewModel : ViewModel() {
     private var dataArtist: MutableLiveData<List<Artist>> = MutableLiveData()
     private var listArtist: List<Artist> = ArrayList()
     private var dataRandomSong: MutableLiveData<Song> = MutableLiveData()
-    private var dataHistory: MutableLiveData<List<History>> = MutableLiveData()
-    private var listHistory: MutableList<History> = ArrayList()
     private var dataCurrentSong: MutableLiveData<Song> = MutableLiveData()
     private var dataRandomPlaylist : MutableLiveData<List<Playlist>> = MutableLiveData()
+    private var dataPlaylistHistory : MutableLiveData<MutableList<Playlist>> = MutableLiveData()
     var currentSong: Song? = null
         private set
     private var dataIsPlaying: MutableLiveData<Boolean> = MutableLiveData()
@@ -164,31 +163,6 @@ class PlaylistViewModel : ViewModel() {
         }
         return dataRandomSong
     }
-
-    fun getHistory(): MutableLiveData<List<History>> {
-        viewModelScope.launch {
-            val user = FirebaseAuth.getInstance().currentUser
-            FirebaseService.apiService.getHistory().enqueue(object : Callback<Map<String, History>> {
-                override fun onResponse(
-                    call: Call<Map<String, History>>,
-                    response: Response<Map<String, History>>
-                ) {
-                    if (response.isSuccessful) {
-                        for (i in response.body()?.values!!.toList()) {
-                            if (i.uid == user?.uid) listHistory.add(i)
-                        }
-                        dataHistory.postValue(listHistory.take(4))
-                    }
-                }
-
-                override fun onFailure(call: Call<Map<String, History>>, t: Throwable) {
-                    Log.e("getHistory", "error")
-                }
-            })
-        }
-        return dataHistory
-    }
-
     fun addPlaylist(playlist: Playlist){
         viewModelScope.launch {
             FirebaseService.apiService.addPlaylist(playlist.id.toString(),playlist)
@@ -205,6 +179,52 @@ class PlaylistViewModel : ViewModel() {
 
                 })
         }
+    }
+
+    fun getPlaylistHistory() : MutableLiveData<MutableList<Playlist>>{
+        viewModelScope.launch {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            val listPlaylistHistory : MutableList<Playlist> = mutableListOf()
+            FirebaseService.apiService.getHistory().enqueue(object : Callback<Map<String,History>>{
+                override fun onResponse(
+                    call: Call<Map<String, History>>,
+                    response: Response<Map<String, History>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        val listHistory = response.body()!!.values.toList().take(4)
+                        FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
+                            override fun onResponse(
+                                call: Call<Map<String, Playlist>>,
+                                response: Response<Map<String, Playlist>>
+                            ) {
+                                if (response.isSuccessful && response.body() != null){
+                                    val listPlaylist = response.body()!!.values.toList()
+                                    for (i in listHistory){
+                                        for (j in listPlaylist){
+                                            if (i.idPlaylist == j.id && i.uid == uid){
+                                                listPlaylistHistory.add(j)
+                                            }
+                                        }
+                                    }
+                                    dataPlaylistHistory.postValue(listPlaylistHistory)
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Map<String, Playlist>>, t: Throwable) {
+
+                            }
+
+                        })
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, History>>, t: Throwable) {
+
+                }
+
+            })
+        }
+        return dataPlaylistHistory
     }
     fun setCurrentSong(song: Song?) {
         currentSong = song
