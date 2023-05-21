@@ -11,11 +11,11 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemSongBinding
 import com.example.muzix.model.Song
-import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.ultis.Constants.Companion.PLAY
 import com.example.muzix.ultis.PlayReceiver
 
-class SongAdapter(private val context: Context,private val listener : ClickRemoveSong) : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
+class SongAdapter(private val context: Context,private val listener : ClickMoreOptions) : RecyclerView.Adapter<SongAdapter.SongViewHolder>() {
 
     private var listSong : ArrayList<Song> = ArrayList()
     private var playingPosition : Song? = null
@@ -49,7 +49,7 @@ class SongAdapter(private val context: Context,private val listener : ClickRemov
             intent.putExtra("position",position)
             context.sendBroadcast(intent)
         }
-        holder.binding.btnMore.setOnClickListener {listener.clickRemoveSong(song)}
+        holder.binding.btnMore.setOnClickListener {listener.clickMore(song)}
     }
     fun setData(list : ArrayList<Song>){
         listSong = list

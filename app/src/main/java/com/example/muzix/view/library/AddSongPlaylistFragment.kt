@@ -20,7 +20,7 @@ import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentAddSongPlaylistBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
-import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.ClickToAddSong
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -28,7 +28,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
+class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
 
     companion object{
         const val ACTION_ADD = 0
@@ -134,7 +134,7 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
         snackBar.show()
     }
 
-    override fun clickRemoveSong(song: Song) {
+    override fun clickMore(song: Song) {
         openOptionsDialog(song)
     }
 
@@ -146,6 +146,9 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
         binding.tvNameSong.text = song.name
         binding.tvArtist.text = song.artist
         binding.tvRemoveSong.setOnClickListener{removeSong(song,dialog)}
+        binding.tvFavourite.setOnClickListener {
+            binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_favorite_24,0,0,0)
+        }
         dialog.show()
     }
 

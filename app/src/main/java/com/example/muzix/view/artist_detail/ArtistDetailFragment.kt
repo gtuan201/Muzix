@@ -13,8 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.muzix.R
+import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentArtistDetailBinding
-import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.model.Artist
@@ -30,10 +31,11 @@ import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.view.playlist_detail.SongAdapter
 import com.example.muzix.viewmodel.ArtistViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.random.Random
 
 
-class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, ClickRemoveSong {
+class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, ClickMoreOptions {
 
     private lateinit var binding: FragmentArtistDetailBinding
     private lateinit var adapter: SongAdapter
@@ -202,7 +204,17 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         context?.sendBroadcast(intent)
     }
 
-    override fun clickRemoveSong(song: Song) {
-
+    override fun clickMore(song: Song) {
+        openOptionsDialog(song)
+    }
+    private fun openOptionsDialog(song: Song) {
+        val dialog = BottomSheetDialog(requireContext())
+        val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
+        dialog.setContentView(binding.root)
+        Glide.with(binding.imgSong).load(song.image).placeholder(R.drawable.thumbnail).into(binding.imgSong)
+        binding.tvNameSong.text = song.name
+        binding.tvArtist.text = song.artist
+        binding.tvRemoveSong.visibility = View.GONE
+        dialog.show()
     }
 }

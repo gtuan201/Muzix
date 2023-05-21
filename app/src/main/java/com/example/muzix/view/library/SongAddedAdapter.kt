@@ -9,9 +9,9 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemSongAddedBinding
 import com.example.muzix.model.Song
-import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickMoreOptions
 
-class SongAddedAdapter(private val listener : ClickRemoveSong) : RecyclerView.Adapter<SongAddedAdapter.SongAddedVH>() {
+class SongAddedAdapter(private val listener : ClickMoreOptions) : RecyclerView.Adapter<SongAddedAdapter.SongAddedVH>() {
 
     private var listAdded: MutableList<Song> = mutableListOf()
     class SongAddedVH(val binding : ItemSongAddedBinding) : ViewHolder(binding.root)
@@ -32,7 +32,7 @@ class SongAddedAdapter(private val listener : ClickRemoveSong) : RecyclerView.Ad
         holder.binding.tvNameSong.text = song.name
         holder.binding.tvArtist.text = song.artist
         holder.binding.tvDurationListens.text = "${song.listens}•${song.duration}"
-        holder.binding.btnMore.setOnClickListener { listener.clickRemoveSong(song) }
+        holder.binding.btnMore.setOnClickListener { listener.clickMore(song) }
     }
     fun setData(list : List<Song>){
         listAdded = if (list.isEmpty()) mutableListOf()

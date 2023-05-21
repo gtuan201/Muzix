@@ -28,7 +28,7 @@ import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentMyPlaylistBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
-import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.ClickToAddSong
 import com.example.muzix.service.PlayMusicService
 import com.example.muzix.ultis.Constants
@@ -44,7 +44,7 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 @SuppressLint("NotifyDataSetChanged")
-class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
+class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
 
 
     private lateinit var binding : FragmentMyPlaylistBinding
@@ -169,6 +169,8 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
         binding.fap.setOnClickListener {
             clickFap(currentSong)
         }
+        binding.btnRefresh.setOnClickListener { viewModel!!.shuffle() }
+        binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }
 
@@ -284,7 +286,7 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
         }
     }
 
-    override fun clickRemoveSong(song: Song) {
+    override fun clickMore(song: Song) {
         openOptionsDialog(song)
     }
 

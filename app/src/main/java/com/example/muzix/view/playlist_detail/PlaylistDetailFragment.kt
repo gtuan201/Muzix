@@ -3,15 +3,19 @@ package com.example.muzix.view.playlist_detail
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.provider.CalendarContract.Colors
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,22 +25,27 @@ import com.bumptech.glide.request.transition.Transition
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.muzix.R
+import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentPlaylistDetailBinding
-import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
-import com.example.muzix.ultis.*
+import com.example.muzix.ultis.Constants
+import com.example.muzix.ultis.PlayReceiver
+import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickRemoveSong {
+
+class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions {
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null
@@ -183,6 +192,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickRemoveSong 
                 }
             })
         binding.btnFavorite.setOnClickListener {
+            binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24))
             YoYo.with(Techniques.Wobble)
                 .duration(500)
                 .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
@@ -227,7 +237,23 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickRemoveSong 
         }
     }
 
-    override fun clickRemoveSong(song: Song) {
+    override fun clickMore(song: Song) {
+        openOptionsDialog(song)
+    }
 
+    private fun openOptionsDialog(song: Song) {
+        val dialog = BottomSheetDialog(requireContext())
+        val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
+        dialog.setContentView(binding.root)
+        Glide.with(binding.imgSong).load(song.image).placeholder(R.drawable.thumbnail).into(binding.imgSong)
+        binding.tvNameSong.text = song.name
+        binding.tvArtist.text = song.artist
+        binding.tvRemoveSong.visibility = View.GONE
+        binding.tvFavourite.setOnClickListener {
+            val drawable = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
+            drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN)
+            binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+        }
+        dialog.show()
     }
 }

@@ -83,9 +83,7 @@ class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
         switchFragment(playlist)
     }
 
-    private fun switchFragment(
-        playlist: Playlist
-    ) {
+    private fun switchFragment(playlist: Playlist) {
         val addSongPlaylistFragment = AddSongPlaylistFragment()
         if (activity is MainActivity){
             val activity = activity as MainActivity
