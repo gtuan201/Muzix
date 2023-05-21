@@ -24,13 +24,9 @@ import com.example.muzix.R
 import com.example.muzix.databinding.FragmentPlaylistDetailBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
-import com.example.muzix.service.PlayMusicService
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
-import com.example.muzix.ultis.Constants
-import com.example.muzix.ultis.OnItemClickListener
-import com.example.muzix.ultis.PlayReceiver
-import com.example.muzix.ultis.sendActionToService
+import com.example.muzix.ultis.*
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.PlaylistViewModel
@@ -38,7 +34,7 @@ import com.example.muzix.viewmodel.SongViewModel
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment(), OnItemClickListener {
+class PlaylistDetailFragment : Fragment(), OnItemClickListener,ClickRemoveSong {
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null
@@ -195,7 +191,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener {
     }
 
     private fun setUpRcv() {
-        adapter = SongAdapter(requireContext())
+        adapter = SongAdapter(requireContext(),this)
         playlistAdapter = HomeChildAdapter(this@PlaylistDetailFragment)
         binding.rcvSong.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.rcvSong.setHasFixedSize(true)
@@ -227,5 +223,9 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener {
             val activity = activity as MainActivity
             activity.switchFragment(playlistDetailFragment,playlist)
         }
+    }
+
+    override fun clickRemoveSong(song: Song) {
+
     }
 }

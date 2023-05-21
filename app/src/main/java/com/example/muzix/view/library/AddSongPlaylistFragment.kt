@@ -108,41 +108,7 @@ class AddSongPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
     }
 
     private fun addSongToPlaylist(song: Song) {
-        FirebaseService.apiService.getPlaylistFromId(playlist?.id.toString()).enqueue(object :Callback<Playlist>{
-            override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
-                if (response.isSuccessful && response.body() != null){
-                    var listSong : ArrayList<Song> = arrayListOf()
-                    if (response.body()?.tracks != null) {
-                        listSong = response.body()?.tracks!!
-                    }
-                    listSong.add(song)
-                    playlist.apply {
-                        this?.tracks = listSong
-                    }
-                    FirebaseService.apiService.addPlaylist(playlist?.id.toString(), playlist!!)
-                        .enqueue(object : Callback<Playlist>{
-                            override fun onResponse(
-                                call: Call<Playlist>,
-                                response2: Response<Playlist>
-                            ) {
-                               if (response2.isSuccessful){
-                                   Log.e("add_song","success")
-                               }
-                            }
-
-                            override fun onFailure(call: Call<Playlist>, t: Throwable) {
-
-                            }
-
-                        })
-                }
-            }
-
-            override fun onFailure(call: Call<Playlist>, t: Throwable) {
-
-            }
-
-        })
+        viewModel!!.addSongToPlaylist(song,playlist)
     }
 
     private fun showSnackBar(song: Song, action : Int) {
@@ -192,6 +158,6 @@ class AddSongPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
         dialog.dismiss()
         showSnackBar(song, ACTION_REMOVE)
         viewModel!!.backUpSongAll(song)
-        viewModel!!.removeSongAdded(song)
+        viewModel!!.removeSongAdded(song,playlist)
     }
 }

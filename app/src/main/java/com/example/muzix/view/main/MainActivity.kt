@@ -195,10 +195,10 @@ class MainActivity : AppCompatActivity() {
         hiddenSoftKeyboard(this)
         supportFragmentManager.beginTransaction()
             .apply {
-                show(fragment)
                 hideFragments(this)
+                show(fragment)
             }
-            .commit()
+            .commitNow()
         active = fragment
     }
 

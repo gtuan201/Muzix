@@ -52,6 +52,7 @@ class PlaylistSearchFragment() : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(playlist: Playlist) {
+        hiddenSoftKeyboard(requireActivity())
         val playlistDetailFragment = PlaylistDetailFragment()
         if (activity is MainActivity){
             val activity = activity as MainActivity

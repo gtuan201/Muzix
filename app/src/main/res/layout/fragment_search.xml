@@ -53,7 +53,7 @@
             android:gravity="center"
             android:paddingHorizontal="8dp"
             android:text="@string/playlist"
-            android:textColor="@color/white" />
+            android:textColor="@drawable/text_selector" />
 
         <RadioButton
             android:id="@+id/tab_song"
@@ -67,7 +67,7 @@
             android:gravity="center"
             android:paddingHorizontal="8dp"
             android:text="@string/song"
-            android:textColor="@color/white" />
+            android:textColor="@drawable/text_selector" />
 
         <RadioButton
             android:id="@+id/tab_artist"
@@ -80,7 +80,7 @@
             android:gravity="center"
             android:paddingHorizontal="8dp"
             android:text="@string/artist"
-            android:textColor="@color/white" />
+            android:textColor="@drawable/text_selector" />
     </RadioGroup>
 
     <androidx.fragment.app.FragmentContainerView

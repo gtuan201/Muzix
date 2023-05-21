@@ -103,10 +103,10 @@ class LibraryFragment : Fragment(),OnItemClickListener,OnArtistClick {
     }
 
     override fun onItemClick(playlist: Playlist) {
-        val playlistDetailFragment = PlaylistDetailFragment()
+        val myPlaylistFragment = MyPlaylistFragment()
         if (activity is MainActivity){
             val activity = activity as MainActivity
-            activity.switchFragment(playlistDetailFragment,playlist)
+            activity.switchFragment(myPlaylistFragment,playlist)
         }
     }
 }

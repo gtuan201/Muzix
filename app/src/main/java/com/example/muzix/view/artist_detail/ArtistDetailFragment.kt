@@ -3,6 +3,8 @@ package com.example.muzix.view.artist_detail
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,7 +33,7 @@ import com.example.muzix.viewmodel.PlaylistViewModel
 import kotlin.random.Random
 
 
-class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener {
+class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener,ClickRemoveSong {
 
     private lateinit var binding: FragmentArtistDetailBinding
     private lateinit var adapter: SongAdapter
@@ -65,6 +67,7 @@ class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener {
             listSong = it
             adapter.setData(it as ArrayList<Song>)
             adapter.notifyDataSetChanged()
+            updateUI()
         }
         viewModel.getRandomArtist().observe(viewLifecycleOwner){
             artistAdapter = ArtistAdapter(it,this@ArtistDetailFragment)
@@ -135,9 +138,16 @@ class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener {
         return binding.root
     }
 
+    private fun updateUI() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.nestedScrollView.visibility = View.VISIBLE
+            binding.progressLoading.visibility = View.GONE
+        },1000)
+    }
+
     private fun setUpRcv() {
         binding.rcvSong.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        adapter = SongAdapter(requireContext())
+        adapter = SongAdapter(requireContext(),this)
         binding.rcvSong.adapter = adapter
         binding.rcvFavouriteArtist.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
         binding.rcvPlaylist.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
@@ -190,5 +200,9 @@ class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener {
         intent.putParcelableArrayListExtra("playlist", listSong as ArrayList)
         intent.putExtra("position",position)
         context?.sendBroadcast(intent)
+    }
+
+    override fun clickRemoveSong(song: Song) {
+
     }
 }

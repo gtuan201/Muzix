@@ -12,6 +12,7 @@ import com.example.muzix.R
 import com.example.muzix.databinding.FragmentArtistSearchBinding
 import com.example.muzix.model.Artist
 import com.example.muzix.ultis.OnArtistClick
+import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.SearchViewModel
@@ -47,6 +48,7 @@ class ArtistSearchFragment : Fragment(),OnArtistClick {
     }
 
     override fun onArtistClick(artist: Artist) {
+        hiddenSoftKeyboard(requireActivity())
         val artistDetailFragment = ArtistDetailFragment()
         if (activity is MainActivity){
             val activity = activity as MainActivity

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.PremiumFragment"
-    android:background="@color/main_background">
+    android:background="@color/white">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>
+   <de.hdodenhof.circleimageview.CircleImageView
+       android:layout_width="wrap_content"
+       android:src="@drawable/logo"
+       android:layout_height="wrap_content"
+       android:layout_centerInParent="true"/>
+</RelativeLayout>

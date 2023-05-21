@@ -1,11 +1,24 @@
 package com.example.muzix.viewmodel
 
+import android.app.Activity
+import android.content.Context
+import android.graphics.Color
+import android.graphics.Typeface
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.util.Log
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.muzix.R
 import com.example.muzix.model.Song
 import com.example.muzix.data.remote.FirebaseService
+import com.example.muzix.model.Playlist
+import com.example.muzix.view.library.AddSongPlaylistFragment
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,6 +78,9 @@ class SongViewModel:ViewModel() {
     }
 
     //add song to playlist
+    fun setSongPlaylist(list : MutableList<Song>?){
+        listSongAdded = list!!
+    }
     fun deleteSongAll(song: Song){
         listAllSong.remove(song)
         dataAllSong.postValue(listAllSong)
@@ -83,8 +99,89 @@ class SongViewModel:ViewModel() {
         listAllSong.add(song)
         dataAllSong.postValue(listAllSong)
     }
-    fun removeSongAdded(song: Song){
+    fun removeSongAdded(song: Song,playlist: Playlist?){
         listSongAdded.remove(song)
+        removeSongInPlaylist(song,playlist)
         dataSongAdded.postValue(listSongAdded)
+    }
+
+    private fun removeSongInPlaylist(song: Song, playlist: Playlist?) {
+        viewModelScope.launch {
+            FirebaseService.apiService.getPlaylistFromId(playlist?.id.toString()).enqueue(object :Callback<Playlist>{
+                override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                    if (response.isSuccessful && response.body() != null){
+                        var listSong : ArrayList<Song> = arrayListOf()
+                        if (response.body()?.tracks != null) {
+                            listSong = response.body()?.tracks!!
+                        }
+                        if (listSong.contains(song)){listSong.remove(song)}
+                        playlist.apply {
+                            this?.tracks = listSong
+                        }
+                        FirebaseService.apiService.addPlaylist(playlist?.id.toString(), playlist!!)
+                            .enqueue(object : Callback<Playlist>{
+                                override fun onResponse(
+                                    call: Call<Playlist>,
+                                    response2: Response<Playlist>
+                                ) {
+                                    if (response2.isSuccessful){
+                                        Log.e("remove_song","success")
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+                                }
+
+                            })
+                    }
+                }
+
+                override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+                }
+
+            })
+        }
+    }
+
+    fun addSongToPlaylist(song: Song, playlist : Playlist?) {
+        viewModelScope.launch {
+            FirebaseService.apiService.getPlaylistFromId(playlist?.id.toString()).enqueue(object :Callback<Playlist>{
+                override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                    if (response.isSuccessful && response.body() != null){
+                        var listSong : ArrayList<Song> = arrayListOf()
+                        if (response.body()?.tracks != null) {
+                            listSong = response.body()?.tracks!!
+                        }
+                        listSong.add(song)
+                        playlist.apply {
+                            this?.tracks = listSong
+                        }
+                        FirebaseService.apiService.addPlaylist(playlist?.id.toString(), playlist!!)
+                            .enqueue(object : Callback<Playlist>{
+                                override fun onResponse(
+                                    call: Call<Playlist>,
+                                    response2: Response<Playlist>
+                                ) {
+                                    if (response2.isSuccessful){
+                                        Log.e("add_song","success")
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+                                }
+
+                            })
+                    }
+                }
+
+                override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+                }
+
+            })
+        }
     }
 }

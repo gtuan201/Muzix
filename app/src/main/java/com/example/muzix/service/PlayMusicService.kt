@@ -113,11 +113,11 @@ class PlayMusicService : Service() {
             isPlaying = true
             if (isPlayingPlaylist()) {
                 sendNotification(playlist?.get(currentPosition))
-                sendActionToActivity(ACTION_PAUSE,playlist?.get(currentPosition))
+                sendActionToActivity(ACTION_RESUME,playlist?.get(currentPosition))
             }
             else {
                 sendNotification(this.song)
-                sendActionToActivity(ACTION_PAUSE, this.song)
+                sendActionToActivity(ACTION_RESUME, this.song)
             }
             updateProgress()
         }
@@ -181,6 +181,14 @@ class PlayMusicService : Service() {
     private fun seekTo(process: Long) {
         player.seekTo(process)
         player.play()
+        if (playlist != null){
+            sendNotification(playlist?.get(currentPosition))
+            sendActionToActivity(ACTION_RESUME,playlist?.get(currentPosition))
+        }
+        else {
+            sendNotification(song)
+            sendActionToActivity(ACTION_RESUME,song)
+        }
     }
 
     private fun sendNotification(song: Song?){
