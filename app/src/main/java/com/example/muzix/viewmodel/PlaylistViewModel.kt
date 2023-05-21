@@ -93,33 +93,6 @@ class PlaylistViewModel : ViewModel() {
         }
         return dataCollection
     }
-
-    fun getCollection(idCategory: String): MutableLiveData<List<PlaylistCollection>> {
-        viewModelScope.launch {
-            FirebaseService.apiService.getCollection()
-                .enqueue(object : Callback<Map<String, PlaylistCollection>> {
-                    override fun onResponse(
-                        call: Call<Map<String, PlaylistCollection>>,
-                        response: Response<Map<String, PlaylistCollection>>
-                    ) {
-                        if (response.isSuccessful) {
-                            listCol = response.body()?.values?.toList()!!
-                            val list : ArrayList<PlaylistCollection> = ArrayList()
-                            for (i in listCol){
-                                if (i.idCategory == idCategory) list.add(i)
-                            }
-                            dataCollection.value = list
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Map<String, PlaylistCollection>>, t: Throwable) {
-                        Log.e(TAG, "Failed to get collections: ${t.message}")
-                    }
-
-                })
-        }
-        return dataCollection
-    }
     fun getTopArtist(): MutableLiveData<List<Artist>> {
         viewModelScope.launch {
             FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String, Artist>> {

@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemSongSuggestBinding
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.ClickToAddSong
+import com.example.muzix.listener.ClickToAddSong
 
 class SongSuggestAdapter(private val listener : ClickToAddSong) : RecyclerView.Adapter<SongSuggestAdapter.SongSuggestVH>() {
 

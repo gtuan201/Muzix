@@ -1,6 +1,5 @@
 package com.example.muzix.view.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.muzix.databinding.ItemArtistBinding
 import com.example.muzix.model.Artist
-import com.example.muzix.ultis.OnArtistClick
+import com.example.muzix.listener.OnArtistClick
 
 class ArtistAdapter(private var list: List<Artist>, private val listener : OnArtistClick) : RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder>() {
 

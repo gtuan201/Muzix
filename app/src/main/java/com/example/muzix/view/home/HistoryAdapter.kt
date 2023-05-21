@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemHistoryBinding
 import com.example.muzix.model.Playlist
-import com.example.muzix.ultis.OnItemClickListener
+import com.example.muzix.listener.OnItemClickListener
 
 class HistoryAdapter(private val listener : OnItemClickListener) : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.FragmentArtistDetailBinding
+import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.OnArtistClick
+import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
-import com.example.muzix.service.PlayMusicService
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.ultis.*
@@ -27,13 +28,12 @@ import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.view.playlist_detail.SongAdapter
-import com.example.muzix.view.search.PlaylistAdapter
 import com.example.muzix.viewmodel.ArtistViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import kotlin.random.Random
 
 
-class ArtistDetailFragment : Fragment(),OnArtistClick, OnItemClickListener,ClickRemoveSong {
+class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, ClickRemoveSong {
 
     private lateinit var binding: FragmentArtistDetailBinding
     private lateinit var adapter: SongAdapter

@@ -2,6 +2,7 @@ package com.example.muzix.view.library
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Typeface
@@ -27,16 +28,23 @@ import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentMyPlaylistBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.ClickRemoveSong
-import com.example.muzix.ultis.ClickToAddSong
+import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickToAddSong
+import com.example.muzix.service.PlayMusicService
+import com.example.muzix.ultis.Constants
+import com.example.muzix.ultis.PlayReceiver
+import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.library.AddSongPlaylistFragment.Companion.ACTION_ADD
 import com.example.muzix.view.playlist_detail.SongAdapter
+import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.abs
+import kotlin.random.Random
+
 @SuppressLint("NotifyDataSetChanged")
-class MyPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
+class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
 
 
     private lateinit var binding : FragmentMyPlaylistBinding
@@ -45,6 +53,7 @@ class MyPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
     private lateinit var adapterSuggestAdapter: SongSuggestAdapter
     private var viewModel : SongViewModel? = null
     private var mContext: Context? = null
+    private var isPlaying : Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -70,6 +79,7 @@ class MyPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
         // Inflate the layout for this fragment
         binding = FragmentMyPlaylistBinding.inflate(LayoutInflater.from(mContext),container,false)
         viewModel = ViewModelProvider(this)[SongViewModel::class.java]
+        val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
         setUpRcv()
         playlist?.tracks?.let { adapter.setData(it) }
         adapter.notifyDataSetChanged()
@@ -87,6 +97,36 @@ class MyPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
         getSuggestSong(viewModel!!)
         getAddedSong(viewModel!!)
 
+        // update UI when playing song
+        var currentSong = viewModelGlobal.currentSong
+        if (currentSong != null && playlist?.tracks != null && playlist?.tracks!!.contains(currentSong)) {
+            adapter.setPlayingPosition(currentSong)
+        }
+        viewModelGlobal.getCurrentSong().observe(requireActivity()) {
+            currentSong = it
+            if (it != null && playlist?.tracks != null && playlist?.tracks!!.contains(it)) {
+                adapter.setPlayingPosition(it)
+            } else {
+                adapter.setPlayingPosition(null)
+                binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
+            }
+        }
+        viewModelGlobal.getIsPlaying().observe(requireActivity()){
+            if (currentSong != null){
+                isPlaying = it
+                if (isPlaying){
+                    binding.fap.setImageResource(R.drawable.baseline_pause_24)
+                }
+                else{
+                    binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
+                }
+            }
+        }
+        isPlaying = viewModelGlobal.isPlaying
+        if (isPlaying){ binding.fap.setImageResource(R.drawable.baseline_pause_24) }
+        else binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
+
+        // Color text appbar
         Glide.with(this).load(playlist?.thumbnail).into(binding.imageView)
         binding.collapsingToolbar.setCollapsedTitleTextColor(
             ContextCompat.getColor(
@@ -126,7 +166,37 @@ class MyPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
 
                 }
             })
+        binding.fap.setOnClickListener {
+            clickFap(currentSong)
+        }
         return binding.root
+    }
+
+    private fun clickFap(currentSong: Song?) {
+        if (currentSong != null && playlist?.tracks != null &&  playlist?.tracks!!.contains(currentSong)){
+            if (isPlaying){
+                sendActionToService(PlayMusicService.ACTION_PAUSE,requireContext(),requireActivity())
+            }
+            else {
+                sendActionToService(PlayMusicService.ACTION_RESUME,requireContext(),requireActivity())
+            }
+        }
+        else{
+            binding.fap.setImageResource(R.drawable.baseline_pause_24)
+            isPlaying = true
+            playingPlaylist()
+        }
+    }
+
+    private fun playingPlaylist() {
+        if (playlist?.tracks != null){
+            val intent = Intent(context, PlayReceiver::class.java)
+            val position = Random.nextInt(playlist?.tracks!!.size - 1)
+            intent.action = Constants.PLAY
+            intent.putParcelableArrayListExtra("playlist", playlist?.tracks)
+            intent.putExtra("position",position)
+            context?.sendBroadcast(intent)
+        }
     }
 
     private fun setUpRcv() {

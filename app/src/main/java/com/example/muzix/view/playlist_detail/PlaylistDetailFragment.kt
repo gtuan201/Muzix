@@ -22,6 +22,8 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.muzix.R
 import com.example.muzix.databinding.FragmentPlaylistDetailBinding
+import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
@@ -34,7 +36,7 @@ import com.example.muzix.viewmodel.SongViewModel
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment(), OnItemClickListener,ClickRemoveSong {
+class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickRemoveSong {
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null

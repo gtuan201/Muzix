@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.muzix.R
-import com.example.muzix.databinding.ItemArtistBinding
 import com.example.muzix.databinding.ItemArtistLibBinding
-import com.example.muzix.databinding.ItemHomeChildBinding
 import com.example.muzix.databinding.ItemPlaylistLibBinding
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
-import com.example.muzix.ultis.OnArtistClick
-import com.example.muzix.ultis.OnItemClickListener
+import com.example.muzix.listener.OnArtistClick
+import com.example.muzix.listener.OnItemClickListener
 
 class LibraryAdapter(
     private val listItem: List<Any>,

@@ -15,11 +15,10 @@ import com.example.muzix.databinding.FragmentLibraryBinding
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
 import com.example.muzix.ultis.CustomComparator
-import com.example.muzix.ultis.OnArtistClick
-import com.example.muzix.ultis.OnItemClickListener
+import com.example.muzix.listener.OnArtistClick
+import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
-import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.LibraryViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -27,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
-class LibraryFragment : Fragment(),OnItemClickListener,OnArtistClick {
+class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
 
     private lateinit var binding : FragmentLibraryBinding
     private lateinit var adapter: LibraryAdapter

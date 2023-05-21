@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemSongBinding
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.ClickRemoveSong
+import com.example.muzix.listener.ClickRemoveSong
 import com.example.muzix.ultis.Constants.Companion.PLAY
 import com.example.muzix.ultis.PlayReceiver
 

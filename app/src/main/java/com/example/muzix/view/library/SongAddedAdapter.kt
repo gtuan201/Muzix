@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemSongAddedBinding
-import com.example.muzix.databinding.ItemSongSuggestBinding
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.ClickRemoveSong
-import com.example.muzix.ultis.ClickToAddSong
+import com.example.muzix.listener.ClickRemoveSong
 
 class SongAddedAdapter(private val listener : ClickRemoveSong) : RecyclerView.Adapter<SongAddedAdapter.SongAddedVH>() {
 

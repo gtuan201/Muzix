@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemHomeChildBinding
 import com.example.muzix.model.Playlist
-import com.example.muzix.ultis.OnItemClickListener
+import com.example.muzix.listener.OnItemClickListener
 
 class HomeChildAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<HomeChildAdapter.HomeChildViewHolder>() {
 

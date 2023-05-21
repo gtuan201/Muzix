@@ -2,24 +2,19 @@ package com.example.muzix.view.search
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.muzix.R
 import com.example.muzix.databinding.FragmentPlaylistSearchBinding
 import com.example.muzix.model.Playlist
-import com.example.muzix.ultis.OnItemClickListener
+import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.ultis.hiddenSoftKeyboard
-import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.SearchViewModel
-import com.example.muzix.viewmodel.SongViewModel
 
 class PlaylistSearchFragment() : Fragment(), OnItemClickListener {
 

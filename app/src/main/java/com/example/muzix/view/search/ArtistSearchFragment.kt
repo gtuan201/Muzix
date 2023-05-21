@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.muzix.R
 import com.example.muzix.databinding.FragmentArtistSearchBinding
 import com.example.muzix.model.Artist
-import com.example.muzix.ultis.OnArtistClick
+import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.SearchViewModel
 
-class ArtistSearchFragment : Fragment(),OnArtistClick {
+class ArtistSearchFragment : Fragment(), OnArtistClick {
 
     private lateinit var binding : FragmentArtistSearchBinding
     private lateinit var adapter: ArtistSearchAdapter

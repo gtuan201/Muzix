@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,23 +16,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.muzix.R
-import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentAddSongPlaylistBinding
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.ClickRemoveSong
-import com.example.muzix.ultis.ClickToAddSong
+import com.example.muzix.listener.ClickRemoveSong
+import com.example.muzix.listener.ClickToAddSong
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-class AddSongPlaylistFragment : Fragment(),ClickToAddSong,ClickRemoveSong {
+class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickRemoveSong {
 
     companion object{
         const val ACTION_ADD = 0

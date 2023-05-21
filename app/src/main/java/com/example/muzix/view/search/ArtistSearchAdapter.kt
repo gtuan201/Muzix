@@ -8,8 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.muzix.R
 import com.example.muzix.databinding.ItemArtistSearchBinding
 import com.example.muzix.model.Artist
-import com.example.muzix.ultis.OnArtistClick
-import com.example.muzix.view.home.ArtistAdapter
+import com.example.muzix.listener.OnArtistClick
 
 class ArtistSearchAdapter(private val listener : OnArtistClick) : RecyclerView.Adapter<ArtistSearchAdapter.ArtistSearchVH>() {
 
