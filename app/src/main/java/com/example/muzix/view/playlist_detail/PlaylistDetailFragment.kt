@@ -3,14 +3,13 @@ package com.example.muzix.view.playlist_detail
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.provider.CalendarContract.Colors
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +28,7 @@ import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentPlaylistDetailBinding
 import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.OnItemClickListener
+import com.example.muzix.model.Favourite
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
@@ -38,12 +38,13 @@ import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import kotlin.math.abs
 import kotlin.random.Random
-
 
 class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions {
 
@@ -53,18 +54,23 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
     private lateinit var adapter: SongAdapter
     private lateinit var playlistAdapter: HomeChildAdapter
     private var listSong : ArrayList<Song> = arrayListOf()
+    private var isFavourite : Boolean = false
+    private var favourite : Favourite? = null
+    private lateinit var viewModelFav : FavouriteViewModel
     private var mContext: Context? = null
+    companion object {
+        private const val ACTION_ADD = 0
+        private const val ACTION_REMOVE = 1
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
-
     override fun onDetach() {
         super.onDetach()
         mContext = null
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments
@@ -84,6 +90,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         // ViewModel getData
         val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
+        viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
         viewModel.getSong(playlist?.id.toString()).observe(requireActivity()) {
             listSong = it
             if (playlist?.tracks != null && playlist?.tracks!!.isNotEmpty()){
@@ -96,6 +103,16 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         viewModelGlobal.getRandomPlaylist().observe(requireActivity()){
             playlistAdapter.setDataPlaylist(it)
             adapter.notifyDataSetChanged()
+        }
+        viewModelFav.getFavFromId(playlist).observe(viewLifecycleOwner){
+            isFavourite = it != null
+            favourite = it
+            if (it != null) {
+                binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24))
+            }
+            else {
+                binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24))
+            }
         }
         // update UI when playing song
         var currentSong = viewModelGlobal.currentSong
@@ -192,14 +209,59 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
                 }
             })
         binding.btnFavorite.setOnClickListener {
-            binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24))
-            YoYo.with(Techniques.Wobble)
-                .duration(500)
-                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                .playOn(binding.btnFavorite)
+            if (isFavourite){
+                removeFavourite(viewModelFav)
+            }
+            else addToFavourite(viewModelFav)
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
+    }
+
+    private fun removeFavourite(viewModelFav: FavouriteViewModel) {
+        YoYo.with(Techniques.Wobble)
+            .duration(500)
+            .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+            .playOn(binding.btnFavorite)
+        viewModelFav.removeFavourite(favourite!!).observe(viewLifecycleOwner){
+            if(it == null) showSnackBar(ACTION_REMOVE)
+        }
+    }
+    private fun addToFavourite(viewModelFav: FavouriteViewModel) {
+        YoYo.with(Techniques.Wobble)
+            .duration(500)
+            .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+            .playOn(binding.btnFavorite)
+        viewModelFav.addToFavourite(playlist).observe(viewLifecycleOwner){
+           showSnackBar(ACTION_ADD)
+        }
+    }
+    private fun showSnackBar(action : Int) {
+        val snackBar = Snackbar.make(binding.root,"Đã thêm ${playlist?.name} vào danh sách phát", Snackbar.LENGTH_SHORT)
+        val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0,0,0,210)
+        snackBar.view.layoutParams = layoutParams
+        snackBar.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_background))
+        snackBar.setBackgroundTint(Color.WHITE)
+        val spannable = SpannableStringBuilder()
+        when(action){
+            ACTION_ADD -> {
+                spannable.apply {
+                    append("Đã thêm ")
+                    append(playlist?.name, StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    append(" vào thư viện")
+                }
+            }
+            ACTION_REMOVE -> {
+                spannable.apply {
+                    append("Đã xóa ")
+                    append(playlist?.name, StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    append(" khỏi thư viện")
+                }
+            }
+        }
+        snackBar.setText(spannable)
+        snackBar.show()
     }
 
     private fun setUpRcv() {
@@ -242,6 +304,8 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
     }
 
     private fun openOptionsDialog(song: Song) {
+        var isFav = false
+        var favourite : Favourite? = null
         val dialog = BottomSheetDialog(requireContext())
         val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
@@ -249,11 +313,23 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         binding.tvNameSong.text = song.name
         binding.tvArtist.text = song.artist
         binding.tvRemoveSong.visibility = View.GONE
+        viewModelFav.getFavFromId(song).observe(viewLifecycleOwner){
+            isFav = it != null
+            favourite = it
+            if (isFav) { setDrawable(binding,true) }
+            else setDrawable(binding,false)
+        }
         binding.tvFavourite.setOnClickListener {
-            val drawable = ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
-            drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN)
-            binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+            if (isFav) { viewModelFav.removeFavouriteSong(favourite!!) }
+            else { viewModelFav.addToFavourite(song) }
         }
         dialog.show()
+    }
+    private fun setDrawable(binding: BottomSheetOptionsBinding, isFav: Boolean) {
+        val drawable = if (isFav){ ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
+        } else ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24)
+        if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
+        else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
+        binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
     }
 }

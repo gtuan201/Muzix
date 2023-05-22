@@ -2,6 +2,8 @@ package com.example.muzix.view.library
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -22,6 +24,8 @@ import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.ClickToAddSong
+import com.example.muzix.model.Favourite
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -40,6 +44,7 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
     private var playlist : Playlist? = null
     private var listSuggest : MutableList<Song> = mutableListOf()
     private var viewModel : SongViewModel? = null
+    private lateinit var viewModelFav : FavouriteViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -54,6 +59,7 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
         // Inflate the layout for this fragment
         binding = FragmentAddSongPlaylistBinding.inflate(LayoutInflater.from(context),container,false)
         viewModel = ViewModelProvider(this)[SongViewModel::class.java]
+        viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
         setUpRecyclerview()
         val user = FirebaseAuth.getInstance().currentUser
         //display information playlist
@@ -139,17 +145,33 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
     }
 
     private fun openOptionsDialog(song: Song) {
+        var isFav = false
+        var favourite : Favourite? = null
         val dialog = BottomSheetDialog(requireContext())
         val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
         Glide.with(binding.imgSong).load(song.image).placeholder(R.drawable.thumbnail).into(binding.imgSong)
         binding.tvNameSong.text = song.name
         binding.tvArtist.text = song.artist
-        binding.tvRemoveSong.setOnClickListener{removeSong(song,dialog)}
+        binding.tvRemoveSong.setOnClickListener { removeSong(song,dialog) }
+        viewModelFav.getFavFromId(song).observe(viewLifecycleOwner){
+            isFav = it != null
+            favourite = it
+            if (isFav) { setDrawable(binding,true) }
+            else setDrawable(binding,false)
+        }
         binding.tvFavourite.setOnClickListener {
-            binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.baseline_favorite_24,0,0,0)
+            if (isFav) { viewModelFav.removeFavouriteSong(favourite!!) }
+            else { viewModelFav.addToFavourite(song) }
         }
         dialog.show()
+    }
+    private fun setDrawable(binding: BottomSheetOptionsBinding, isFav: Boolean) {
+        val drawable = if (isFav){ ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
+        } else ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24)
+        if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
+        else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
+        binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
     }
 
     private fun removeSong(song: Song, dialog: BottomSheetDialog) {

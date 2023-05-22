@@ -64,5 +64,12 @@ interface FirebaseService {
     fun getSongLib() : Call<Map<String,SongPlaylistLib>>
 
     @PUT("favourite/{id}.json")
-    fun addToFavourite(@Path("id") id: String,@Body idSong : String) : Call<String>
+    fun addToFavourite(@Path("id") id: String,@Body favourite: Favourite) : Call<Favourite>
+
+    @DELETE("favourite/{id}.json")
+    fun removeFavourite(@Path("id") id: String) : Call<Favourite>
+    @GET("favourite.json")
+    fun getFavourite() : Call<Map<String,Favourite>>
+    @GET("favourite.json")
+    fun getFavouriteFromId() : Call<Map<String,Favourite>>
 }

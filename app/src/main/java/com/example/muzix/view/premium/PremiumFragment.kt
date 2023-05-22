@@ -1,4 +1,4 @@
-package com.example.muzix.view
+package com.example.muzix.view.premium
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

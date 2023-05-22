@@ -2,6 +2,9 @@ package com.example.muzix.view.artist_detail
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -19,6 +23,7 @@ import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.model.Artist
+import com.example.muzix.model.Favourite
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
@@ -30,6 +35,7 @@ import com.example.muzix.view.main.MainActivity
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.view.playlist_detail.SongAdapter
 import com.example.muzix.viewmodel.ArtistViewModel
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlin.random.Random
@@ -46,6 +52,7 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
     private var isExpandable : Boolean = false
     private var isPlaying : Boolean = false
     private var listSong : List<Song> = listOf()
+    private lateinit var viewModelFav : FavouriteViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments
@@ -65,6 +72,7 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         //ViewModel get data
         val viewModel = ViewModelProvider(this)[ArtistViewModel::class.java]
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
+        viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
         viewModel.getSongOfArtist(artist?.name!!.lowercase()).observe(viewLifecycleOwner) {
             listSong = it
             adapter.setData(it as ArrayList<Song>)
@@ -208,6 +216,8 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         openOptionsDialog(song)
     }
     private fun openOptionsDialog(song: Song) {
+        var isFav = false
+        var favourite : Favourite? = null
         val dialog = BottomSheetDialog(requireContext())
         val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
@@ -215,6 +225,23 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         binding.tvNameSong.text = song.name
         binding.tvArtist.text = song.artist
         binding.tvRemoveSong.visibility = View.GONE
+        viewModelFav.getFavFromId(song).observe(viewLifecycleOwner){
+            isFav = it != null
+            favourite = it
+            if (isFav) { setDrawable(binding,true) }
+            else setDrawable(binding,false)
+        }
+        binding.tvFavourite.setOnClickListener {
+            if (isFav) { viewModelFav.removeFavouriteSong(favourite!!) }
+            else { viewModelFav.addToFavourite(song) }
+        }
         dialog.show()
+    }
+    private fun setDrawable(binding: BottomSheetOptionsBinding, isFav: Boolean) {
+        val drawable = if (isFav){ ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
+        } else ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24)
+        if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
+        else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
+        binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
     }
 }
