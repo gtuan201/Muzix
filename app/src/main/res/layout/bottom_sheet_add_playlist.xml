@@ -1,70 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
     android:background="#252525"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     android:paddingBottom="20dp">
+
     <View
-        android:background="@color/grey"
+        android:id="@+id/view"
         android:layout_width="30dp"
+        android:layout_height="4dp"
         android:layout_marginTop="8dp"
-        android:layout_height="4dp"/>
+        android:background="@color/grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:text="@string/create_playlist"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="20sp"
+        android:id="@+id/tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="@string/create_playlist"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAddPlaylist" />
+
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
-        android:layout_height="wrap_content"
         android:hint="Tên của playlist"
         android:textColorHint="@color/grey"
-        app:hintTextColor="@color/grey"
+        app:boxBackgroundColor="@color/white"
         app:boxStrokeColor="@color/grey"
         app:boxStrokeWidth="2dp"
-        app:boxBackgroundColor="@color/white"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"        tools:ignore="HardcodedText">
+        app:hintTextColor="@color/grey"
+        app:layout_constraintTop_toBottomOf="@id/tv"
+        tools:ignore="HardcodedText">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtName"
             android:layout_width="match_parent"
-            android:textColor="@color/black"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="16dp"
+
+    <ImageButton
+        android:id="@+id/btnCancel"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:src="@drawable/baseline_cancel_24"
+        android:background="@color/transparent"
+        android:layout_height="wrap_content" />
+
+    <com.google.android.material.button.MaterialButton
+        app:layout_constraintStart_toEndOf="@id/tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        android:id="@+id/btnAddPlaylist"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:text="Hủy"
-            android:backgroundTint="@color/grey"
-            android:textColor="#2E2E2E"
-            android:textAllCaps="false"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            tools:ignore="HardcodedText" />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddPlaylist"
-            android:layout_width="0dp"
-            android:text="Thêm"
-            android:textColor="@color/white"
-            android:backgroundTint="#59D63D"
-            android:textAllCaps="false"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
-</LinearLayout>
+        android:backgroundTint="@color/main"
+        android:text="Thêm"
+        android:textAllCaps="false"
+        android:textColor="@color/main_background"
+        tools:ignore="HardcodedText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

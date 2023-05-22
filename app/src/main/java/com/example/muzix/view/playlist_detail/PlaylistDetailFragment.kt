@@ -39,6 +39,7 @@ import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.FavouriteViewModel
+import com.example.muzix.viewmodel.LibraryViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -233,7 +234,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
             .playOn(binding.btnFavorite)
         viewModelFav.addToFavourite(playlist).observe(viewLifecycleOwner){
-           showSnackBar(ACTION_ADD)
+           if (it != null) showSnackBar(ACTION_ADD)
         }
     }
     private fun showSnackBar(action : Int) {

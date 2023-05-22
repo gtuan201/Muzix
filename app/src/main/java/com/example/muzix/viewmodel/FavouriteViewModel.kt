@@ -17,7 +17,31 @@ import retrofit2.Response
 class FavouriteViewModel : ViewModel() {
     private var dataFavourite : MutableLiveData<Favourite> = MutableLiveData()
     private var dataFavSong : MutableLiveData<Favourite> = MutableLiveData()
+    private var dataListFav : MutableLiveData<List<Favourite>> = MutableLiveData()
 
+    //get all favourite
+    fun getFavourite(): MutableLiveData<List<Favourite>>{
+        viewModelScope.launch {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            FirebaseService.apiService.getFavourite().enqueue(object : Callback<Map<String,Favourite>>{
+                override fun onResponse(
+                    call: Call<Map<String, Favourite>>,
+                    response: Response<Map<String, Favourite>>
+                ) {
+                    if (response.isSuccessful){
+                        val list = response.body()!!.values.toList()
+                        dataListFav.postValue(list)
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Favourite>>, t: Throwable) {
+                    Log.e("getFavourite","error")
+                }
+
+            })
+        }
+        return dataListFav
+    }
     // favourite song
     fun addToFavourite(song: Song) : MutableLiveData<Favourite>{
         viewModelScope.launch {

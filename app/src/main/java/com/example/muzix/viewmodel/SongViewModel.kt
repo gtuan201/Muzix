@@ -29,6 +29,7 @@ class SongViewModel:ViewModel() {
     private var listSong : List<Song> = ArrayList()
     private var listSongValue : ArrayList<Song> = ArrayList()
     private var dataAllSong : MutableLiveData<List<Song>> = MutableLiveData()
+    private var songLiveData : MutableLiveData<Song> = MutableLiveData()
     var listAllSong : MutableList<Song> = mutableListOf()
     private set
     var listSongAdded : MutableList<Song> = mutableListOf()
@@ -75,6 +76,24 @@ class SongViewModel:ViewModel() {
             })
         }
         return dataAllSong
+    }
+    fun getSongFromId(id : String) : MutableLiveData<Song>{
+        viewModelScope.launch {
+            FirebaseService.apiService.getSongFromId(id)
+                .enqueue(object : Callback<Song>{
+                    override fun onResponse(call: Call<Song>, response: Response<Song>) {
+                        if (response.isSuccessful && response.body() != null){
+                            songLiveData.postValue(response.body())
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Song>, t: Throwable) {
+                        Log.e("getSongFromId","error")
+                    }
+
+                })
+        }
+        return songLiveData
     }
 
     //add song to playlist

@@ -39,6 +39,9 @@ interface FirebaseService {
     @GET("songs.json")
     fun getSong(): Call<Map<String, Song>>
 
+    @GET("songs/{id}.json")
+    fun getSongFromId(@Path("id") id: String) : Call<Song>
+
     @POST("collections.json")
     fun addUser(@Body collection: PlaylistCollection) : Call<PlaylistCollection>
 

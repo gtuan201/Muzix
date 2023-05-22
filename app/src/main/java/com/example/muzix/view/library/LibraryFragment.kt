@@ -2,10 +2,12 @@ package com.example.muzix.view.library
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -19,13 +21,15 @@ import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.LibraryViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
+import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
-
+@SuppressLint("NotifyDataSetChanged")
 class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
 
     private lateinit var binding : FragmentLibraryBinding
@@ -33,7 +37,6 @@ class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +44,8 @@ class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
         // Inflate the layout for this fragment
         binding = FragmentLibraryBinding.inflate(LayoutInflater.from(context),container,false)
         binding.rcvLib.layoutManager = GridLayoutManager(context,2)
-        val viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
         val viewModelLib = ViewModelProvider(this)[LibraryViewModel::class.java]
+        val favouriteViewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
         viewModelLib.getLibrary().observe(viewLifecycleOwner){
             Collections.sort(it,CustomComparator())
             adapter = LibraryAdapter(it,this,this)
@@ -52,12 +55,11 @@ class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
         val imgProfile = FirebaseAuth.getInstance().currentUser?.photoUrl
         Glide.with(binding.imgProfile).load(imgProfile).placeholder(R.drawable.thumbnail).into(binding.imgProfile)
         binding.btnAdd.setOnClickListener {
-            openDialogAdd(viewModel)
+            openDialogAdd(viewModelLib)
         }
         return binding.root
     }
-
-    private fun openDialogAdd(viewModel: PlaylistViewModel) {
+    private fun openDialogAdd(viewModel: LibraryViewModel) {
         val dialog = BottomSheetDialog(requireContext())
         val bindingBottom :BottomSheetAddPlaylistBinding = BottomSheetAddPlaylistBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(bindingBottom.root)
@@ -65,13 +67,16 @@ class LibraryFragment : Fragment(), OnItemClickListener, OnArtistClick {
         bindingBottom.btnAddPlaylist.setOnClickListener {
             val namePlaylist = bindingBottom.edtName.text.toString().trim()
             dialog.dismiss()
-            addPlaylistToLib(namePlaylist,viewModel)
+            if (namePlaylist.isNotEmpty()){
+                addPlaylistToLib(namePlaylist,viewModel)
+            }
+            else Toast.makeText(requireContext(),"Tên Playlist còn trống!",Toast.LENGTH_SHORT).show()
         }
         dialog.show()
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun addPlaylistToLib(namePlaylist: String, viewModel: PlaylistViewModel) {
+    private fun addPlaylistToLib(namePlaylist: String, viewModel: LibraryViewModel) {
         val user = FirebaseAuth.getInstance().currentUser
         val uid = user?.uid.toString()
         val timeStamp = System.currentTimeMillis().toString()
