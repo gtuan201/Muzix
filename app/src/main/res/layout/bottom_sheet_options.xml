@@ -92,17 +92,17 @@
             android:background="@drawable/btn_play_background"
             android:padding="12dp"
             android:src="@drawable/baseline_sms_32"
-            app:layout_constraintEnd_toStartOf="@id/btnMore"
+            app:layout_constraintEnd_toStartOf="@id/btnDownload"
             app:layout_constraintStart_toEndOf="@id/btnMessenger"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/btnMore"
+            android:id="@+id/btnDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_play_background"
             android:padding="12dp"
-            android:src="@drawable/baseline_more_horiz"
+            android:src="@drawable/baseline_download_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnSms"
             app:layout_constraintTop_toTopOf="parent" />
@@ -152,9 +152,9 @@
             android:layout_height="wrap_content"
             android:text="Khác"
             android:textColor="@color/grey"
-            app:layout_constraintEnd_toEndOf="@id/btnMore"
-            app:layout_constraintStart_toStartOf="@id/btnMore"
-            app:layout_constraintTop_toBottomOf="@id/btnMore"
+            app:layout_constraintEnd_toEndOf="@id/btnDownload"
+            app:layout_constraintStart_toStartOf="@id/btnDownload"
+            app:layout_constraintTop_toBottomOf="@id/btnDownload"
             tools:ignore="HardcodedText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

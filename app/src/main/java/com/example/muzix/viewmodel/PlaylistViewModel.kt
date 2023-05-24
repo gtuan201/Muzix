@@ -184,7 +184,7 @@ class PlaylistViewModel : ViewModel() {
     }
     fun setCurrentSong(song: Song?) {
         currentSong = song
-        dataCurrentSong.postValue(song)
+        dataCurrentSong.postValue(song!!)
     }
 
     fun getCurrentSong(): MutableLiveData<Song> {

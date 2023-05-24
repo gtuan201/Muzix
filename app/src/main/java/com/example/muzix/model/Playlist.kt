@@ -12,7 +12,7 @@ data class Playlist(
     val thumbnail : String? = null,
     var tracks : ArrayList<Song>? = null,
     val duration : String? = null,
-    val lover : Long? = null,
+    var lover : Long? = null,
     val idCollection : String? = null,
 ):Parcelable {
     constructor(parcel: Parcel) : this(

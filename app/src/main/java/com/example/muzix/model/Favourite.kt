@@ -4,5 +4,6 @@ data class Favourite(
     val id : String? = null,
     val idSong : String? = null,
     val idPlaylist: String? = null,
+    val idArtist: String? = null,
     val uid : String? = null
 )

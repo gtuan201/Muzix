@@ -15,4 +15,9 @@
         <item name="android:textSize">12sp</item>
         <item name="textAllCaps">false</item>
     </style>
+
+    <style name="PopupMenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:itemTextAppearance">@color/white</item>
+        <item name="android:popupBackground">@color/black</item>
+    </style>
 </resources>

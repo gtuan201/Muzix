@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.muzix.data.remote.FirebaseService
+import com.example.muzix.model.Artist
 import com.example.muzix.model.Favourite
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
@@ -47,7 +48,7 @@ class FavouriteViewModel : ViewModel() {
         viewModelScope.launch {
             val id = System.currentTimeMillis().toString()
             val uid = FirebaseAuth.getInstance().currentUser?.uid
-            val favourite = Favourite(id,song.id,null,uid)
+            val favourite = Favourite(id,song.id,null,null,uid)
             FirebaseService.apiService.addToFavourite(id,favourite).enqueue(object : Callback<Favourite>{
                 override fun onResponse(call: Call<Favourite>, response: Response<Favourite>) {
                     if (response.isSuccessful && response.body() != null){
@@ -116,7 +117,7 @@ class FavouriteViewModel : ViewModel() {
         viewModelScope.launch {
             val id = System.currentTimeMillis().toString()
             val uid = FirebaseAuth.getInstance().currentUser?.uid
-            val favourite = Favourite(id,null,playlist?.id,uid)
+            val favourite = Favourite(id,null,playlist?.id,null,uid)
             FirebaseService.apiService.addToFavourite(id,favourite).enqueue(object : Callback<Favourite>{
                 override fun onResponse(call: Call<Favourite>, response: Response<Favourite>) {
                     if (response.isSuccessful && response.body() != null){
@@ -179,5 +180,73 @@ class FavouriteViewModel : ViewModel() {
                     })
             }
         return dataFavourite
+    }
+    fun addToFavourite(artist: Artist?){
+        viewModelScope.launch {
+            val id = System.currentTimeMillis().toString()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            val favourite = Favourite(id,null,null,artist?.id,uid)
+            FirebaseService.apiService.addToFavourite(id,favourite).enqueue(object : Callback<Favourite>{
+                override fun onResponse(call: Call<Favourite>, response: Response<Favourite>) {
+                    if (response.isSuccessful && response.body() != null){
+                        val favouriteData = response.body()
+                        dataFavourite.postValue(favouriteData)
+                    }
+                }
+
+                override fun onFailure(call: Call<Favourite>, t: Throwable) {
+                    Log.e("addToFavourite","error")
+                }
+
+            })
+        }
+    }
+    fun getFavFromId(artist: Artist?) : MutableLiveData<Favourite>{
+        viewModelScope.launch {
+            FirebaseService.apiService.getFavouriteFromId().enqueue(object : Callback<Map<String,Favourite>>{
+                override fun onResponse(
+                    call: Call<Map<String, Favourite>>,
+                    response: Response<Map<String, Favourite>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        val list = response.body()!!.values.toList()
+                        var fav : Favourite? = null
+                        for (i in list){
+                            if (i.idArtist == artist?.id){
+                                fav = i
+                                break
+                            }
+                        }
+                        dataFavourite.postValue(fav)
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Favourite>>, t: Throwable) {
+                    Log.e("getFavFromId","error")
+                }
+
+            })
+        }
+        return dataFavourite
+    }
+
+    fun updatePlaylist(playlist: Playlist?,like : Long){
+        viewModelScope.launch {
+            playlist?.apply {
+                lover = like
+            }
+            FirebaseService.apiService.addPlaylist(playlist?.id.toString(),playlist!!).enqueue(object : Callback<Playlist>{
+                override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                    if (response.isSuccessful && response.body() != null){
+                        Log.e("update","ok")
+                    }
+                }
+
+                override fun onFailure(call: Call<Playlist>, t: Throwable) {
+
+                }
+
+            })
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.example.muzix.view.artist_detail
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -53,6 +54,8 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
     private var isPlaying : Boolean = false
     private var listSong : List<Song> = listOf()
     private lateinit var viewModelFav : FavouriteViewModel
+    private var isFav = false
+    private var favourite : Favourite? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments
@@ -73,6 +76,12 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         val viewModel = ViewModelProvider(this)[ArtistViewModel::class.java]
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
         viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
+
+        viewModelFav.getFavFromId(artist).observe(viewLifecycleOwner){
+            isFav = it != null
+            favourite = it
+            changeShapeButton(it != null)
+        }
         viewModel.getSongOfArtist(artist?.name!!.lowercase()).observe(viewLifecycleOwner) {
             listSong = it
             adapter.setData(it as ArrayList<Song>)
@@ -142,6 +151,14 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
                 binding.fap.setImageResource(R.drawable.baseline_pause_24)
                 isPlaying = true
                 playingPlaylist()
+            }
+        }
+        binding.btnFollow.setOnClickListener {
+            if (isFav){
+                viewModelFav.removeFavourite(favourite!!)
+            }
+            else {
+                viewModelFav.addToFavourite(artist)
             }
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
@@ -243,5 +260,21 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
         else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
         binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+    }
+    @SuppressLint("SetTextI18n")
+    fun changeShapeButton(fav : Boolean){
+        if (fav){
+            binding.btnFollow.text = "Followed"
+            binding.btnFollow.strokeWidth = 0
+            binding.btnFollow.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFD154"))
+            binding.btnFollow.setTextColor(Color.BLACK)
+        }
+        else{
+            binding.btnFollow.text = "Follow"
+            binding.btnFollow.strokeWidth = 1
+            binding.btnFollow.strokeColor = ColorStateList.valueOf(Color.WHITE)
+            binding.btnFollow.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#151515"))
+            binding.btnFollow.setTextColor(Color.WHITE)
+        }
     }
 }

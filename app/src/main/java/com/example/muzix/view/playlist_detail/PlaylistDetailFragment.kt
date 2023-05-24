@@ -147,7 +147,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         binding.collapsingToolbar.title = playlist?.name
         binding.tvDescriptionPlaylist.text = playlist?.description
         binding.tvOwner.text = playlist?.owner
-        binding.tvLoverDuration.text = "${playlist?.lover} lượt thích · ${playlist?.duration}"
+        binding.tvLoverDuration.text = "${playlist?.lover} lượt thích • ${playlist?.duration}"
         binding.appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val isCollapsed = abs(verticalOffset) == appBarLayout.totalScrollRange
             binding.imageView.visibility = if (isCollapsed) View.GONE else View.VISIBLE
@@ -213,7 +213,9 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             if (isFavourite){
                 removeFavourite(viewModelFav)
             }
-            else addToFavourite(viewModelFav)
+            else {
+                addToFavourite(viewModelFav)
+            }
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root

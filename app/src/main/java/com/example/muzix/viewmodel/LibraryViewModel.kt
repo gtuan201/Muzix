@@ -8,6 +8,7 @@ import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Favourite
 import com.example.muzix.model.Playlist
+import com.example.muzix.model.Song
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -20,6 +21,8 @@ class LibraryViewModel : ViewModel() {
     private var dataPlaylist : MutableLiveData<MutableList<Playlist>> = MutableLiveData()
     private var dataArtist : MutableLiveData<MutableList<Artist>> = MutableLiveData()
     private var dataFavPlaylist : MutableLiveData<MutableList<Playlist>> = MutableLiveData()
+    private var dataFavArtist : MutableLiveData<MutableList<Artist>> = MutableLiveData()
+    private var dataFavSong : MutableLiveData<MutableList<Song>> = MutableLiveData()
 
     init {
         dataPlaylist.observeForever { playlistList ->
@@ -28,30 +31,14 @@ class LibraryViewModel : ViewModel() {
             combinedList.addAll(playlistList)
             dataLibrary.value = combinedList
         }
-
-        dataArtist.observeForever { artistList ->
-            val combinedList = mutableListOf<Any>()
-            combinedList.addAll(dataLibrary.value ?: emptyList())
-            combinedList.addAll(artistList)
-            dataLibrary.value = combinedList
-        }
-
-        dataFavPlaylist.observeForever { favPlaylistList ->
-            val combinedList = mutableListOf<Any>()
-            combinedList.addAll(dataLibrary.value ?: emptyList())
-            combinedList.addAll(favPlaylistList)
-            dataLibrary.value = combinedList
-        }
     }
 
     fun getLibrary(): MutableLiveData<MutableList<Any>>{
-        getFavPlaylist()
         getPlaylist()
-        getArtist()
         return dataLibrary
     }
 
-    private fun getPlaylist(): MutableLiveData<MutableList<Playlist>>{
+    fun getPlaylist(): MutableLiveData<MutableList<Playlist>>{
         viewModelScope.launch {
             val list : MutableList<Playlist> = mutableListOf()
             val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -80,7 +67,7 @@ class LibraryViewModel : ViewModel() {
         return dataPlaylist
     }
 
-    private fun getArtist(): MutableLiveData<MutableList<Artist>>{
+    fun getArtist(): MutableLiveData<MutableList<Artist>>{
         viewModelScope.launch {
             FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String,Artist>>{
                 override fun onResponse(
@@ -100,7 +87,7 @@ class LibraryViewModel : ViewModel() {
         }
         return dataArtist
     }
-    private fun getFavPlaylist(): MutableLiveData<MutableList<Playlist>>{
+    fun getFavPlaylist(): MutableLiveData<MutableList<Playlist>>{
         viewModelScope.launch {
             val listValue : MutableList<Playlist> = mutableListOf()
             FirebaseService.apiService.getFavourite().enqueue(object : Callback<Map<String, Favourite>>{
@@ -108,7 +95,7 @@ class LibraryViewModel : ViewModel() {
                     call: Call<Map<String, Favourite>>,
                     response: Response<Map<String, Favourite>>
                 ) {
-                    if (response.isSuccessful){
+                    if (response.isSuccessful && response.body() != null){
                         val list = response.body()!!.values.toList()
                         FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
                             override fun onResponse(
@@ -153,9 +140,9 @@ class LibraryViewModel : ViewModel() {
                 .enqueue(object : Callback<Playlist>{
                     override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
                         if (response.isSuccessful && response.body() != null){
-                            val list = dataLibrary.value
+                            val list = dataPlaylist.value
                             list?.add(playlist)
-                            dataLibrary.postValue(list)
+                            dataPlaylist.value = list
                         }
                     }
                     override fun onFailure(call: Call<Playlist>, t: Throwable) {
@@ -164,5 +151,104 @@ class LibraryViewModel : ViewModel() {
 
                 })
         }
+    }
+    fun getFavArtist(): MutableLiveData<MutableList<Artist>> {
+        viewModelScope.launch {
+            val listValue : MutableList<Artist> = mutableListOf()
+            FirebaseService.apiService.getFavourite().enqueue(object : Callback<Map<String, Favourite>>{
+                override fun onResponse(
+                    call: Call<Map<String, Favourite>>,
+                    response: Response<Map<String, Favourite>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        val list = response.body()!!.values.toList()
+                        FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String,Artist>>{
+                            override fun onResponse(
+                                call: Call<Map<String, Artist>>,
+                                response: Response<Map<String, Artist>>
+                            ) {
+                                if (response.isSuccessful){
+                                    val listA = response.body()!!.values.toList()
+                                    for (i in list){
+                                        for (j in listA){
+                                            if (i.idArtist != null && i.idArtist == j.id){
+                                                listValue.add(j)
+                                            }
+                                        }
+                                    }
+                                    dataFavArtist.postValue(listValue)
+                                }
+                            }
+
+                            override fun onFailure(
+                                call: Call<Map<String, Artist>>,
+                                t: Throwable
+                            ) {
+
+                            }
+
+                        })
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Favourite>>, t: Throwable) {
+                    Log.e("getFavourite","error")
+                }
+
+            })
+        }
+        return dataFavArtist
+    }
+
+    fun getFavSong(): MutableLiveData<MutableList<Song>> {
+        viewModelScope.launch {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            val listValue : MutableList<Song> = mutableListOf()
+            FirebaseService.apiService.getFavourite().enqueue(object : Callback<Map<String, Favourite>>{
+                override fun onResponse(
+                    call: Call<Map<String, Favourite>>,
+                    response: Response<Map<String, Favourite>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        val list = response.body()!!.values.toList()
+                        if (list[0].uid == uid)
+                        {
+                            FirebaseService.apiService.getSong().enqueue(object : Callback<Map<String,Song>>{
+                                override fun onResponse(
+                                    call: Call<Map<String, Song>>,
+                                    response: Response<Map<String, Song>>
+                                ) {
+                                    if (response.isSuccessful){
+                                        val listA = response.body()!!.values.toList()
+                                        for (i in list){
+                                            for (j in listA){
+                                                if (i.idSong != null && i.idSong == j.id){
+                                                    listValue.add(j)
+                                                }
+                                            }
+                                        }
+                                        dataFavSong.postValue(listValue)
+                                    }
+                                }
+
+                                override fun onFailure(
+                                    call: Call<Map<String, Song>>,
+                                    t: Throwable
+                                ) {
+
+                                }
+
+                            })
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Favourite>>, t: Throwable) {
+                    Log.e("getFavourite","error")
+                }
+
+            })
+        }
+        return dataFavSong
     }
 }

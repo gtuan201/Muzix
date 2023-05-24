@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.muzix.R
+import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.model.Song
 import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.PLAY
@@ -24,6 +25,12 @@ import com.example.muzix.ultis.NotificationApplication.Companion.NOTIFICATION_CH
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.random.Random
 
 
@@ -35,6 +42,7 @@ class PlayMusicService : Service() {
     private var currentPosition : Int = 0
     private lateinit var player: ExoPlayer
     private lateinit var listPlayedSong : MutableList<Int>
+    private var listAllSong : List<Song> = arrayListOf()
 
     //variable update progress
     private val handler = Handler(Looper.getMainLooper())
@@ -66,6 +74,7 @@ class PlayMusicService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        getAllSong()
         if (intent?.action == PLAY) {
             song = intent.getParcelableExtra("song")
             playlist = intent.getParcelableArrayListExtra("playlist")
@@ -73,6 +82,8 @@ class PlayMusicService : Service() {
             if (song != null) {
                 startMusic(song)
                 sendNotification(song)
+                listPlayedSong = mutableListOf()
+                listPlayedSong.add(listAllSong.indexOf(song))
             }
             if (isPlayingPlaylist()){
                 listPlayedSong = mutableListOf()
@@ -148,10 +159,24 @@ class PlayMusicService : Service() {
                 }
                 nextPosition = Random.nextInt(playlist?.size ?: 0)
             }
-            Log.e("playlist_size",playlist?.size.toString())
             val nextSong = playlist?.get(nextPosition)
             listPlayedSong.add(nextPosition)
-            Log.e("played",listPlayedSong.size.toString())
+            currentPosition = nextPosition
+            sendCurrentSongToActivity(nextSong)
+            startMusic(nextSong)
+            sendNotification(nextSong)
+        }
+        else{
+            var nextPosition = 0
+            while (listPlayedSong.contains(nextPosition)){
+                if (listPlayedSong.size == listAllSong.size){
+                    listPlayedSong.clear()
+                    break
+                }
+                nextPosition = Random.nextInt(listAllSong.size)
+            }
+            val nextSong = listAllSong[nextPosition]
+            listPlayedSong.add(nextPosition)
             currentPosition = nextPosition
             sendCurrentSongToActivity(nextSong)
             startMusic(nextSong)
@@ -280,5 +305,24 @@ class PlayMusicService : Service() {
         super.onDestroy()
         handler.removeCallbacks(progressRunnable!!)
         player.release()
+    }
+    fun getAllSong(){
+        CoroutineScope(Dispatchers.IO).launch {
+            FirebaseService.apiService.getSong().enqueue(object : Callback<Map<String,Song>>{
+                override fun onResponse(
+                    call: Call<Map<String, Song>>,
+                    response: Response<Map<String, Song>>
+                ) {
+                    if (response.isSuccessful && response.body() != null){
+                        listAllSong = response.body()!!.values.toList()
+                    }
+                }
+
+                override fun onFailure(call: Call<Map<String, Song>>, t: Throwable) {
+
+                }
+
+            })
+        }
     }
 }
