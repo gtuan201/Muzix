@@ -3,9 +3,7 @@ package com.example.muzix.view.library
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Color
-import android.graphics.Typeface
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -30,12 +28,14 @@ import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.ClickToAddSong
+import com.example.muzix.model.Favourite
 import com.example.muzix.service.PlayMusicService
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.library.AddSongPlaylistFragment.Companion.ACTION_ADD
 import com.example.muzix.view.playlist_detail.SongAdapter
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -54,6 +54,7 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
     private var viewModel : SongViewModel? = null
     private var mContext: Context? = null
     private var isPlaying : Boolean = false
+    private lateinit var viewModelFav : FavouriteViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -79,6 +80,7 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
         // Inflate the layout for this fragment
         binding = FragmentMyPlaylistBinding.inflate(LayoutInflater.from(mContext),container,false)
         viewModel = ViewModelProvider(this)[SongViewModel::class.java]
+        viewModelFav = ViewModelProvider(requireActivity())[FavouriteViewModel::class.java]
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
         setUpRcv()
         playlist?.tracks?.let { adapter.setData(it) }
@@ -291,14 +293,36 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
     }
 
     private fun openOptionsDialog(song: Song) {
+        var isFav = false
+        var favourite : Favourite? = null
         val dialog = BottomSheetDialog(requireContext())
         val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
+        viewModelFav.getFavFromId(song).observe(viewLifecycleOwner){
+            isFav = it != null
+            favourite = it
+            if (isFav){
+                setDrawable(binding,true)
+            }
+            else setDrawable(binding,false)
+        }
         dialog.setContentView(binding.root)
         Glide.with(binding.imgSong).load(song.image).placeholder(R.drawable.thumbnail).into(binding.imgSong)
         binding.tvNameSong.text = song.name
         binding.tvArtist.text = song.artist
         binding.tvRemoveSong.setOnClickListener{removeSong(song,dialog)}
+        binding.tvFavourite.setOnClickListener {
+            if (isFav) { viewModelFav.removeFavouriteSong(favourite!!) }
+            else { viewModelFav.addToFavourite(song) }
+        }
         dialog.show()
+    }
+
+    private fun setDrawable(binding: BottomSheetOptionsBinding, isFav: Boolean) {
+        val drawable = if (isFav){ ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
+        } else ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24)
+        if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
+        else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
+        binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
     }
 
     private fun removeSong(song: Song, dialog: BottomSheetDialog) {

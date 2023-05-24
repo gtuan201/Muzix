@@ -75,7 +75,7 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
         //ViewModel get data
         val viewModel = ViewModelProvider(this)[ArtistViewModel::class.java]
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
-        viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
+        viewModelFav = ViewModelProvider(requireActivity())[FavouriteViewModel::class.java]
 
         viewModelFav.getFavFromId(artist).observe(viewLifecycleOwner){
             isFav = it != null

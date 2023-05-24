@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -17,6 +18,8 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.daimajia.swipe.SimpleSwipeListener
 import com.daimajia.swipe.SwipeLayout
 import com.example.muzix.R
@@ -37,6 +40,7 @@ import com.example.muzix.view.premium.PremiumFragment
 import com.example.muzix.view.home.HomeFragment
 import com.example.muzix.view.search.SearchFragment
 import com.example.muzix.view.song_playing.SongPlayingActivity
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 
 
@@ -53,6 +57,9 @@ class MainActivity : AppCompatActivity() {
     private var action: Int? = null
     private var progress: Long = 0
     private var max: Long = 0
+    private lateinit var viewModel : FavouriteViewModel
+    private var isFav : Boolean = false
+    private var fav : Favourite? = null
 
     //    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
@@ -65,8 +72,25 @@ class MainActivity : AppCompatActivity() {
                 showNowPlaying(action)
                 backgroundLayoutNowPlaying(song)
                 sendIsPlayingToFragment(isPlaying)
+                viewModel.getFavFromId(song).observe(this@MainActivity){favData->
+                    isFav = favData != null
+                    fav = favData
+                    if (isFav){
+                        binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this@MainActivity,R.drawable.baseline_favorite_24))
+                    }
+                    else{
+                        binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this@MainActivity,R.drawable.baseline_favorite_border_24))
+                    }
+                }
             }
         }
+    }
+
+    private fun animationFav() {
+        YoYo.with(Techniques.Wobble)
+            .duration(500)
+            .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+            .playOn(binding.btnFavorite)
     }
 
 
@@ -97,6 +121,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
         registerBroadcast()
         val fragmentManager: FragmentManager = supportFragmentManager
         fragmentTransaction = fragmentManager.beginTransaction()
@@ -138,6 +163,16 @@ class MainActivity : AppCompatActivity() {
                 layout?.close()
             }
         })
+        binding.btnFavorite.setOnClickListener {
+            if (isFav){
+                viewModel.removeFavouriteSong(fav!!)
+                animationFav()
+            }
+            else {
+                viewModel.addToFavourite(song!!)
+                animationFav()
+            }
+        }
     }
 
     private fun openSongPlayingDetail() {

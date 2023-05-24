@@ -59,7 +59,7 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
         // Inflate the layout for this fragment
         binding = FragmentAddSongPlaylistBinding.inflate(LayoutInflater.from(context),container,false)
         viewModel = ViewModelProvider(this)[SongViewModel::class.java]
-        viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
+        viewModelFav = ViewModelProvider(requireActivity())[FavouriteViewModel::class.java]
         setUpRecyclerview()
         val user = FirebaseAuth.getInstance().currentUser
         //display information playlist

@@ -82,4 +82,5 @@ dependencies {
     //Android Animation View
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.androidanimations:library:2.4@aar'
+    implementation 'com.google.zxing:core:3.4.1'
 }

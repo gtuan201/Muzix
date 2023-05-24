@@ -91,7 +91,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         // ViewModel getData
         val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
         val viewModelGlobal = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
-        viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
+        viewModelFav = ViewModelProvider(requireActivity())[FavouriteViewModel::class.java]
         viewModel.getSong(playlist?.id.toString()).observe(requireActivity()) {
             listSong = it
             if (playlist?.tracks != null && playlist?.tracks!!.isNotEmpty()){
