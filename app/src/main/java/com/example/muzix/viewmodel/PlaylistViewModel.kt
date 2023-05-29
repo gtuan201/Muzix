@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.muzix.model.*
 import com.example.muzix.data.remote.FirebaseService
+import com.example.muzix.ultis.HistoryComparator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PlaylistViewModel : ViewModel() {
     private var dataPlaylist: MutableLiveData<Playlist> = MutableLiveData()
@@ -147,7 +150,8 @@ class PlaylistViewModel : ViewModel() {
                     response: Response<Map<String, History>>
                 ) {
                     if (response.isSuccessful && response.body() != null){
-                        val listHistory = response.body()!!.values.toList().take(4)
+                        val listHistory = response.body()!!.values.toList()
+                        Collections.sort(listHistory,HistoryComparator())
                         FirebaseService.apiService.getPlaylist().enqueue(object : Callback<Map<String,Playlist>>{
                             override fun onResponse(
                                 call: Call<Map<String, Playlist>>,
@@ -182,6 +186,29 @@ class PlaylistViewModel : ViewModel() {
         }
         return dataPlaylistHistory
     }
+
+    fun addHistoryPlaylist(playlist: Playlist){
+        viewModelScope.launch {
+            val id = System.currentTimeMillis().toString()
+            val uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            val history = History(id,playlist.id,uid)
+            FirebaseService.apiService.addHistory(playlist.id.toString(),history).enqueue(object :Callback<History>{
+                override fun onResponse(call: Call<History>, response: Response<History>) {
+                    if (response.isSuccessful && response.body() != null){
+                        val list = dataPlaylistHistory.value?.toMutableList()
+                        list?.add(playlist)
+                        dataPlaylistHistory.value = list
+                    }
+                }
+
+                override fun onFailure(call: Call<History>, t: Throwable) {
+
+                }
+
+            })
+        }
+    }
+
     fun setCurrentSong(song: Song?) {
         currentSong = song
         dataCurrentSong.postValue(song)

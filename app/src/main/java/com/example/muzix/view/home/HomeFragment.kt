@@ -27,6 +27,7 @@ import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
 import java.util.Calendar
+import java.util.Collections
 
 class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
 
@@ -61,19 +62,21 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         val preferences = context?.getSharedPreferences("MyPreferences",Context.MODE_PRIVATE)
         randomPosition = preferences?.getInt("id",0) ?: 0
         val viewModel = ViewModelProvider(requireActivity())[PlaylistViewModel::class.java]
+        viewModel.getRandomSong(randomPosition).observe(requireActivity()){
+            Glide.with(binding.imgRandomSong).load(it.image).into(binding.imgRandomSong)
+            binding.tvNameSong.text = "${it.name} - ${it.artist}"
+            song = it
+        }
+        // listened playlists
+        viewModel.getPlaylistHistory().observe(viewLifecycleOwner){
+            historyAdapter.setData(it.take(4))
+            historyAdapter.notifyDataSetChanged()
+        }
         viewModel.getCollection().observe(requireActivity()) {
             adapter.setDataCollection(it)
             binding.rcvHome.adapter = adapter
             adapter.notifyDataSetChanged()
-            updateUI(viewModel)
-        }
-        // listened playlists
-        viewModel.getPlaylistHistory().observe(viewLifecycleOwner){
-            historyAdapter.setData(it)
-            historyAdapter.notifyDataSetChanged()
-            if (it.isNotEmpty()){
-                displayHistory()
-            }
+            updateUI()
         }
         //top artist
         viewModel.getTopArtist().observe(requireActivity()){
@@ -88,14 +91,6 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         }
         return binding.root
     }
-
-    private fun displayHistory() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            binding.titleHistory.visibility = View.VISIBLE
-            binding.rcvHistory.visibility = View.VISIBLE
-        },500)
-    }
-
     private fun setUpRcv() {
         binding.rcvHome.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.rcvHome.setHasFixedSize(true)
@@ -108,21 +103,19 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         binding.rcvHistory.adapter = historyAdapter
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun updateUI(viewModel: PlaylistViewModel) {
+    private fun updateUI() {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.progressLoading.visibility = View.GONE
-            viewModel.getRandomSong(randomPosition).observe(requireActivity()){
-                Glide.with(binding.imgRandomSong).load(it.image).into(binding.imgRandomSong)
-                binding.tvNameSong.text = "${it.name} - ${it.artist}"
-                song = it
-            }
             binding.rcvHome.visibility = View.VISIBLE
+            binding.imgRandomSong.visibility = View.VISIBLE
             binding.tvTitleSong.visibility = View.VISIBLE
+            binding.tvNameSong.visibility = View.VISIBLE
             binding.rcvArtist.visibility = View.VISIBLE
             binding.tvTitleArtist.visibility = View.VISIBLE
             binding.imgRandomSong.visibility = View.VISIBLE
             binding.btnPlay.visibility = View.VISIBLE
+            binding.titleHistory.visibility = View.VISIBLE
+            binding.rcvHistory.visibility = View.VISIBLE
         },1000)
     }
     private fun welcomeTitle() : String{

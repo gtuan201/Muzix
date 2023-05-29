@@ -40,6 +40,7 @@ class PlayMusicService : Service() {
     private var playlist : ArrayList<Song>? = null
     private var position : Int = 0
     private var currentPosition : Int = 0
+    private var currentSong : Song? = null
     private lateinit var player: ExoPlayer
     private lateinit var listPlayedSong : MutableList<Int>
     private var listAllSong : List<Song> = arrayListOf()
@@ -82,11 +83,13 @@ class PlayMusicService : Service() {
             if (song != null) {
                 startMusic(song)
                 sendNotification(song)
+                currentSong = song
                 listPlayedSong = mutableListOf()
                 listPlayedSong.add(listAllSong.indexOf(song))
             }
             if (isPlayingPlaylist()){
                 listPlayedSong = mutableListOf()
+                currentSong = playlist?.get(position)
                 startMusic(playlist?.get(position))
                 sendNotification(playlist?.get(position))
                 sendCurrentSongToActivity(playlist?.get(position))
@@ -127,8 +130,8 @@ class PlayMusicService : Service() {
                 sendActionToActivity(ACTION_RESUME,playlist?.get(currentPosition))
             }
             else {
-                sendNotification(this.song)
-                sendActionToActivity(ACTION_RESUME, this.song)
+                sendNotification(currentSong)
+                sendActionToActivity(ACTION_RESUME, currentSong)
             }
             updateProgress()
         }
@@ -143,8 +146,8 @@ class PlayMusicService : Service() {
                 sendActionToActivity(ACTION_PAUSE,playlist?.get(currentPosition))
             }
             else {
-                sendNotification(this.song)
-                sendActionToActivity(ACTION_PAUSE, this.song)
+                sendNotification(currentSong)
+                sendActionToActivity(ACTION_PAUSE, currentSong)
             }
             handler.removeCallbacks(progressRunnable!!)
         }
@@ -164,6 +167,7 @@ class PlayMusicService : Service() {
             currentPosition = nextPosition
             sendCurrentSongToActivity(nextSong)
             startMusic(nextSong)
+            currentSong = nextSong
             sendNotification(nextSong)
         }
         else{
@@ -180,6 +184,7 @@ class PlayMusicService : Service() {
             currentPosition = nextPosition
             sendCurrentSongToActivity(nextSong)
             startMusic(nextSong)
+            currentSong = nextSong
             sendNotification(nextSong)
         }
     }
@@ -211,8 +216,8 @@ class PlayMusicService : Service() {
             sendActionToActivity(ACTION_RESUME,playlist?.get(currentPosition))
         }
         else {
-            sendNotification(song)
-            sendActionToActivity(ACTION_RESUME,song)
+            sendNotification(currentSong)
+            sendActionToActivity(ACTION_RESUME,currentSong)
         }
     }
 
@@ -306,7 +311,7 @@ class PlayMusicService : Service() {
         handler.removeCallbacks(progressRunnable!!)
         player.release()
     }
-    fun getAllSong(){
+    private fun getAllSong(){
         CoroutineScope(Dispatchers.IO).launch {
             FirebaseService.apiService.getSong().enqueue(object : Callback<Map<String,Song>>{
                 override fun onResponse(

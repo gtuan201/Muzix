@@ -68,6 +68,7 @@ class FavouriteViewModel : ViewModel() {
 
     fun getFavFromId(song: Song?) : MutableLiveData<Favourite>{
         viewModelScope.launch {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
             FirebaseService.apiService.getFavouriteFromId().enqueue(object : Callback<Map<String,Favourite>>{
                 override fun onResponse(
                     call: Call<Map<String, Favourite>>,
@@ -77,7 +78,7 @@ class FavouriteViewModel : ViewModel() {
                         val list = response.body()!!.values.toList()
                         var fav : Favourite? = null
                         for (i in list){
-                            if (i.idSong == song?.id){
+                            if (i.idSong == song?.id && i.uid == uid){
                                 fav = i
                                 break
                             }
@@ -137,6 +138,7 @@ class FavouriteViewModel : ViewModel() {
 
     fun getFavFromId(playlist: Playlist?) : MutableLiveData<Favourite>{
         viewModelScope.launch {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
             FirebaseService.apiService.getFavouriteFromId().enqueue(object : Callback<Map<String,Favourite>>{
                 override fun onResponse(
                     call: Call<Map<String, Favourite>>,
@@ -146,7 +148,7 @@ class FavouriteViewModel : ViewModel() {
                         val list = response.body()!!.values.toList()
                         var fav : Favourite? = null
                         for (i in list){
-                            if (i.idPlaylist == playlist?.id){
+                            if (i.idPlaylist == playlist?.id && i.uid == uid){
                                 fav = i
                                 break
                             }
@@ -203,6 +205,7 @@ class FavouriteViewModel : ViewModel() {
     }
     fun getFavFromId(artist: Artist?) : MutableLiveData<Favourite>{
         viewModelScope.launch {
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
             FirebaseService.apiService.getFavouriteFromId().enqueue(object : Callback<Map<String,Favourite>>{
                 override fun onResponse(
                     call: Call<Map<String, Favourite>>,
@@ -212,7 +215,7 @@ class FavouriteViewModel : ViewModel() {
                         val list = response.body()!!.values.toList()
                         var fav : Favourite? = null
                         for (i in list){
-                            if (i.idArtist == artist?.id){
+                            if (i.idArtist == artist?.id && i.uid == uid){
                                 fav = i
                                 break
                             }

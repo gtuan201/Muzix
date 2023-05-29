@@ -1,5 +1,6 @@
 package com.example.muzix.view.song_playing
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.SeekBar
@@ -20,8 +22,11 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.muzix.R
 import com.example.muzix.databinding.ActivitySongPlayingBinding
+import com.example.muzix.model.Favourite
 import com.example.muzix.model.Song
 import com.example.muzix.service.PlayMusicService
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_NEXT
@@ -32,7 +37,10 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_SEEK_TO
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
+import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SongPlayingActivity : AppCompatActivity() {
 
@@ -42,6 +50,8 @@ class SongPlayingActivity : AppCompatActivity() {
     private var song : Song? = null
     private var max: Long = 0
     private var viewModel : PlaylistViewModel? = null
+    private var isFav = false
+    private var fav : Favourite? = null
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras
@@ -65,7 +75,12 @@ class SongPlayingActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun updateProgress() {
+        val tvMax = SimpleDateFormat("mm:ss").format(Date(max - progress))
+        val tvProgress = SimpleDateFormat("mm:ss").format(Date(progress))
+        binding.tvCurrentPosition.text = tvProgress
+        binding.tvDuration.text = "-$tvMax"
         binding.progressBar.max = max.toInt()
         binding.progressBar.progress = progress.toInt()
     }
@@ -76,6 +91,7 @@ class SongPlayingActivity : AppCompatActivity() {
         binding = ActivitySongPlayingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]
+        val viewModelFav = ViewModelProvider(this)[FavouriteViewModel::class.java]
         LocalBroadcastManager.getInstance(this).registerReceiver(receiverProgress, IntentFilter(UPDATE_PROGRESS_PLAYING))
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
             IntentFilter(ACTION_UPDATE_STATUS_PLAYING)
@@ -84,6 +100,16 @@ class SongPlayingActivity : AppCompatActivity() {
         isPlaying = intent.getBooleanExtra("isPlaying",true)
         max = intent.getLongExtra("max",0)
         progress = intent.getLongExtra("progress",0)
+        viewModelFav.getFavFromId(song).observe(this){
+            isFav = it != null
+            fav = it
+            if (it != null) {
+                binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_favorite_24))
+            }
+            else {
+                binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(this,R.drawable.baseline_favorite_border_24))
+            }
+        }
         updateProgress()
         showInforSong(song,viewModel)
         showPlayOrPause(isPlaying)
@@ -108,6 +134,16 @@ class SongPlayingActivity : AppCompatActivity() {
             }
 
         })
+        binding.btnFavorite.setOnClickListener {
+            if (isFav){
+                viewModelFav.removeFavouriteSong(fav!!)
+                animationFav()
+            }
+            else {
+                viewModelFav.addToFavourite(song!!)
+                animationFav()
+            }
+        }
     }
 
     private fun showInforSong(song: Song?, viewModel: PlaylistViewModel?) {
@@ -177,5 +213,11 @@ class SongPlayingActivity : AppCompatActivity() {
                 }
 
             })
+    }
+    private fun animationFav(){
+        YoYo.with(Techniques.Wobble)
+            .duration(500)
+            .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+            .playOn(binding.btnFavorite)
     }
 }

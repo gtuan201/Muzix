@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.PopupMenu
@@ -24,9 +23,6 @@ import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
 import com.example.muzix.ultis.CustomComparator
 import com.example.muzix.listener.OnArtistClick
-import com.example.muzix.listener.OnItemClickListener
-import com.example.muzix.ultis.hiddenSoftKeyboard
-import com.example.muzix.ultis.showSoftKeyboard
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
@@ -72,6 +68,7 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
             Collections.sort(it, CustomComparator())
             adapter.setData(it)
             adapter.notifyDataSetChanged()
+            changeUI(it.isEmpty())
         }
 
         //pop up menu
@@ -122,6 +119,17 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
             changeViewType()
         }
         return binding.root
+    }
+
+    private fun changeUI(b: Boolean) {
+        if (b){
+            binding.rcvLib.visibility = View.INVISIBLE
+            binding.layoutEmpty.visibility = View.VISIBLE
+        }
+        else{
+            binding.layoutEmpty.visibility = View.GONE
+            binding.rcvLib.visibility = View.VISIBLE
+        }
     }
 
     private fun changeViewType() {

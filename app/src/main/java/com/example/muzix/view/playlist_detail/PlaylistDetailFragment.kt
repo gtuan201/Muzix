@@ -39,7 +39,6 @@ import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.FavouriteViewModel
-import com.example.muzix.viewmodel.LibraryViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -180,6 +179,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
                 binding.fap.setImageResource(R.drawable.baseline_pause_24)
                 isPlaying = true
                 playingPlaylist()
+                viewModelGlobal.addHistoryPlaylist(playlist!!)
             }
         }
 
@@ -216,6 +216,9 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             else {
                 addToFavourite(viewModelFav)
             }
+        }
+        binding.btnDownload.setOnClickListener {
+
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root

@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:background="@color/transparent"
         android:padding="16dp"
-        android:src="@drawable/baseline_keyboard_arrow_down_24" />
+        android:src="@drawable/baseline_keyboard_arrow_down_24"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tvTitle"
@@ -35,7 +36,8 @@
         android:layout_alignParentEnd="true"
         android:background="@color/transparent"
         android:padding="16dp"
-        android:src="@drawable/baseline_more_vert_24" />
+        android:src="@drawable/baseline_more_vert_24"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tvNamePlaylist"
@@ -56,15 +58,17 @@
         android:layout_below="@id/tvNamePlaylist"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="72dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tvNameSong"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/imgSong"
         android:layout_marginStart="16dp"
         android:layout_marginTop="72dp"
+        android:layout_toStartOf="@id/btnFavorite"
         android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -89,7 +93,8 @@
         android:layout_marginTop="64dp"
         android:background="@color/transparent"
         android:padding="16dp"
-        android:src="@drawable/baseline_favorite_border_24" />
+        android:src="@drawable/baseline_favorite_border_24"
+        tools:ignore="ContentDescription" />
 
     <SeekBar
         android:id="@+id/progressBar"
@@ -137,7 +142,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnPrevious"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/btnPrevious"
@@ -150,7 +156,8 @@
             android:src="@drawable/ic_previous"
             app:layout_constraintEnd_toStartOf="@id/btnPlay"
             app:layout_constraintStart_toEndOf="@id/btnShuffle"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/btnPlay"
@@ -161,7 +168,8 @@
             android:src="@drawable/baseline_play_arrow_24"
             app:layout_constraintEnd_toStartOf="@id/btnNext"
             app:layout_constraintStart_toEndOf="@id/btnPrevious"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/btnNext"
@@ -174,7 +182,8 @@
             android:src="@drawable/ic_next"
             app:layout_constraintEnd_toStartOf="@id/btnCancel"
             app:layout_constraintStart_toEndOf="@id/btnPlay"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/btnCancel"
@@ -185,6 +194,7 @@
             android:src="@drawable/baseline_remove_circle_outline_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnNext"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

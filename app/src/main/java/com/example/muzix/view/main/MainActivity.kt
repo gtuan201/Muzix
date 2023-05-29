@@ -23,6 +23,7 @@ import com.daimajia.androidanimations.library.YoYo
 import com.daimajia.swipe.SimpleSwipeListener
 import com.daimajia.swipe.SwipeLayout
 import com.example.muzix.R
+import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.databinding.ActivityMainBinding
 import com.example.muzix.model.*
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_CLEAR
@@ -42,6 +43,9 @@ import com.example.muzix.view.search.SearchFragment
 import com.example.muzix.view.song_playing.SongPlayingActivity
 import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
@@ -173,6 +177,22 @@ class MainActivity : AppCompatActivity() {
                 animationFav()
             }
         }
+//        for (i in 1..6){
+//            val id = System.currentTimeMillis().toString()
+//            val song = Song(id,"name","0","des","image","","mp3","1682762116509",0,"Pop")
+//            FirebaseService.apiService.addSong(id,song).enqueue(object : Callback<Song>{
+//                override fun onResponse(call: Call<Song>, response: Response<Song>) {
+//                    if (response.isSuccessful && response.body() != null){
+//                        Log.e("ok","ok")
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<Song>, t: Throwable) {
+//
+//                }
+//
+//            })
+//        }
     }
 
     private fun openSongPlayingDetail() {

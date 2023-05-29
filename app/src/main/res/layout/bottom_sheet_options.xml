@@ -150,7 +150,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Khác"
+            android:text="Tải xuống"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="@id/btnDownload"
             app:layout_constraintStart_toStartOf="@id/btnDownload"
