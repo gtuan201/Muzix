@@ -107,7 +107,8 @@ class SongViewModel:ViewModel() {
         dataAllSong.postValue(listAllSong)
     }
     fun shuffle(){
-        dataAllSong.postValue(listAllSong.shuffled())
+        listAllSong = listAllSong.shuffled() as MutableList<Song>
+        dataAllSong.postValue(listAllSong)
     }
     fun addSongPlaylist(song: Song){
         listSongAdded.add(song)

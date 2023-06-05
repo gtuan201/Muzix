@@ -218,7 +218,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             }
         }
         binding.btnDownload.setOnClickListener {
-
+            Snackbar.make(binding.root, "Chức năng yêu cầu Premium", Snackbar.LENGTH_SHORT).show()
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root

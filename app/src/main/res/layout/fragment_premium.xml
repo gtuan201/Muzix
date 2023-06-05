@@ -4,9 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.premium.PremiumFragment"
-    android:background="@color/white">
+    android:background="@color/main_background">
 
-   <com.google.android.exoplayer2.ui.PlayerView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
 </RelativeLayout>
