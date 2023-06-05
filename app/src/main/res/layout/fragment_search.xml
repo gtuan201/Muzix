@@ -24,6 +24,8 @@
         android:layout_below="@id/tvSearch"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey"
         android:background="@drawable/edt_custom"
         android:hint="@string/edt_hint"
         android:inputType="textCapSentences"
@@ -86,6 +88,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container_child"
         android:layout_width="match_parent"
+        android:layout_marginTop="16dp"
         android:layout_height="match_parent"
         android:layout_below="@id/tab_search"
         android:visibility="invisible" />

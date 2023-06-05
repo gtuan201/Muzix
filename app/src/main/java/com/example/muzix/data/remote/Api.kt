@@ -75,4 +75,7 @@ interface FirebaseService {
     fun getFavourite() : Call<Map<String,Favourite>>
     @GET("favourite.json")
     fun getFavouriteFromId() : Call<Map<String,Favourite>>
+
+    @DELETE("playlists/{id}.json")
+    fun removePlaylist(@Path("id") id: String) : Call<Playlist>
 }

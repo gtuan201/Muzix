@@ -19,6 +19,7 @@ import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.model.Playlist
 import com.example.muzix.view.library.AddSongPlaylistFragment
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -95,6 +96,7 @@ class SongViewModel:ViewModel() {
         }
         return songLiveData
     }
+
 
     //add song to playlist
     fun setSongPlaylist(list : MutableList<Song>?){
@@ -202,5 +204,23 @@ class SongViewModel:ViewModel() {
 
             })
         }
+    }
+    fun updatePlaylist(playlist: Playlist){
+        viewModelScope.launch(Dispatchers.IO) {
+            FirebaseService.apiService.addPlaylist(playlist.id.toString(),playlist)
+                .enqueue(object :Callback<Playlist>{
+                    override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                        if (response.isSuccessful){
+                            Log.e("updatePlaylist","ok")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Playlist>, t: Throwable) {
+                        Log.e("updatePlaylist","error")
+                    }
+
+                })
+        }
+
     }
 }

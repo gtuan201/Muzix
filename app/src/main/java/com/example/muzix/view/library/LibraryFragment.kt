@@ -1,6 +1,7 @@
 package com.example.muzix.view.library
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
@@ -16,12 +17,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.muzix.R
+import com.example.muzix.databinding.AlertSubmitDeleteBinding
 import com.example.muzix.databinding.BottomSheetAddPlaylistBinding
+import com.example.muzix.databinding.BottomSheetUpdatePlaylistBinding
 import com.example.muzix.databinding.FragmentLibraryBinding
 import com.example.muzix.listener.ClickPlaylist
+import com.example.muzix.listener.LongClickToChangeImg
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
-import com.example.muzix.ultis.CustomComparator
 import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.main.MainActivity
@@ -33,11 +36,12 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @SuppressLint("NotifyDataSetChanged")
-class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
+class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick, LongClickToChangeImg {
 
     private lateinit var binding: FragmentLibraryBinding
     private lateinit var adapter: LibraryAdapter
     private lateinit var viewModelLib : LibraryViewModel
+    private var listLib : MutableList<Any> = mutableListOf()
     private var gridViewEnable = true
 
     companion object{
@@ -61,11 +65,12 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
         // Inflate the layout for this fragment
         binding = FragmentLibraryBinding.inflate(LayoutInflater.from(context), container, false)
         binding.rcvLib.layoutManager = GridLayoutManager(context, 2)
-        adapter = LibraryAdapter(this, this)
+        adapter = LibraryAdapter(this, this,this)
         binding.rcvLib.adapter = adapter
-        viewModelLib = ViewModelProvider(this)[LibraryViewModel::class.java]
+        viewModelLib = ViewModelProvider(requireActivity())[LibraryViewModel::class.java]
         viewModelLib.getLibrary().observe(viewLifecycleOwner) {
-            Collections.sort(it, CustomComparator())
+            listLib = it
+//            Collections.sort(it, CustomComparator())
             adapter.setData(it)
             adapter.notifyDataSetChanged()
             changeUI(it.isEmpty())
@@ -118,6 +123,9 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
         binding.btnChangeLayout.setOnClickListener {
             changeViewType()
         }
+        binding.pullToRefresh.setOnRefreshListener {
+            binding.pullToRefresh.isRefreshing = false
+        }
         return binding.root
     }
 
@@ -137,13 +145,13 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
             gridViewEnable = false
             binding.rcvLib.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
             adapter.changeLayoutManager(LINEAR_VIEW)
-            binding.btnChangeLayout.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_format_list_bulleted_24))
+            binding.btnChangeLayout.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_grid_view_24))
         }
         else {
             gridViewEnable = true
             binding.rcvLib.layoutManager = GridLayoutManager(requireContext(),2)
             adapter.changeLayoutManager(GRID_VIEW)
-            binding.btnChangeLayout.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_grid_view_24))
+            binding.btnChangeLayout.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_format_list_bulleted_24))
         }
     }
 
@@ -172,7 +180,8 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
         val calendar = Calendar.getInstance().time
         val dateCreate = SimpleDateFormat("dd-MM-yyyy").format(calendar)
         val playlist = Playlist(timeStamp, namePlaylist, "", user?.displayName, dateCreate, user?.photoUrl.toString(), null, "0", 0, uid)
-        viewModel.addPlaylist(playlist)
+        listLib.add(playlist)
+        viewModel.addPlaylist(listLib,playlist)
         switchFragment(playlist)
     }
 
@@ -235,5 +244,38 @@ class LibraryFragment : Fragment(), ClickPlaylist, OnArtistClick {
                 activity.switchFragment(playlistDetailFragment, playlist)
             }
         }
+    }
+
+    override fun pickImageToChange(playlist: Playlist) {
+        val dialog = BottomSheetDialog(requireContext())
+        val bindingBottom = BottomSheetUpdatePlaylistBinding.inflate(LayoutInflater.from(context))
+        dialog.setContentView(bindingBottom.root)
+        Glide.with(bindingBottom.imgPlaylist).load(playlist.thumbnail)
+            .placeholder(R.drawable.thumbnail).into(bindingBottom.imgPlaylist)
+        bindingBottom.tvNamePlaylist.text = playlist.name
+        bindingBottom.tvOwner.text = playlist.owner
+        bindingBottom.tvDelete.setOnClickListener {
+            openAlertDialog(playlist,dialog)
+        }
+        bindingBottom.tvEdit.setOnClickListener {
+            val bsEdit = BottomSheetEditFragment(playlist,viewModelLib,listLib,dialog)
+            fragmentManager?.let { it1 -> bsEdit.show(it1,bsEdit.tag) }
+        }
+        dialog.show()
+    }
+
+    private fun openAlertDialog(playlist: Playlist, dialogParent: BottomSheetDialog) {
+       val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        val binding = AlertSubmitDeleteBinding.inflate(LayoutInflater.from(context))
+        dialog.setContentView(binding.root)
+        binding.btnSubmit.setOnClickListener {
+            dialog.dismiss()
+            dialogParent.dismiss()
+            viewModelLib.removePlaylist(playlist)
+        }
+        binding.btnCancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 }

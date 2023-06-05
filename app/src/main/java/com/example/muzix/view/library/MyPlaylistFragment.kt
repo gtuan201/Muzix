@@ -6,15 +6,20 @@ import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,11 +29,11 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.muzix.R
 import com.example.muzix.databinding.BottomSheetOptionsBinding
 import com.example.muzix.databinding.FragmentMyPlaylistBinding
-import com.example.muzix.model.Playlist
-import com.example.muzix.model.Song
 import com.example.muzix.listener.ClickMoreOptions
 import com.example.muzix.listener.ClickToAddSong
 import com.example.muzix.model.Favourite
+import com.example.muzix.model.Playlist
+import com.example.muzix.model.Song
 import com.example.muzix.service.PlayMusicService
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.PlayReceiver
@@ -36,6 +41,7 @@ import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.library.AddSongPlaylistFragment.Companion.ACTION_ADD
 import com.example.muzix.view.playlist_detail.SongAdapter
 import com.example.muzix.viewmodel.FavouriteViewModel
+import com.example.muzix.viewmodel.LibraryViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -143,9 +149,19 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
             )
         )
         // Color ContentScrim
+        setContentScrimColor(playlist?.thumbnail)
+        binding.fap.setOnClickListener {
+            clickFap(currentSong)
+        }
+        binding.btnRefresh.setOnClickListener { viewModel!!.shuffle() }
+        binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
+        return binding.root
+    }
+
+    private fun setContentScrimColor(thumbnail: String?) {
         Glide.with(this)
             .asBitmap()
-            .load(playlist?.thumbnail)
+            .load(thumbnail)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     // Trích xuất màu tối nhất từ ảnh bằng Palette
@@ -168,14 +184,8 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
 
                 }
             })
-        binding.fap.setOnClickListener {
-            clickFap(currentSong)
-        }
-        binding.btnRefresh.setOnClickListener { viewModel!!.shuffle() }
-        binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
-        return binding.root
-    }
 
+    }
     private fun clickFap(currentSong: Song?) {
         if (currentSong != null && playlist?.tracks != null &&  playlist?.tracks!!.contains(currentSong)){
             if (isPlaying){
@@ -273,6 +283,7 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
                 setData(listSuggest)
                 notifyDataSetChanged()
             }
+            if (it != null)  updateUI()
         }
     }
     private fun getAddedSong(viewModel: SongViewModel){
@@ -286,6 +297,15 @@ class MyPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
                 notifyDataSetChanged()
             }
         }
+    }
+
+    private fun updateUI() {
+        Handler().postDelayed({
+            binding.progressLoading.visibility = View.GONE
+            binding.appBarLayout.visibility = View.VISIBLE
+            binding.scroll.visibility = View.VISIBLE
+            binding.fap.visibility = View.VISIBLE
+        },800)
     }
 
     override fun clickMore(song: Song) {

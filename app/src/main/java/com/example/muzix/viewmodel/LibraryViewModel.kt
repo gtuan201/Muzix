@@ -10,6 +10,7 @@ import com.example.muzix.model.Favourite
 import com.example.muzix.model.Playlist
 import com.example.muzix.model.Song
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,27 +67,6 @@ class LibraryViewModel : ViewModel() {
         }
         return dataPlaylist
     }
-
-    fun getArtist(): MutableLiveData<MutableList<Artist>>{
-        viewModelScope.launch {
-            FirebaseService.apiService.getArtist().enqueue(object : Callback<Map<String,Artist>>{
-                override fun onResponse(
-                    call: Call<Map<String, Artist>>,
-                    response: Response<Map<String, Artist>>
-                ) {
-                    if (response.isSuccessful && response.body() != null){
-                        dataArtist.postValue(response.body()!!.values.toMutableList().take(2).toMutableList())
-                    }
-                }
-
-                override fun onFailure(call: Call<Map<String, Artist>>, t: Throwable) {
-
-                }
-
-            })
-        }
-        return dataArtist
-    }
     fun getFavPlaylist(): MutableLiveData<MutableList<Playlist>>{
         viewModelScope.launch {
             val listValue : MutableList<Playlist> = mutableListOf()
@@ -134,19 +114,35 @@ class LibraryViewModel : ViewModel() {
         }
         return dataFavPlaylist
     }
-    fun addPlaylist(playlist: Playlist){
+    fun addPlaylist(list: MutableList<Any>, playlist: Playlist){
         viewModelScope.launch {
             FirebaseService.apiService.addPlaylist(playlist.id.toString(),playlist)
                 .enqueue(object : Callback<Playlist>{
                     override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
                         if (response.isSuccessful && response.body() != null){
-                            val list = dataPlaylist.value
-                            list?.add(playlist)
-                            dataPlaylist.value = list
+                          dataLibrary.value = list
                         }
                     }
                     override fun onFailure(call: Call<Playlist>, t: Throwable) {
                         Log.e("addPlaylist", "error")
+                    }
+
+                })
+        }
+    }
+
+    fun updatePlaylistLib(playlist: Playlist){
+        viewModelScope.launch(Dispatchers.IO) {
+            FirebaseService.apiService.addPlaylist(playlist.id.toString(),playlist)
+                .enqueue(object :Callback<Playlist>{
+                    override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                        if (response.isSuccessful){
+                            Log.e("updatePlaylist","ok")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Playlist>, t: Throwable) {
+                        Log.e("updatePlaylist","error")
                     }
 
                 })
@@ -250,5 +246,29 @@ class LibraryViewModel : ViewModel() {
             })
         }
         return dataFavSong
+    }
+    fun removePlaylist(playlist: Playlist){
+        viewModelScope.launch(Dispatchers.IO){
+            FirebaseService.apiService.removePlaylist(playlist.id.toString())
+                .enqueue(object : Callback<Playlist>{
+                    override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
+                        if (response.isSuccessful){
+                            val list = dataLibrary.value
+                            list?.remove(playlist)
+                            dataLibrary.postValue(list)
+                            Log.e("remove","ok")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Playlist>, t: Throwable) {
+                        Log.e("removePlaylist","error")
+                    }
+
+                })
+        }
+    }
+    fun updateLib(listLib : MutableList<Any>){
+        dataLibrary.value = mutableListOf()
+        dataLibrary.postValue(listLib)
     }
 }

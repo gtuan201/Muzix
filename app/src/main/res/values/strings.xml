@@ -28,4 +28,13 @@
     <string name="library">Thư viện</string>
     <string name="create_playlist">Tạo playlist mới</string>
     <string name="suggest_song">Gợi ý bài hát cho bạn</string>
+    <string name="edit_playlist">Chỉnh sửa danh sách phát</string>
+    <string name="delete_playlist">Xóa danh sách phát</string>
+    <string name="share">Chia sẻ</string>
+    <string name="premium">Premium</string>
+    <string name="no_ads">Nghe nhạc không quảng cáo</string>
+    <string name="save">Lưu</string>
+    <string name="submit_delete">Bạn có chắc muốn xóa playlist này không?</string>
+    <string name="cancel">Hủy</string>
+    <string name="yes">Có</string>
 </resources>

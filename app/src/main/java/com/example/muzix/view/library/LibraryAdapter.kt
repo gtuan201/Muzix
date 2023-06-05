@@ -13,18 +13,19 @@ import com.example.muzix.databinding.ItemArtistSearchBinding
 import com.example.muzix.databinding.ItemPlaylistLibBinding
 import com.example.muzix.databinding.ItemSongSearchBinding
 import com.example.muzix.listener.ClickPlaylist
+import com.example.muzix.listener.LongClickToChangeImg
 import com.example.muzix.model.Artist
 import com.example.muzix.model.Playlist
 import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.model.Song
-import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.view.library.LibraryFragment.Companion.GRID_VIEW
 import com.google.firebase.auth.FirebaseAuth
 @SuppressLint("NotifyDataSetChanged")
 class LibraryAdapter(
     private val clickPlaylist: ClickPlaylist,
-    private val clickArtist: OnArtistClick
+    private val clickArtist: OnArtistClick,
+    private val longClickToChangeImg: LongClickToChangeImg
 ) : RecyclerView.Adapter<ViewHolder>() {
     companion object {
         const val VIEW_TYPE_PLAYLIST = 0
@@ -86,6 +87,11 @@ class LibraryAdapter(
                     } else {
                         clickPlaylist.clickPlaylist((listItem[position] as Playlist), PLAYLIST_FAV)
                     }
+                }
+                holder.itemView.setOnLongClickListener {
+                    if ((listItem[position] as Playlist).idCollection == uid)
+                        longClickToChangeImg.pickImageToChange((listItem[position] as Playlist))
+                    true
                 }
             }
             VIEW_TYPE_ARTIST -> {

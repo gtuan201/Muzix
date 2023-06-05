@@ -53,7 +53,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
     private fun putValuePreferences(size: Int, editor: SharedPreferences.Editor, currentDate: Int) {
-        val newRandomId = Random.nextInt(size - 18)
+        val newRandomId = Random.nextInt(size)
         editor.putInt("id",newRandomId)
         editor.putInt("lastDate",currentDate)
         editor.apply()

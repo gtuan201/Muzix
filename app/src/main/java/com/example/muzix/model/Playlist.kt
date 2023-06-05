@@ -5,11 +5,11 @@ import android.os.Parcelable
 
 data class Playlist(
     val id : String? = null,
-    val name : String? = null,
+    var name : String? = null,
     val description : String? = null,
     val owner : String? = null,
     val dayCreate : String? = null,
-    val thumbnail : String? = null,
+    var thumbnail : String? = null,
     var tracks : ArrayList<Song>? = null,
     val duration : String? = null,
     var lover : Long? = null,
