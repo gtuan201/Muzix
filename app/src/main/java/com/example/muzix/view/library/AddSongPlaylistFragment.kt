@@ -121,7 +121,7 @@ class AddSongPlaylistFragment : Fragment(), ClickToAddSong, ClickMoreOptions {
     private fun showSnackBar(song: Song, action : Int) {
         val snackBar = Snackbar.make(binding.root,"Đã thêm ${song.name} vào danh sách phát",Snackbar.LENGTH_SHORT)
         val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(0,0,0,210)
+        layoutParams.setMargins(0,0,0,110)
         snackBar.view.layoutParams = layoutParams
         snackBar.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_background))
         snackBar.setBackgroundTint(Color.WHITE)

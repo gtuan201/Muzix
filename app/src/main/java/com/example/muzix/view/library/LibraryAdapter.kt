@@ -118,6 +118,11 @@ class LibraryAdapter(
                         clickPlaylist.clickPlaylist((listItem[position] as Playlist), PLAYLIST_FAV)
                     }
                 }
+                holder.itemView.setOnLongClickListener {
+                    if ((listItem[position] as Playlist).idCollection == uid)
+                        longClickToChangeImg.pickImageToChange((listItem[position] as Playlist))
+                    true
+                }
             }
             VIEW_TYPE_ARTIST_LINEAR -> {
                 (holder as ArtistVHLinear).bind(listItem[position] as Artist)

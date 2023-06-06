@@ -218,7 +218,11 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             }
         }
         binding.btnDownload.setOnClickListener {
-            Snackbar.make(binding.root, "Chức năng yêu cầu Premium", Snackbar.LENGTH_SHORT).show()
+            val snackBar = Snackbar.make(binding.root,"Chức năng chỉ có ở Muzix Premium", Snackbar.LENGTH_SHORT)
+            val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(0,0,0,110)
+            snackBar.view.layoutParams = layoutParams
+            snackBar.show()
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
@@ -245,7 +249,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
     private fun showSnackBar(action : Int) {
         val snackBar = Snackbar.make(binding.root,"Đã thêm ${playlist?.name} vào danh sách phát", Snackbar.LENGTH_SHORT)
         val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(0,0,0,210)
+        layoutParams.setMargins(0,0,0,110)
         snackBar.view.layoutParams = layoutParams
         snackBar.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_background))
         snackBar.setBackgroundTint(Color.WHITE)
