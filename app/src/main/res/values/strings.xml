@@ -37,4 +37,14 @@
     <string name="submit_delete">Bạn có chắc muốn xóa playlist này không?</string>
     <string name="cancel">Hủy</string>
     <string name="yes">Có</string>
+    <string name="free_trial">Dùng thử miễn phí</string>
+    <string name="free_1_month">Dùng thử Premium miễn phí trong 1 tháng</string>
+    <string name="des">Sau đó chỉ 59,000đ/tháng. Ưu đãi chỉ dành cho những người mới dùng gói Premium. Có áp dụng điều khoản</string>
+    <string name="price_1">19.000đ/tháng</string>
+    <string name="content_1">Trải nghiệm nghe nhạc với chất lượng cao nhất và không quảng cáo với giá ưu đãi dành riêng cho học sinh, sinh viên</string>
+    <string name="tv_no_ads">Nghe nhạc không quảng cáo</string>
+    <string name="vip_music">Nghe và tải nhạc Lossless</string>
+    <string name="download">Tải nhạc không giới hạn</string>
+    <string name="price_2">49.000đ/tháng</string>
+    <string name="content_2">Trải nghiệm nghe nhạc với chất lượng cao nhất và không quảng cáo</string>
 </resources>
