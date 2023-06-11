@@ -3,10 +3,15 @@ package com.example.muzix.view.main
 import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -39,10 +44,12 @@ import com.example.muzix.ultis.sendActionToService
 import com.example.muzix.view.library.LibraryFragment
 import com.example.muzix.view.premium.PremiumFragment
 import com.example.muzix.view.home.HomeFragment
+import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.view.search.SearchFragment
 import com.example.muzix.view.song_playing.SongPlayingActivity
 import com.example.muzix.viewmodel.FavouriteViewModel
 import com.example.muzix.viewmodel.PlaylistViewModel
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -65,7 +72,10 @@ class MainActivity : AppCompatActivity() {
     private var isFav : Boolean = false
     private var fav : Favourite? = null
 
-    //    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    companion object {
+        private const val ADD_FAV = 1
+        private const val REMOVE_FAV = 0
+    }
     private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras
@@ -169,18 +179,20 @@ class MainActivity : AppCompatActivity() {
         })
         binding.btnFavorite.setOnClickListener {
             if (isFav){
+                showSnackBar(REMOVE_FAV)
                 viewModel.removeFavouriteSong(fav!!)
                 animationFav()
             }
             else {
+                showSnackBar(ADD_FAV)
                 viewModel.addToFavourite(song!!)
                 animationFav()
             }
         }
-//        for (i in 1..6){
+//        for (i in 1..11){
 //            val id = System.currentTimeMillis().toString()
-//            val song = Song(id,"name","0","des","image","","mp3","1682762116509",0,"Pop")
-//            FirebaseService.apiService.addSong(id,song).enqueue(object : Callback<Song>{
+//            val song = Song(id,"Summer Is For Falling In Love","0","des","image","Sarah Kang","mp3","1682762163931",0,"Pop")
+//            FirebaseService.apiService.addSong(id,song).enqueue(object : Callback<Song> {
 //                override fun onResponse(call: Call<Song>, response: Response<Song>) {
 //                    if (response.isSuccessful && response.body() != null){
 //                        Log.e("ok","ok")
@@ -193,6 +205,34 @@ class MainActivity : AppCompatActivity() {
 //
 //            })
 //        }
+    }
+
+    private fun showSnackBar(fav : Int) {
+        val snackBar = Snackbar.make(binding.root,"Đã thêm ${song?.name} vào thư viện", Snackbar.LENGTH_SHORT)
+        val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0,0,0,210)
+        snackBar.view.layoutParams = layoutParams
+        snackBar.setTextColor(ContextCompat.getColor(this,R.color.main_background))
+        snackBar.setBackgroundTint(Color.WHITE)
+        val spannable = SpannableStringBuilder()
+        when(fav){
+            ADD_FAV -> {
+                spannable.apply {
+                    append("Đã thêm ")
+                    append(song?.name, StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    append(" vào thư viện")
+                }
+            }
+            REMOVE_FAV -> {
+                spannable.apply {
+                    append("Đã xóa ")
+                    append(song?.name, StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    append(" khỏi thư viện")
+                }
+            }
+        }
+        snackBar.setText(spannable)
+        snackBar.show()
     }
 
     private fun openSongPlayingDetail() {

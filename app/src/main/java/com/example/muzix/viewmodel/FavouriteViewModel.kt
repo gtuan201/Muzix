@@ -234,11 +234,8 @@ class FavouriteViewModel : ViewModel() {
         return dataFavourite
     }
 
-    fun updatePlaylist(playlist: Playlist?,like : Long){
+    fun updatePlaylist(playlist: Playlist?){
         viewModelScope.launch {
-            playlist?.apply {
-                lover = like
-            }
             FirebaseService.apiService.addPlaylist(playlist?.id.toString(),playlist!!).enqueue(object : Callback<Playlist>{
                 override fun onResponse(call: Call<Playlist>, response: Response<Playlist>) {
                     if (response.isSuccessful && response.body() != null){

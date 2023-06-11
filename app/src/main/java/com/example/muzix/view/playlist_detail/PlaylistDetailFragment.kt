@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,11 @@ import com.example.muzix.viewmodel.PlaylistViewModel
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -96,6 +102,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             if (playlist?.tracks != null && playlist?.tracks!!.isNotEmpty()){
                 listSong.addAll(playlist?.tracks!!)
             }
+            setDurationPlaylist(listSong)
             adapter.setData(listSong)
             adapter.notifyDataSetChanged()
             updateUI()
@@ -146,7 +153,6 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         binding.collapsingToolbar.title = playlist?.name
         binding.tvDescriptionPlaylist.text = playlist?.description
         binding.tvOwner.text = playlist?.owner
-        binding.tvLoverDuration.text = "${playlist?.lover} lượt thích • ${playlist?.duration}"
         binding.appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val isCollapsed = abs(verticalOffset) == appBarLayout.totalScrollRange
             binding.imageView.visibility = if (isCollapsed) View.GONE else View.VISIBLE
@@ -228,6 +234,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         return binding.root
     }
 
+
     private fun removeFavourite(viewModelFav: FavouriteViewModel) {
         YoYo.with(Techniques.Wobble)
             .duration(500)
@@ -236,6 +243,8 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         viewModelFav.removeFavourite(favourite!!).observe(viewLifecycleOwner){
             if(it == null) showSnackBar(ACTION_REMOVE)
         }
+        val newPlaylist = playlist?.copy(lover = playlist?.lover?.minus(1))
+        viewModelFav.updatePlaylist(newPlaylist)
     }
     private fun addToFavourite(viewModelFav: FavouriteViewModel) {
         YoYo.with(Techniques.Wobble)
@@ -245,6 +254,8 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         viewModelFav.addToFavourite(playlist).observe(viewLifecycleOwner){
            if (it != null) showSnackBar(ACTION_ADD)
         }
+        val newPlaylist = playlist?.copy(lover = playlist?.lover?.plus(1))
+        viewModelFav.updatePlaylist(newPlaylist)
     }
     private fun showSnackBar(action : Int) {
         val snackBar = Snackbar.make(binding.root,"Đã thêm ${playlist?.name} vào danh sách phát", Snackbar.LENGTH_SHORT)
@@ -287,7 +298,9 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
 
     private fun playingPlaylist() {
         val intent = Intent(context, PlayReceiver::class.java)
-        val position = Random.nextInt(listSong.size - 1)
+        val position = if (listSong.size != 1){
+            Random.nextInt(listSong.size - 1)
+        } else 0
         intent.action = Constants.PLAY
         intent.putParcelableArrayListExtra("playlist", listSong)
         intent.putExtra("position",position)
@@ -341,5 +354,29 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
         else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
         binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+    }
+    @SuppressLint("SimpleDateFormat", "SetTextI18n")
+    private fun setDurationPlaylist(listSong: ArrayList<Song>?) {
+        val calendar = Calendar.getInstance()
+        val df = SimpleDateFormat("mm:ss")
+        var total : Long = 0
+        if (listSong != null){
+            for (i in listSong){
+                val time = df.parse(i.duration.toString())
+                if (time != null) {
+                    val durationInMillis = TimeUnit.MILLISECONDS.toMillis(time.time)
+                    total += durationInMillis
+                }
+            }
+        }
+        val time = Date()
+        time.time = total
+        calendar.time = time
+        val hour = calendar.get(Calendar.HOUR_OF_DAY).toString()
+        val minute = calendar.get(Calendar.MINUTE).toString()
+        val formatter = NumberFormat.getNumberInstance(Locale.GERMAN)
+        formatter.isGroupingUsed = true
+        val formatted = formatter.format(playlist?.lover ?: 0)
+        binding.tvLoverDuration.text = "$formatted lượt thích • $hour giờ $minute phút"
     }
 }
