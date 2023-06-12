@@ -12,6 +12,7 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -41,6 +42,7 @@ import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
 import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.ultis.sendActionToService
+import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.library.LibraryFragment
 import com.example.muzix.view.premium.PremiumFragment
 import com.example.muzix.view.home.HomeFragment
@@ -273,13 +275,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-//    private fun changeFragment(fragment: Fragment) {
-//        hiddenSoftKeyboard(this)
-//        fragmentTransaction = supportFragmentManager.beginTransaction()
-//        fragmentTransaction.hide(active).show(fragment).commitNow()
-//        active = fragment
-//    }
     private fun showFragment(fragment: Fragment) {
         checkBackStack()
         hiddenSoftKeyboard(this)
@@ -347,16 +342,6 @@ class MainActivity : AppCompatActivity() {
             .commit()
         active = fragment
     }
-//    fun switchFragment(fragment: Fragment, playlist: String) {
-//        fragmentTransaction = supportFragmentManager.beginTransaction()
-//        val bundle = Bundle()
-//        bundle.putString("name", playlist)
-//        fragment.arguments = bundle
-//        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null).hide(active)
-//            .show(fragment)
-//            .commit()
-//        active = fragment
-//    }
 
     private fun checkBackStack() {
         while (supportFragmentManager.backStackEntryCount > 0) {
@@ -410,6 +395,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 //    private fun clearBackStack() {
 //        val fragmentManager = supportFragmentManager
 //        for (i in 0 until fragmentManager.backStackEntryCount) {

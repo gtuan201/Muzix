@@ -162,6 +162,7 @@ class ArtistDetailFragment : Fragment(), OnArtistClick, OnItemClickListener, Cli
             }
         }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
+        binding.btnShuffle.setOnClickListener { showSnackBar(binding.root) }
         return binding.root
     }
 

@@ -37,6 +37,7 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.ultis.sendActionToService
+import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.FavouriteViewModel
@@ -223,13 +224,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
                 addToFavourite(viewModelFav)
             }
         }
-        binding.btnDownload.setOnClickListener {
-            val snackBar = Snackbar.make(binding.root,"Chức năng chỉ có ở Muzix Premium", Snackbar.LENGTH_SHORT)
-            val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
-            layoutParams.setMargins(0,0,0,110)
-            snackBar.view.layoutParams = layoutParams
-            snackBar.show()
-        }
+        binding.btnDownload.setOnClickListener { com.example.muzix.ultis.showSnackBar(binding.root)}
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }
@@ -348,6 +343,8 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         }
         dialog.show()
     }
+
+
     private fun setDrawable(binding: BottomSheetOptionsBinding, isFav: Boolean) {
         val drawable = if (isFav){ ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
         } else ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24)

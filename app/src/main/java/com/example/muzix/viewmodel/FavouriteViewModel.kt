@@ -20,6 +20,7 @@ class FavouriteViewModel : ViewModel() {
     private var dataFavourite : MutableLiveData<Favourite> = MutableLiveData()
     private var dataFavSong : MutableLiveData<Favourite> = MutableLiveData()
     private var dataListFav : MutableLiveData<List<Favourite>> = MutableLiveData()
+    private var dataArtist : MutableLiveData<Artist> = MutableLiveData()
 
     //get all favourite
     fun getFavourite(): MutableLiveData<List<Favourite>>{

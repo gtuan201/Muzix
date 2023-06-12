@@ -143,10 +143,10 @@
             <TextView
                 android:id="@+id/show_more"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_below="@id/tvDescription"
                 android:layout_marginHorizontal="16dp"
-                android:gravity="start"
+                android:gravity="start|top"
                 android:text="@string/show_more"
                 android:textColor="#247EDD"
                 android:textStyle="bold" />
