@@ -51,19 +51,20 @@ import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions,
-    View.OnClickListener {
+class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions {
+
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null
-    private var isPlaying : Boolean = false
+    private var isPlaying: Boolean = false
     private lateinit var adapter: SongAdapter
     private lateinit var playlistAdapter: HomeChildAdapter
-    private var listSong : ArrayList<Song> = arrayListOf()
-    private var isFavourite : Boolean = false
-    private var favourite : Favourite? = null
-    private lateinit var viewModelFav : FavouriteViewModel
+    private var listSong: ArrayList<Song> = arrayListOf()
+    private var isFavourite: Boolean = false
+    private var favourite: Favourite? = null
+    private lateinit var viewModelFav: FavouriteViewModel
     private var mContext: Context? = null
+
     companion object {
         private const val ACTION_ADD = 0
         private const val ACTION_REMOVE = 1
@@ -73,10 +74,12 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         super.onAttach(context)
         mContext = context
     }
+
     override fun onDetach() {
         super.onDetach()
         mContext = null
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments
@@ -91,7 +94,8 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentPlaylistDetailBinding.inflate(LayoutInflater.from(mContext), container, false)
+        binding =
+            FragmentPlaylistDetailBinding.inflate(LayoutInflater.from(mContext), container, false)
         setUpRcv()
         // ViewModel getData
         val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
@@ -99,7 +103,7 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         viewModelFav = ViewModelProvider(requireActivity())[FavouriteViewModel::class.java]
         viewModel.getSong(playlist?.id.toString()).observe(requireActivity()) {
             listSong = it
-            if (playlist?.tracks != null && playlist?.tracks!!.isNotEmpty()){
+            if (playlist?.tracks != null && playlist?.tracks!!.isNotEmpty()) {
                 listSong.addAll(playlist?.tracks!!)
             }
             setDurationPlaylist(listSong)
@@ -107,18 +111,27 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             adapter.notifyDataSetChanged()
             updateUI()
         }
-        viewModelGlobal.getRandomPlaylist().observe(requireActivity()){
+        viewModelGlobal.getRandomPlaylist().observe(requireActivity()) {
             playlistAdapter.setDataPlaylist(it)
             adapter.notifyDataSetChanged()
         }
-        viewModelFav.getFavFromId(playlist).observe(viewLifecycleOwner){
+        viewModelFav.getFavFromId(playlist).observe(viewLifecycleOwner) {
             isFavourite = it != null
             favourite = it
             if (it != null) {
-                binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24))
-            }
-            else {
-                binding.btnFavorite.setImageDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24))
+                binding.btnFavorite.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.baseline_favorite_24
+                    )
+                )
+            } else {
+                binding.btnFavorite.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.baseline_favorite_border_24
+                    )
+                )
             }
         }
         // update UI when playing song
@@ -135,20 +148,20 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
                 binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
             }
         }
-        viewModelGlobal.getIsPlaying().observe(requireActivity()){
-            if (currentSong != null){
+        viewModelGlobal.getIsPlaying().observe(requireActivity()) {
+            if (currentSong != null) {
                 isPlaying = it
-                if (isPlaying){
+                if (isPlaying) {
                     binding.fap.setImageResource(R.drawable.baseline_pause_24)
-                }
-                else{
+                } else {
                     binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
                 }
             }
         }
         isPlaying = viewModelGlobal.isPlaying
-        if (isPlaying){ binding.fap.setImageResource(R.drawable.baseline_pause_24) }
-        else binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
+        if (isPlaying) {
+            binding.fap.setImageResource(R.drawable.baseline_pause_24)
+        } else binding.fap.setImageResource(R.drawable.baseline_play_arrow_24)
         // Information Playlist
         binding.collapsingToolbar.title = playlist?.name
         binding.tvDescriptionPlaylist.text = playlist?.description
@@ -173,15 +186,13 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         )
         //click fap
         binding.fap.setOnClickListener {
-            if (currentSong != null && currentSong?.idPlaylist == playlist?.id){
-                if (isPlaying){
-                    sendActionToService(ACTION_PAUSE,requireContext(),requireActivity())
+            if (currentSong != null && currentSong?.idPlaylist == playlist?.id) {
+                if (isPlaying) {
+                    sendActionToService(ACTION_PAUSE, requireContext(), requireActivity())
+                } else {
+                    sendActionToService(ACTION_RESUME, requireContext(), requireActivity())
                 }
-                else {
-                    sendActionToService(ACTION_RESUME,requireContext(),requireActivity())
-                }
-            }
-            else{
+            } else {
                 binding.fap.setImageResource(R.drawable.baseline_pause_24)
                 isPlaying = true
                 playingPlaylist()
@@ -216,14 +227,13 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
                 }
             })
         binding.btnFavorite.setOnClickListener {
-            if (isFavourite){
+            if (isFavourite) {
                 removeFavourite(viewModelFav)
-            }
-            else {
+            } else {
                 addToFavourite(viewModelFav)
             }
         }
-        binding.btnDownload.setOnClickListener { com.example.muzix.ultis.showSnackBar(binding.root)}
+        binding.btnDownload.setOnClickListener { com.example.muzix.ultis.showSnackBar(binding.root) }
         binding.btnBack.setOnClickListener { requireActivity().onBackPressed() }
         return binding.root
     }
@@ -234,43 +244,57 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             .duration(500)
             .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
             .playOn(binding.btnFavorite)
-        viewModelFav.removeFavourite(favourite!!).observe(viewLifecycleOwner){
-            if(it == null) showSnackBar(ACTION_REMOVE)
+        viewModelFav.removeFavourite(favourite!!).observe(viewLifecycleOwner) {
+            if (it == null) showSnackBar(ACTION_REMOVE)
         }
         val newPlaylist = playlist?.copy(lover = playlist?.lover?.minus(1))
         viewModelFav.updatePlaylist(newPlaylist)
     }
+
     private fun addToFavourite(viewModelFav: FavouriteViewModel) {
         YoYo.with(Techniques.Wobble)
             .duration(500)
             .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
             .playOn(binding.btnFavorite)
-        viewModelFav.addToFavourite(playlist).observe(viewLifecycleOwner){
-           if (it != null) showSnackBar(ACTION_ADD)
+        viewModelFav.addToFavourite(playlist).observe(viewLifecycleOwner) {
+            if (it != null) showSnackBar(ACTION_ADD)
         }
         val newPlaylist = playlist?.copy(lover = playlist?.lover?.plus(1))
         viewModelFav.updatePlaylist(newPlaylist)
     }
-    private fun showSnackBar(action : Int) {
-        val snackBar = Snackbar.make(binding.root,"Đã thêm ${playlist?.name} vào danh sách phát", Snackbar.LENGTH_SHORT)
+
+    private fun showSnackBar(action: Int) {
+        val snackBar = Snackbar.make(
+            binding.root,
+            "Đã thêm ${playlist?.name} vào danh sách phát",
+            Snackbar.LENGTH_SHORT
+        )
         val layoutParams = snackBar.view.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(0,0,0,110)
+        layoutParams.setMargins(0, 0, 0, 110)
         snackBar.view.layoutParams = layoutParams
-        snackBar.setTextColor(ContextCompat.getColor(requireContext(),R.color.main_background))
+        snackBar.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_background))
         snackBar.setBackgroundTint(Color.WHITE)
         val spannable = SpannableStringBuilder()
-        when(action){
+        when (action) {
             ACTION_ADD -> {
                 spannable.apply {
                     append("Đã thêm ")
-                    append(playlist?.name, StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    append(
+                        playlist?.name,
+                        StyleSpan(Typeface.BOLD),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     append(" vào thư viện")
                 }
             }
             ACTION_REMOVE -> {
                 spannable.apply {
                     append("Đã xóa ")
-                    append(playlist?.name, StyleSpan(Typeface.BOLD), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    append(
+                        playlist?.name,
+                        StyleSpan(Typeface.BOLD),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     append(" khỏi thư viện")
                 }
             }
@@ -280,24 +304,26 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
     }
 
     private fun setUpRcv() {
-        adapter = SongAdapter(requireContext(),this)
+        adapter = SongAdapter(requireContext(), this)
         playlistAdapter = HomeChildAdapter(this@PlaylistDetailFragment)
-        binding.rcvSong.layoutManager = LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
+        binding.rcvSong.layoutManager =
+            LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false)
         binding.rcvSong.setHasFixedSize(true)
         binding.rcvSong.adapter = adapter
-        binding.rcvRecommend.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+        binding.rcvRecommend.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rcvRecommend.adapter = playlistAdapter
         binding.rcvRecommend.setHasFixedSize(true)
     }
 
     private fun playingPlaylist() {
         val intent = Intent(context, PlayReceiver::class.java)
-        val position = if (listSong.size != 1){
+        val position = if (listSong.size != 1) {
             Random.nextInt(listSong.size - 1)
         } else 0
         intent.action = Constants.PLAY
         intent.putParcelableArrayListExtra("playlist", listSong)
-        intent.putExtra("position",position)
+        intent.putExtra("position", position)
         context?.sendBroadcast(intent)
     }
 
@@ -310,9 +336,9 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
 
     override fun onItemClick(playlist: Playlist) {
         val playlistDetailFragment = PlaylistDetailFragment()
-        if (activity is MainActivity){
+        if (activity is MainActivity) {
             val activity = activity as MainActivity
-            activity.switchFragment(playlistDetailFragment,playlist)
+            activity.switchFragment(playlistDetailFragment, playlist)
         }
     }
 
@@ -322,53 +348,68 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
 
     private fun openOptionsDialog(song: Song) {
         var isFav = false
-        var favourite : Favourite? = null
+        var favourite: Favourite? = null
         val dialog = BottomSheetDialog(requireContext())
         val binding = BottomSheetOptionsBinding.inflate(LayoutInflater.from(context))
         dialog.setContentView(binding.root)
-        Glide.with(binding.imgSong).load(song.image).placeholder(R.drawable.thumbnail).into(binding.imgSong)
+        Glide.with(binding.imgSong).load(song.image).placeholder(R.drawable.thumbnail)
+            .into(binding.imgSong)
         binding.tvNameSong.text = song.name
         binding.tvArtist.text = song.artist
         binding.tvRemoveSong.visibility = View.GONE
-        viewModelFav.getFavFromId(song).observe(viewLifecycleOwner){
+        viewModelFav.getFavFromId(song).observe(viewLifecycleOwner) {
             isFav = it != null
             favourite = it
-            if (isFav) { setDrawable(binding,true) }
-            else setDrawable(binding,false)
+            if (isFav) {
+                setDrawable(binding, true)
+            } else setDrawable(binding, false)
         }
         binding.tvFavourite.setOnClickListener {
-            if (isFav) { viewModelFav.removeFavouriteSong(favourite!!) }
-            else { viewModelFav.addToFavourite(song) }
+            if (isFav) {
+                viewModelFav.removeFavouriteSong(favourite!!)
+            } else {
+                viewModelFav.addToFavourite(song)
+            }
         }
-        clickButton(binding)
+        clickButton(binding, dialog)
         dialog.show()
     }
 
-    private fun clickButton(binding: BottomSheetOptionsBinding) {
-        binding.tvInforArtist.setOnClickListener(this)
-        binding.btnDownload.setOnClickListener(this)
-        binding.btnCopy.setOnClickListener(this)
-        binding.btnMessenger.setOnClickListener(this)
-        binding.btnQR.setOnClickListener(this)
-        binding.btnSms.setOnClickListener(this)
-        binding.tvReport.setOnClickListener(this)
+    private fun clickButton(binding: BottomSheetOptionsBinding, dialog: BottomSheetDialog) {
+        binding.tvInforArtist.setOnClickListener { onClick(dialog) }
+        binding.btnDownload.setOnClickListener { onClick(dialog) }
+        binding.btnCopy.setOnClickListener { onClick(dialog) }
+        binding.btnMessenger.setOnClickListener { onClick(dialog) }
+        binding.btnQR.setOnClickListener { onClick(dialog) }
+        binding.btnSms.setOnClickListener { onClick(dialog) }
+        binding.tvReport.setOnClickListener { onClick(dialog) }
     }
 
 
     private fun setDrawable(binding: BottomSheetOptionsBinding, isFav: Boolean) {
-        val drawable = if (isFav){ ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_24)
-        } else ContextCompat.getDrawable(requireContext(),R.drawable.baseline_favorite_border_24)
-        if (isFav) { drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN) }
-        else drawable!!.colorFilter = PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
-        binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+        val drawable = if (isFav) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.baseline_favorite_24)
+        } else ContextCompat.getDrawable(requireContext(), R.drawable.baseline_favorite_border_24)
+        if (isFav) {
+            drawable!!.colorFilter =
+                PorterDuffColorFilter(Color.parseColor("#FFD154"), PorterDuff.Mode.SRC_IN)
+        } else drawable!!.colorFilter =
+            PorterDuffColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN)
+        binding.tvFavourite.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            drawable,
+            null,
+            null,
+            null
+        )
     }
+
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun setDurationPlaylist(listSong: ArrayList<Song>?) {
         val calendar = Calendar.getInstance()
         val df = SimpleDateFormat("mm:ss")
-        var total : Long = 0
-        if (listSong != null){
-            for (i in listSong){
+        var total: Long = 0
+        if (listSong != null) {
+            for (i in listSong) {
                 val time = df.parse(i.duration.toString())
                 if (time != null) {
                     val durationInMillis = TimeUnit.MILLISECONDS.toMillis(time.time)
@@ -387,7 +428,8 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         binding.tvLoverDuration.text = "$formatted lượt thích • $hour giờ $minute phút"
     }
 
-    override fun onClick(v: View?) {
+    private fun onClick(dialog: BottomSheetDialog) {
+        dialog.dismiss()
         com.example.muzix.ultis.showSnackBar(binding.root)
     }
 }
