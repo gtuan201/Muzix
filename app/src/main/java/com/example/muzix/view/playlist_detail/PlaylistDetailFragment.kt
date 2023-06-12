@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +36,6 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.ultis.sendActionToService
-import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.home.HomeChildAdapter
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.viewmodel.FavouriteViewModel
@@ -53,7 +51,8 @@ import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.random.Random
 
-class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions {
+class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions,
+    View.OnClickListener {
 
     private lateinit var binding: FragmentPlaylistDetailBinding
     private var playlist: Playlist? = null
@@ -341,7 +340,18 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
             if (isFav) { viewModelFav.removeFavouriteSong(favourite!!) }
             else { viewModelFav.addToFavourite(song) }
         }
+        clickButton(binding)
         dialog.show()
+    }
+
+    private fun clickButton(binding: BottomSheetOptionsBinding) {
+        binding.tvInforArtist.setOnClickListener(this)
+        binding.btnDownload.setOnClickListener(this)
+        binding.btnCopy.setOnClickListener(this)
+        binding.btnMessenger.setOnClickListener(this)
+        binding.btnQR.setOnClickListener(this)
+        binding.btnSms.setOnClickListener(this)
+        binding.tvReport.setOnClickListener(this)
     }
 
 
@@ -375,5 +385,9 @@ class PlaylistDetailFragment : Fragment(), OnItemClickListener, ClickMoreOptions
         formatter.isGroupingUsed = true
         val formatted = formatter.format(playlist?.lover ?: 0)
         binding.tvLoverDuration.text = "$formatted lượt thích • $hour giờ $minute phút"
+    }
+
+    override fun onClick(v: View?) {
+        com.example.muzix.ultis.showSnackBar(binding.root)
     }
 }
