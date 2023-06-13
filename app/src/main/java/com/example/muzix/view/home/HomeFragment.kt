@@ -25,6 +25,7 @@ import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
+import com.example.muzix.view.setting.SettingFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
 import java.util.Calendar
 import java.util.Collections
@@ -89,8 +90,13 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             intent.putExtra("key",song)
             context?.sendBroadcast(intent)
         }
+        binding.btnSetting.setOnClickListener {
+            changeFragment()
+        }
         return binding.root
     }
+
+
     private fun setUpRcv() {
         binding.rcvHome.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.rcvHome.setHasFixedSize(true)
@@ -147,6 +153,13 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         if (activity is MainActivity){
             val activity = activity as MainActivity
             activity.switchFragment(artistDetailFragment,artist)
+        }
+    }
+    private fun changeFragment() {
+        val fragment = SettingFragment()
+        if (activity is MainActivity){
+            val activity = activity as MainActivity
+            activity.switchFragment(fragment)
         }
     }
 }

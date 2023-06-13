@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/main_background"
+    tools:context=".view.setting.SettingFragment">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#272727">
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:text="@string/setting"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/infor"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp"
+        android:text="Phiên bản"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <com.google.android.material.textview.MaterialTextView
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/help"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:textSize="16sp"
+        android:text="Trợ giúp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <com.google.android.material.textview.MaterialTextView
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/feedback"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:textSize="16sp"
+        android:text="Góp ý và báo lỗi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <com.google.android.material.textview.MaterialTextView
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/star"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:textSize="16sp"
+        android:text="Bình chọn cho Muzix"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <com.google.android.material.textview.MaterialTextView
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/security"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:textSize="16sp"
+        android:text="Chính sách bảo mật"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <View
+        android:background="#373737"
+        android:layout_marginVertical="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.8dp"/>
+    <com.google.android.material.textview.MaterialTextView
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/more_"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:textSize="16sp"
+        android:text="Khác"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/btnLogOut"
+        android:textColor="@color/white"
+        app:drawableStartCompat="@drawable/log_out"
+        android:drawableTint="@color/white"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:textSize="16sp"
+        android:text="Đăng xuất"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="HardcodedText" />
+</LinearLayout>

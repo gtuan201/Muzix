@@ -342,6 +342,13 @@ class MainActivity : AppCompatActivity() {
             .commit()
         active = fragment
     }
+    fun switchFragment(fragment: Fragment) {
+        fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.add(R.id.fragment_container, fragment).addToBackStack(null).hide(active)
+            .show(fragment)
+            .commit()
+        active = fragment
+    }
 
     private fun checkBackStack() {
         while (supportFragmentManager.backStackEntryCount > 0) {
