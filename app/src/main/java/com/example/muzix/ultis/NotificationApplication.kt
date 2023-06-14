@@ -9,7 +9,7 @@ import android.util.Log
 class NotificationApplication : Application() {
     companion object {
         const val NOTIFICATION_CHANNEL = "channel_play"
-        const val NOTIFICATION_DOWNLOAD = "channel_download"
+        const val NOTIFICATION_MESSAGE = "channel_message"
     }
     override fun onCreate() {
         super.onCreate()
@@ -22,7 +22,7 @@ class NotificationApplication : Application() {
             val notificationManager : NotificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
 
-            val channel2 = NotificationChannel(NOTIFICATION_CHANNEL,"DownloadNotification", NotificationManager.IMPORTANCE_LOW)
+            val channel2 = NotificationChannel(NOTIFICATION_CHANNEL,"MessgageNotification", NotificationManager.IMPORTANCE_LOW)
             channel.setSound(null,null)
             notificationManager.createNotificationChannel(channel2)
         }
