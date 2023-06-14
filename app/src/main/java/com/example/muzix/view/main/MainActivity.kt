@@ -37,7 +37,9 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_NEXT
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_START
+import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
+import com.example.muzix.ultis.Constants.Companion.CLICK_NOTIFICATION
 import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
 import com.example.muzix.ultis.hiddenSoftKeyboard
@@ -71,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     private var progress: Long = 0
     private var max: Long = 0
     private lateinit var viewModel : FavouriteViewModel
+    private lateinit var viewModelPlaylist: PlaylistViewModel
     private var isFav : Boolean = false
     private var fav : Favourite? = null
 
@@ -128,6 +131,16 @@ class MainActivity : AppCompatActivity() {
                 sendToFragment(song)
             } else {
                 sendToFragment(null)
+            }
+        }
+    }
+    private val notiReceiver : BroadcastReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val id = intent?.getStringExtra("id")
+            viewModelPlaylist = ViewModelProvider(this@MainActivity)[PlaylistViewModel::class.java]
+            viewModelPlaylist.getPlaylist(id!!).observe(this@MainActivity){
+                val playlistFragment = PlaylistDetailFragment()
+                switchFragment(playlistFragment,it)
             }
         }
     }
@@ -255,6 +268,9 @@ class MainActivity : AppCompatActivity() {
             currentSongReceiver,
             IntentFilter(SEND_CURRENT_SONG)
         )
+        LocalBroadcastManager.getInstance(this).registerReceiver(notiReceiver,
+            IntentFilter(CLICK_NOTIFICATION)
+        )
     }
 
     private fun showNowPlaying(action: Int?) {
@@ -378,6 +394,7 @@ class MainActivity : AppCompatActivity() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(receiverProgress)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentSongReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(notiReceiver)
     }
 
     override fun onBackPressed() {

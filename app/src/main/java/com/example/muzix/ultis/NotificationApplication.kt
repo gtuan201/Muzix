@@ -22,7 +22,7 @@ class NotificationApplication : Application() {
             val notificationManager : NotificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
 
-            val channel2 = NotificationChannel(NOTIFICATION_CHANNEL,"MessgageNotification", NotificationManager.IMPORTANCE_LOW)
+            val channel2 = NotificationChannel(NOTIFICATION_CHANNEL,"MessageNotification", NotificationManager.IMPORTANCE_DEFAULT)
             channel.setSound(null,null)
             notificationManager.createNotificationChannel(channel2)
         }

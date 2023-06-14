@@ -7,5 +7,6 @@ class Constants {
         const val UPDATE_PROGRESS_PLAYING = "progress"
         const val UPDATE_STATUS_PLAYING_NOTIFICATION = "action_service"
         const val SEND_CURRENT_SONG = "current_song"
+        const val CLICK_NOTIFICATION = "click_notification"
     }
 }
