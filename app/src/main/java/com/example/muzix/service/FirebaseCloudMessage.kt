@@ -82,7 +82,8 @@ class FirebaseCloudMessage : FirebaseMessagingService() {
         val body = data["body"]
         val image = data["image"]
         val id = data["id_playlist"]
-        val notification = Notification(null, title, body, image,id)
+        val date = data["date"]
+        val notification = Notification(null, title, body, image,id,date)
         CoroutineScope(Dispatchers.IO).launch {
             val dao = AppDatabase.createDatabase(applicationContext).getDao()
             dao.insertNotification(notification)

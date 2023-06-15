@@ -10,5 +10,6 @@ data class Notification(
     val title : String? = null,
     val body : String? = null,
     val image : String? = null,
-    val id_playlist : String? = null
+    val id_playlist : String? = null,
+    val date : String? = null
 )

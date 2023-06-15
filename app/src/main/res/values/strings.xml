@@ -49,4 +49,7 @@
     <string name="content_2">Trải nghiệm nghe nhạc với chất lượng cao nhất và không quảng cáo</string>
     <string name="setting">Cài đặt</string>
     <string name="default_notification_channel_id">channel_play</string>
+    <string name="new_playlist">Bản phát hành mới</string>
+    <string name="noti_">Nội dung phát hành mới nhất từ các nghệ sĩ, podcast và chương trình bạn theo dõi</string>
+    <string name="muzix_notification">Thông báo của Muzix</string>
 </resources>

@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.muzix.model.Notification
 
-@Database(entities = [Notification::class], version = 2)
+@Database(entities = [Notification::class], version = 3)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun getDao() : NotificationDao
     companion object {
@@ -17,7 +17,7 @@ abstract class AppDatabase : RoomDatabase(){
                 "database"
             )
                 .allowMainThreadQueries()
-                .fallbackToDestructiveMigrationFrom(1)
+                .fallbackToDestructiveMigrationFrom(2)
                 .build()
         }
     }

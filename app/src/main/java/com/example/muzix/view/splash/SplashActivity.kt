@@ -25,24 +25,28 @@ import kotlin.random.Random
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
-    private var intentUser : Intent? = null
+    private var intentUser: Intent? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        val data  = intent.extras
+        val data = intent.extras
         val viewModel = ViewModelProvider(this)[SongViewModel::class.java]
-        viewModel.getAllSong().observe(this){
+        viewModel.getAllSong().observe(this) {
             randomSong(it.size)
         }
         val user = FirebaseAuth.getInstance().currentUser
-        intentUser = if (user == null){
+        intentUser = if (user == null) {
             Intent(this, OnboardingActivity::class.java)
-        } else Intent(this,MainActivity::class.java)
+        } else Intent(this, MainActivity::class.java)
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(intentUser)
-            if (data != null) {saveNotificationClicked(data)}
+            if (data != null) {
+                saveNotificationClicked(data)
+            }
             finish()
-        },2000)
+        }, 2000)
+//        val dao = AppDatabase.createDatabase(applicationContext).getDao()
+//        dao.deleteAll()
 //        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
 //            if (!task.isSuccessful) {
 //                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
@@ -53,21 +57,23 @@ class SplashActivity : AppCompatActivity() {
 //            Log.e("token",token)
 //        })
     }
+
     private fun saveNotificationClicked(data: Bundle) {
         CoroutineScope(Dispatchers.IO).launch {
-                val title = data.getString("title")
-                val body = data.getString("body")
-                val image = data.getString("image")
-                val id = data.getString("id_playlist")
-                val dao = AppDatabase.createDatabase(applicationContext).getDao()
-                dao.insertNotification(Notification(null,title, body, image,id))
-                changeFragmentClicked(id)
+            val title = data.getString("title")
+            val body = data.getString("body")
+            val image = data.getString("image")
+            val id = data.getString("id_playlist")
+            val date = data.getString("date")
+            val dao = AppDatabase.createDatabase(applicationContext).getDao()
+            dao.insertNotification(Notification(null, title, body, image, id,date))
+            changeFragmentClicked(id)
         }
     }
 
     private fun changeFragmentClicked(id: String?) {
-        val notiIntent = Intent(this,ClickNotificationReceiver::class.java)
-        notiIntent.putExtra("id_playlist",id)
+        val notiIntent = Intent(this, ClickNotificationReceiver::class.java)
+        notiIntent.putExtra("id_playlist", id)
         sendBroadcast(notiIntent)
     }
 
@@ -76,20 +82,20 @@ class SplashActivity : AppCompatActivity() {
         val currentDate = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         val sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        if (sharedPreferences.contains("lastDate")){
-            val lastDate = sharedPreferences.getInt("lastDate",0)
-            if (currentDate > lastDate){
-                putValuePreferences(size,editor,currentDate)
+        if (sharedPreferences.contains("lastDate")) {
+            val lastDate = sharedPreferences.getInt("lastDate", 0)
+            if (currentDate > lastDate) {
+                putValuePreferences(size, editor, currentDate)
             }
-        }
-        else {
-            putValuePreferences(size,editor,currentDate)
+        } else {
+            putValuePreferences(size, editor, currentDate)
         }
     }
+
     private fun putValuePreferences(size: Int, editor: SharedPreferences.Editor, currentDate: Int) {
         val newRandomId = Random.nextInt(size)
-        editor.putInt("id",newRandomId)
-        editor.putInt("lastDate",currentDate)
+        editor.putInt("id", newRandomId)
+        editor.putInt("lastDate", currentDate)
         editor.apply()
     }
 }

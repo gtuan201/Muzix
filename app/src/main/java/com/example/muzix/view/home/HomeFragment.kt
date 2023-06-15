@@ -24,6 +24,7 @@ import com.example.muzix.listener.OnArtistClick
 import com.example.muzix.listener.OnItemClickListener
 import com.example.muzix.ultis.PlayReceiver
 import com.example.muzix.view.artist_detail.ArtistDetailFragment
+import com.example.muzix.view.notification.NotificationFragment
 import com.example.muzix.view.playlist_detail.PlaylistDetailFragment
 import com.example.muzix.view.setting.SettingFragment
 import com.example.muzix.viewmodel.PlaylistViewModel
@@ -91,7 +92,10 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             context?.sendBroadcast(intent)
         }
         binding.btnSetting.setOnClickListener {
-            changeFragment()
+            changeFragment(SettingFragment())
+        }
+        binding.btnNotification.setOnClickListener {
+            changeFragment(NotificationFragment())
         }
         return binding.root
     }
@@ -155,8 +159,7 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             activity.switchFragment(artistDetailFragment,artist)
         }
     }
-    private fun changeFragment() {
-        val fragment = SettingFragment()
+    private fun changeFragment(fragment: Fragment) {
         if (activity is MainActivity){
             val activity = activity as MainActivity
             activity.switchFragment(fragment)
