@@ -85,7 +85,7 @@ class FirebaseCloudMessage : FirebaseMessagingService() {
         val notification = Notification(null, title, body, image,id)
         CoroutineScope(Dispatchers.IO).launch {
             val dao = AppDatabase.createDatabase(applicationContext).getDao()
-            dao.insertAll(notification)
+            dao.insertNotification(notification)
         }
     }
 }
