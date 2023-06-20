@@ -43,6 +43,8 @@ class NameFragment : Fragment() {
         }
         binding.btnNext.setOnClickListener {
             val name = binding.edt.text.toString().trim()
+            binding.btnNext.visibility = View.GONE
+            binding.progress.visibility = View.VISIBLE
             register(name)
         }
         return binding.root
@@ -54,6 +56,8 @@ class NameFragment : Fragment() {
             auth.createUserWithEmailAndPassword(it.email.toString(),it.password.toString())
                 .addOnCompleteListener(requireActivity()){task->
                     if (task.isSuccessful){
+                        binding.progress.visibility = View.GONE
+                        binding.btnNext.visibility = View.VISIBLE
                         Toast.makeText(requireContext(),"Đăng ký thành công !",Toast.LENGTH_SHORT).show()
                         startActivity(Intent(requireContext(),MainActivity::class.java))
                         val user = auth.currentUser
@@ -62,7 +66,11 @@ class NameFragment : Fragment() {
                             .build()
                         user?.updateProfile(profileUpdates)
                     }
-                    else Toast.makeText(requireContext(),"Đăng ký thất bại !",Toast.LENGTH_SHORT).show()
+                    else {
+                        Toast.makeText(requireContext(),"Đăng ký thất bại !",Toast.LENGTH_SHORT).show()
+                        binding.progress.visibility = View.GONE
+                        binding.btnNext.visibility = View.VISIBLE
+                    }
                 }
         }
     }

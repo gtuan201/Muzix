@@ -94,6 +94,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNext"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -104,5 +105,14 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:cornerRadius="20dp" />
+    <ProgressBar
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/main"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
