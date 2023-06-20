@@ -21,7 +21,9 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import kotlin.random.Random
 
 @SuppressLint("CustomSplashScreen")
@@ -59,13 +61,15 @@ class SplashActivity : AppCompatActivity() {
 //        })
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun saveNotificationClicked(data: Bundle) {
+        val current = System.currentTimeMillis()
+        val date = SimpleDateFormat("dd/MM/yyyy").format(Date(current))
         CoroutineScope(Dispatchers.IO).launch {
             val title = data.getString("title")
             val body = data.getString("body")
             val image = data.getString("image")
             val id = data.getString("id_playlist")
-            val date = data.getString("date")
             val dao = AppDatabase.createDatabase(applicationContext).getDao()
             dao.insertNotification(Notification(null, title, body, image, id,date))
             changeFragmentClicked(id)

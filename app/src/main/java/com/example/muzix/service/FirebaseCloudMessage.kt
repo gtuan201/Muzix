@@ -27,6 +27,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.random.Random
 
 
@@ -77,12 +79,14 @@ class FirebaseCloudMessage : FirebaseMessagingService() {
 
             })
     }
+    @SuppressLint("SimpleDateFormat")
     private fun saveNotification(data: Map<String, String>) {
         val title = data["title"]
         val body = data["body"]
         val image = data["image"]
         val id = data["id_playlist"]
-        val date = data["date"]
+        val current = System.currentTimeMillis()
+        val date = SimpleDateFormat("dd/MM/yyyy").format(Date(current))
         val notification = Notification(null, title, body, image,id,date)
         CoroutineScope(Dispatchers.IO).launch {
             val dao = AppDatabase.createDatabase(applicationContext).getDao()

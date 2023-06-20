@@ -42,7 +42,7 @@ class NotificationFragment : Fragment(),ClickNotification {
             adapter.setData(it)
             adapter.notifyDataSetChanged()
         }
-        viewModel.deleteOldNotification(requireContext())
+//        viewModel.deleteOldNotification(requireContext())
         return binding.root
     }
     override fun clickNoti(notification: Notification) {
