@@ -8,6 +8,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import com.example.muzix.ultis.Constants.Companion.EMAIL_REGEX
 import com.google.android.material.snackbar.Snackbar
 
 fun showSoftKeyboard(activity: Activity) {
@@ -32,4 +33,7 @@ fun showSnackBar(viewGroup: ViewGroup){
     }
     snackBar.setText(spannable)
     snackBar.show()
+}
+fun isEmailValid(email: String): Boolean {
+    return EMAIL_REGEX.toRegex().matches(email)
 }

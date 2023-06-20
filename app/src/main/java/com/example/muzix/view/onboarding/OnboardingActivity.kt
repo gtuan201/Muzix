@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.muzix.view.main.MainActivity
 import com.example.muzix.R
 import com.example.muzix.databinding.ActivityOnboardingBinding
+import com.example.muzix.view.register.RegisterActivity
 import com.example.muzix.viewmodel.LoginViewModel
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
@@ -41,7 +42,10 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         binding.btnLogin.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+//            startActivity(Intent(this, MainActivity::class.java))
+        }
+        binding.btnSignUp.setOnClickListener {
+            startActivity(Intent(this,RegisterActivity::class.java))
         }
         //set up login google
         val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -96,7 +100,6 @@ class OnboardingActivity : AppCompatActivity() {
     private fun updateUIFB(user: FirebaseUser?) {
         if (user != null){
             val intent = Intent(this@OnboardingActivity, MainActivity::class.java)
-            intent.putExtra("Email",user.displayName)
             viewModel.addInforUser()
             startActivity(intent)
         }
@@ -135,7 +138,6 @@ class OnboardingActivity : AppCompatActivity() {
         auth?.signInWithCredential(credential)?.addOnCompleteListener {
             if (it.isSuccessful) {
                 val intent = Intent(this@OnboardingActivity, MainActivity::class.java)
-                intent.putExtra("Email", account.displayName)
                 viewModel.addInforUser()
                 startActivity(intent)
             } else {

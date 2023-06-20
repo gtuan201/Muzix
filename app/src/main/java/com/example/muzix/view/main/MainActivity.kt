@@ -12,7 +12,6 @@ import android.text.style.StyleSpan
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -37,14 +36,12 @@ import com.example.muzix.service.PlayMusicService.Companion.ACTION_NEXT
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_PAUSE
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_RESUME
 import com.example.muzix.service.PlayMusicService.Companion.ACTION_START
-import com.example.muzix.ultis.Constants
 import com.example.muzix.ultis.Constants.Companion.ACTION_UPDATE_STATUS_PLAYING
 import com.example.muzix.ultis.Constants.Companion.CLICK_NOTIFICATION
 import com.example.muzix.ultis.Constants.Companion.SEND_CURRENT_SONG
 import com.example.muzix.ultis.Constants.Companion.UPDATE_PROGRESS_PLAYING
 import com.example.muzix.ultis.hiddenSoftKeyboard
 import com.example.muzix.ultis.sendActionToService
-import com.example.muzix.view.artist_detail.ArtistDetailFragment
 import com.example.muzix.view.library.LibraryFragment
 import com.example.muzix.view.premium.PremiumFragment
 import com.example.muzix.view.home.HomeFragment
@@ -204,9 +201,9 @@ class MainActivity : AppCompatActivity() {
                 animationFav()
             }
         }
-//        for (i in 1..11){
+//        for (i in 1..8){
 //            val id = System.currentTimeMillis().toString()
-//            val song = Song(id,"Summer Is For Falling In Love","0","des","image","Sarah Kang","mp3","1682762163931",0,"Pop")
+//            val song = Song(id,"name","0","des","image","Dept 뎁트","mp3","1682762163937",0,"Pop")
 //            FirebaseService.apiService.addSong(id,song).enqueue(object : Callback<Song> {
 //                override fun onResponse(call: Call<Song>, response: Response<Song>) {
 //                    if (response.isSuccessful && response.body() != null){
@@ -408,7 +405,7 @@ class MainActivity : AppCompatActivity() {
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                 Palette.from(resource).generate { palette ->
                     val darkMutedSwatch = palette?.darkMutedSwatch
-                    val darkColor = darkMutedSwatch?.rgb ?: Color.TRANSPARENT
+                    val darkColor = darkMutedSwatch?.rgb ?: R.color.teal_700
                     binding.layoutNowPlaying.setBackgroundColor(darkColor)
                     binding.layoutSwipe.setBackgroundColor(darkColor)
                 }

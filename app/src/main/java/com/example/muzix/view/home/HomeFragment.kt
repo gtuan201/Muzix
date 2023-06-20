@@ -73,6 +73,9 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         viewModel.getPlaylistHistory().observe(viewLifecycleOwner){
             historyAdapter.setData(it.take(4))
             historyAdapter.notifyDataSetChanged()
+            if (it.isNotEmpty()){
+                displayHistory()
+            }
         }
         viewModel.getCollection().observe(requireActivity()) {
             adapter.setDataCollection(it)
@@ -100,6 +103,13 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
         return binding.root
     }
 
+    private fun displayHistory() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.titleHistory.visibility = View.VISIBLE
+            binding.rcvHistory.visibility = View.VISIBLE
+        },800)
+    }
+
 
     private fun setUpRcv() {
         binding.rcvHome.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -124,8 +134,6 @@ class HomeFragment : Fragment(), OnItemClickListener, OnArtistClick {
             binding.tvTitleArtist.visibility = View.VISIBLE
             binding.imgRandomSong.visibility = View.VISIBLE
             binding.btnPlay.visibility = View.VISIBLE
-            binding.titleHistory.visibility = View.VISIBLE
-            binding.rcvHistory.visibility = View.VISIBLE
         },1000)
     }
     private fun welcomeTitle() : String{

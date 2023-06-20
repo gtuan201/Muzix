@@ -15,6 +15,7 @@ import com.example.muzix.data.local.AppDatabase
 import com.example.muzix.model.Notification
 import com.example.muzix.ultis.ClickNotificationReceiver
 import com.example.muzix.view.onboarding.OnboardingActivity
+import com.example.muzix.view.register.RegisterActivity
 import com.example.muzix.viewmodel.SongViewModel
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope

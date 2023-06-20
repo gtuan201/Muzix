@@ -8,5 +8,6 @@ class Constants {
         const val UPDATE_STATUS_PLAYING_NOTIFICATION = "action_service"
         const val SEND_CURRENT_SONG = "current_song"
         const val CLICK_NOTIFICATION = "click_notification"
+        const val EMAIL_REGEX = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
     }
 }

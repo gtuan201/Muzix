@@ -52,4 +52,12 @@
     <string name="new_playlist">Bản phát hành mới</string>
     <string name="noti_">Nội dung phát hành mới nhất từ các nghệ sĩ, podcast và chương trình bạn theo dõi</string>
     <string name="muzix_notification">Thông báo của Muzix</string>
+    <string name="email">Email của bạn là gì?</string>
+    <string name="next">Tiếp</string>
+    <string name="password">Tạo một mật khẩu !</string>
+    <string name="when_click_create_account">Bằng việc nhấp vào \'Tạo tài khoản\', bạn đồng ý với điều khoản của Muzix</string>
+    <string name="terms">Điều khoản sử dụng</string>
+    <string name="privacy">Để tìm hiểu thêm về cách thức Muzix thu thập, sử dụng, chia sẻ và bảo vệ dữ liệu cá nhân của bạn, vui lòng xem Chính sách quyền riêng tư của Spotify</string>
+    <string name="create_account">Tạo tài khoản</string>
+    <string name="your_name">Tên của bạn là gì?</string>
 </resources>
