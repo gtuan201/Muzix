@@ -1,9 +1,6 @@
 package com.example.muzix.data.local
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.muzix.model.Notification
 
 @Dao
@@ -17,4 +14,7 @@ interface NotificationDao {
 
     @Query("DELETE FROM notification")
     fun deleteAll()
+
+    @Delete
+    fun deleteItem(item : Notification)
 }

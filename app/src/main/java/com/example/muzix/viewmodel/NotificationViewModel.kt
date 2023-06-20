@@ -1,5 +1,6 @@
 package com.example.muzix.viewmodel
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +14,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
 
 class NotificationViewModel : ViewModel() {
     private var dataNotification : MutableLiveData<List<Notification>> = MutableLiveData()
@@ -40,5 +43,21 @@ class NotificationViewModel : ViewModel() {
             })
         }
         return dataPlaylist
+    }
+    @SuppressLint("SimpleDateFormat")
+    fun deleteOldNotification(context: Context){
+        val dao = AppDatabase.createDatabase(context).getDao()
+        val list = dao.getNotification()
+        for (i in list){
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val date = sdf.parse(i.date!!)
+            val calendar = Calendar.getInstance()
+            calendar.time = date as Date
+            calendar.add(Calendar.DAY_OF_YEAR,7)
+            val currentDate = Calendar.getInstance().time
+            if ((calendar.time).before(currentDate)){
+                dao.deleteItem(i)
+            }
+        }
     }
 }
