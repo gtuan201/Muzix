@@ -42,7 +42,8 @@ class NotificationFragment : Fragment(),ClickNotification {
             adapter.setData(it)
             adapter.notifyDataSetChanged()
         }
-//        viewModel.deleteOldNotification(requireContext())
+        viewModel.deleteOldNotification(requireContext())
+        binding.btnBack.setOnClickListener { requireActivity().onBackPressed()}
         return binding.root
     }
     override fun clickNoti(notification: Notification) {

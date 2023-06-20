@@ -10,6 +10,7 @@ import com.example.muzix.data.local.AppDatabase
 import com.example.muzix.data.remote.FirebaseService
 import com.example.muzix.model.Notification
 import com.example.muzix.model.Playlist
+import com.example.muzix.ultis.CustomComparator
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,16 +49,9 @@ class NotificationViewModel : ViewModel() {
     fun deleteOldNotification(context: Context){
         val dao = AppDatabase.createDatabase(context).getDao()
         val list = dao.getNotification()
-        for (i in list){
-            val sdf = SimpleDateFormat("dd/MM/yyyy")
-            val date = sdf.parse(i.date!!)
-            val calendar = Calendar.getInstance()
-            calendar.time = date as Date
-            calendar.add(Calendar.DAY_OF_YEAR,7)
-            val currentDate = Calendar.getInstance().time
-            if ((calendar.time).before(currentDate)){
-                dao.deleteItem(i)
-            }
+        Collections.sort(list,CustomComparator())
+        if (list.size > 10){
+            dao.deleteItem(list[0])
         }
     }
 }

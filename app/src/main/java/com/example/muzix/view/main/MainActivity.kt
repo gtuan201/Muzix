@@ -136,8 +136,10 @@ class MainActivity : AppCompatActivity() {
             val id = intent?.getStringExtra("id")
             viewModelPlaylist = ViewModelProvider(this@MainActivity)[PlaylistViewModel::class.java]
             viewModelPlaylist.getPlaylist(id!!).observe(this@MainActivity){
-                val playlistFragment = PlaylistDetailFragment()
-                switchFragment(playlistFragment,it)
+                if (it != null){
+                    val playlistFragment = PlaylistDetailFragment()
+                    switchFragment(playlistFragment,it)
+                }
             }
         }
     }

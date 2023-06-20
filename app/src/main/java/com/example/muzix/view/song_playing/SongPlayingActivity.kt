@@ -77,17 +77,16 @@ class SongPlayingActivity : AppCompatActivity() {
 
     @SuppressLint("SimpleDateFormat", "SetTextI18n")
     private fun updateProgress() {
-        val tvMax = SimpleDateFormat("mm:ss").format(Date(max - progress))
+        val tvMax = SimpleDateFormat("mm:ss").format(Date(max))
         val tvProgress = SimpleDateFormat("mm:ss").format(Date(progress))
         binding.tvCurrentPosition.text = tvProgress
-        binding.tvDuration.text = "-$tvMax"
+        binding.tvDuration.text = tvMax
         binding.progressBar.max = max.toInt()
         binding.progressBar.progress = progress.toInt()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivitySongPlayingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(this)[PlaylistViewModel::class.java]

@@ -46,12 +46,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="2dp"
+            android:textSize="12sp"
             android:text="@string/muzix_notification"
             android:textColor="@color/grey" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/tvBody"
+        android:textSize="12sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
